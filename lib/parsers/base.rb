@@ -1,6 +1,6 @@
 require 'net/https'
-require 'iconv'
 require 'open-uri'
+require 'iconv'
 
 # encoding: utf-8
 
@@ -16,6 +16,9 @@ module Parsers
 
     def doc
       @doc ||= Nokogiri::HTML(raw_document)
+    rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED
+      refresh!
+      doc
     end
 
     def refresh!
@@ -49,8 +52,7 @@ module Parsers
         end
 
         if proxy
-            puts "Proxy:"
-            puts "IP&Port: #{[proxy.ip, proxy.port]}"
+            puts "PROXY: #{[proxy.ip, proxy.port]}"
 
             res = Net::HTTP::Proxy(proxy.ip, proxy.port).start(uri.hostname, uri.port) {|http|
               http.request(req)
