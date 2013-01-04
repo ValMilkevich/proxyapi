@@ -75,10 +75,21 @@
                 <%= link_to "Proxies", api_proxies_path, class: "pull-left"  %>
               </li>
 
-              <li>
+              <li class="clearfix">
                 <span class="badge badge-info pull-right"><%= Country.count %></span>
                 <%= link_to "Countries", api_countries_path, class: "pull-left"  %>
               </li>
+
+              <% if Proxy.recent.first %>
+                <li class="nav-header">Last check:</li>
+                <li class="clearfix">
+                  <span class="label label-important">
+                    <%= Proxy.recent.first.last_check %>
+                  </span>
+                </li>
+              <% end %>
+
+
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

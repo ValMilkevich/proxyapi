@@ -3,13 +3,13 @@ module ApplicationHelper
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
 
-		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : ''), :class => "span8 docs")
+		content_tag(:div, content_tag(:ul, nav ? content_tag(:h3, content) : content), :class => "span8 docs")
 	end
 
 	def desc nav = false, &block
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
-		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : '') , :class => "span4 defs")
+		content_tag(:div, content_tag(:ul, nav ? content_tag(:h3, content) : content ) , :class => "span4 defs")
 	end
 
 	def row &block
