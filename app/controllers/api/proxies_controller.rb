@@ -8,7 +8,7 @@ class Api::ProxiesController < ApiController
 	end
 
 	def selector
-		render :json => construct_query(proxies)
+		render :json => construct_query(proxies).limit(100)
 	end
 
 	def recent
