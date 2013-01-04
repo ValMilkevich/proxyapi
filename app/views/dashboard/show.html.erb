@@ -17,27 +17,17 @@
 	</section>
 
 	<section id="formats">
-	  <h3 class="offset6">Formats</h3>
-	  <div class="row-fluid">
-	  	<span class="span6">
-		  	<ul>
-		  		<div>JSON</div>
-		  	</ul>
-		  </span>
-		  <span class="span6 defs">
-		  	<ul>
-		  		<div>The only format currently</div>
-		  	</ul>
-		  </span>
+		<div class="row-fluid">
+			<%= doc_row  "Format", true %>
+			<%= doc_row  "JSON", "The only format currently" %>
 		</div>
 	</section>
 
 
 	<section id="proxies">
-	  <h3 class="offset6">Proxies</h3>
 
 			<div class="row-fluid">
-				<%= doc_row  "Fields", "Comments", true %>
+				<%= doc_row  "Fields", true %>
 				<%= doc_row  "_id", "Proxy permanent id, type: Integer" %>
 				<%= doc_row  "ip", "Proxy IP, type: String" %>
 				<%= doc_row  "port", "Proxy Port, type: String" %>
@@ -51,7 +41,7 @@
 
 
 	  <div class="row-fluid">
-	  	<%= doc_row  "URLs", "Comments", true %>
+	  	<%= doc_row  "URLs", true %>
 
 			<%= doc_row "Starting from most recent proxies" do %>
 				GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path%>
@@ -73,7 +63,7 @@
 
 	  <div class="row-fluid">
 
-			<%= doc_row  "Selectors", "Comments", true %>
+			<%= doc_row  "Selectors", true %>
 
 			<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
 			  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
@@ -98,54 +88,28 @@
 			<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
 				GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
 			<% end %>
-
 		</div>
-
 	</section>
 
 
-
-
-
 	<section id="countries">
-	  <h3 class="offset6">Countries <small>:index, :show</small></h3>
-	  <div class="row-fluid">
-	  	<span class="span6">
-		  	<ul>
-		  		<div class="nav-header">URL</div>
-					<div>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></div>
-			  	<div>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %></div>
-		  	</ul>
-		  </span>
-		  <span class="span6 defs">
-
-		  	<ul>
-		  		<div class="nav-header">Comments</div>
-		  		<div>Index</div>
-		  		<div>Show</div>
-		  	</ul>
-		  </span>
+		<div class="row-fluid">
+			<%= doc_row  "Countries", true %>
+					<%= doc_row "API countries index" do %>
+				GET: <%= link_to "/api/countries(.:format)", api_countries_path %>
+			<% end %>
+						<%= doc_row "API country show action" do %>
+				GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %>
+			<% end %>
 		</div>
 	</section>
 
 	<section id="country_proxies">
-	  <h3 class="offset6">Country / Proxies <small>:index, :show</small></h3>
-	  <div class="row-fluid">
-	  	<span class="span6">
-		  	<ul>
-		  		<div class="nav-header">URL</div>
-					<div>GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || country_id) %></div>
-		  	</ul>
-		  </span>
-		  <span class="span6 defs">
-
-		  	<ul>
-		  		<div class="nav-header">Comments</div>
-		  		<div>Index</div>
-		  	</ul>
-		  </span>
+		<div class="row-fluid">
+			<%= doc_row  "Country Proxies", true %>
+					<%= doc_row "API proxies for the selected country index" do %>
+				GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || country_id) %>
+			<% end %>
 		</div>
 	</section>
-
-
 </div>

@@ -6,15 +6,20 @@
  *= require_tree .
 */
 
+.docs-def{
+	border-bottom: 1px solid #eee;
+}
 
 .defs{
-	border-left: 1px solid #ccc; background: #fdfdfd
+	border-right: 1px solid #ccc; background: #fdfdfd;
+	padding-right: 20px;
 }
 
-.documentation section .span6{
-	text-align: right;
-}
-
-.documentation section .span6.defs{
-	text-align: left;
+.documentation section .docs, .documentation section .defs{
+	text-align: left; height: 100%;
+	padding: 12px 0;
+	padding-left: 0px;
+	margin-left: 0px;
+	padding-right: 12px;
+	margin-right: 12px;
 }
