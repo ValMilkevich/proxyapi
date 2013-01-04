@@ -27,6 +27,8 @@ class Proxy
 
 	before_save :assign_country
 
+	scope :http, where(type: "HTTP")
+
 	def as_json(options={})
     options.merge!(:only => [:_id, :ip, :port, :latency, :type, :check_time] )
     super(options)
@@ -48,12 +50,13 @@ class Proxy
 	def self.create_or_update(hash)
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
 		el.check_count += 1
-		el.check_time = Time.now
-		el.update_attributes(hash)
+		el.attributes = hash
+		el.check_time ||= Time.now
+		el.save
 	end
 
 	def self.random
-		where({:latency.lt => 500, :check_time.gte => 60.minutes.ago }).order_by(:latency.asc).sample
+		ne(:check_time => nil, :latency => nil).where({:latency.lt => 1500}).order_by(:check_time.asc).limit(100).sample
 	end
 
 	protected

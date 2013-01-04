@@ -67,7 +67,7 @@ module Parsers
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, Proxy.where(type: "HTTP").order_by(:latency.asc).first)
+        res = raw_open(url, Proxy.http.random)
 
         ic = Iconv.new('UTF-8', 'windows-1251')
         ic.iconv(res.body)

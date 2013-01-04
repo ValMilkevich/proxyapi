@@ -1,10 +1,10 @@
 <div>
 
 	<section id="home">
-		<% if Proxy.order_by(:updated_at.desc).first %>
+		<% if Proxy.order_by(:check_time.desc).first %>
 			Last proxy check:
 			<span class="label label-important">
-				<%= Proxy.order_by(:updated_at.desc).first.updated_at %>
+				<%= Proxy.order_by(:check_time.desc).first.check_time %>
 			</span>
 		<% end %>
 
