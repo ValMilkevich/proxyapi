@@ -19,7 +19,7 @@
 	<section id="formats">
 	  <h3 class="offset3">Formats</h3>
 	  <div class="row-fluid">
-	  	<span class="span4">
+	  	<span class="span6">
 		  	<ul>
 		  		<div>JSON</div>
 		  	</ul>
@@ -37,7 +37,7 @@
 	  <h3 class="offset3">Proxies</h3>
 
 			<div class="row-fluid">
-		  	<span class="span4">
+		  	<span class="span6">
 			  	<ul>
 			  		<div class="nav-header">Fields</div>
 			  		<div>:_id</div>
@@ -70,7 +70,7 @@
 <br/>
 
 	  <div class="row-fluid">
-	  	<span class="span4">
+	  	<span class="span6">
 		  	<ul>
 		  		<div class="nav-header">URL</div>
 		  		<div>GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path %></div>
@@ -93,12 +93,46 @@
 		  </span>
 		</div>
 
+	  <div class="row-fluid">
+	  	<span class="span6">
+		  	<ul>
+		  		<div class="nav-header">Selectors</div>
+		  		<br/><br/><br/><br/>
+		  		<div>GET: <%= link_to "/api/proxies/selector/.json", "/api/proxies/selector/.json" %></div>
+		  		<div>GET: <%= link_to "/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0.9-1).json" %></div>
+		  		<div>GET: <%= link_to "/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0.9-1):availability(0.95-1).json" %></div>
+		  		<div>GET: <%= link_to "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json" %></div>
+		  		<div>GET: <%= link_to "/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json" %></div>
+				</ul>
+		  </span>
+
+		  <span class="span6 defs">
+		  	<ul>
+		  		<div class="nav-header">Comments</div>
+		  		<div>
+		  			You can send an orbitrary query to set conditions & sorting
+		  			Please not that you should set .format with each query so that last param will be not mixed with format
+		  		</div>
+		  		<br/>
+					<div> Proxies without conditions or sorting </div>
+					<div> Proxies with latency from 0 to 500ms</div>
+					<div> Proxies with latency from 0 to 500ms and availabiltiy higher then 95% </div>
+					<div> 8888, 8080, 80 proxies ordered by latency in descending order</div>
+					<div> Proxies ordered by latency in descending order and availability in ascending order </div>
+		  	</ul>
+		  </span>
+		</div>
+
 	</section>
+
+
+
+
 
 	<section id="countries">
 	  <h3 class="offset3">Countries <small>:index, :show</small></h3>
 	  <div class="row-fluid">
-	  	<span class="span4">
+	  	<span class="span6">
 		  	<ul>
 		  		<div class="nav-header">URL</div>
 					<div>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></div>
@@ -119,7 +153,7 @@
 	<section id="country_proxies">
 	  <h3 class="offset3">Country / Proxies <small>:index, :show</small></h3>
 	  <div class="row-fluid">
-	  	<span class="span4">
+	  	<span class="span6">
 		  	<ul>
 		  		<div class="nav-header">URL</div>
 					<div>GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || country_id) %></div>
