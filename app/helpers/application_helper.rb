@@ -3,17 +3,17 @@ module ApplicationHelper
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
 
-		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : ''), :class => "span6")
+		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : ''), :class => "span8 docs")
 	end
 
 	def desc nav = false, &block
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
-		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : '') , :class => "span6 defs")
+		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : '') , :class => "span4 defs")
 	end
 
 	def row &block
-		content_tag :div, capture(&block), :class => "row-fluid"
+		content_tag :div, capture(&block), :class => "row-fluid docs-def"
 	end
 
 	def doc_row *args, &block
@@ -36,7 +36,7 @@ module ApplicationHelper
 		nav ||= false
 
 		row do
-			[(doc(nav){(block.present? ? capture(&block) : d1)} if d1 || block), desc(nav){d2}].compact.join.html_safe
+			[(doc(nav){(block.present? ? capture(&block) : d1)} if d1 || block), desc(nav){d2}].reverse.compact.join.html_safe
 		end
 	end
 
