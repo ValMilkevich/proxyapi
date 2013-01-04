@@ -5,3 +5,13 @@
  *= require_self
  *= require_tree .
 */
+
+
+.defs{
+	border-left: 1px solid #ccc; background: #fdfdfd
+}
+
+.documentation section .span4{
+	text-align: right;
+}
+

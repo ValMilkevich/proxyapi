@@ -1,4 +1,4 @@
-<div>
+<div class="documentation">
 
 	<section id="home">
 		<% if Proxy.order_by(:check_time.desc).first %>
@@ -17,55 +17,121 @@
 	</section>
 
 	<section id="formats">
-	  <h3>Formats</h3>
-	  <div class="well" style="margin-bottom: 9px;">
-		  <ul>
-				<li>JSON</li>
-		  </ul>
-	  </div>
+	  <h3 class="offset3">Formats</h3>
+	  <div class="row-fluid">
+	  	<span class="span4">
+		  	<ul>
+		  		<div>JSON</div>
+		  	</ul>
+		  </span>
+		  <span class="span6 defs">
+		  	<ul>
+		  		<div>The only format currently</div>
+		  	</ul>
+		  </span>
+		</div>
 	</section>
 
 
 	<section id="proxies">
-	  <h3>Proxies <small>many actions</small></h3>
-		<div class="well" style="margin-bottom: 9px;">
-			<ul>
-				<li>GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path %></li>
-				<small> # Starting from most recent proxies </small>
+	  <h3 class="offset3">Proxies</h3>
 
-				<li>GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %> </li>
-				<small> # Starting from the fastest proxies </small>
+			<div class="row-fluid">
+		  	<span class="span4">
+			  	<ul>
+			  		<div class="nav-header">Fields</div>
+			  		<div>:_id</div>
+			  		<div>:ip</div>
+			  		<div>:port</div>
+			  		<div>:latency</div>
+			  		<div>:type</div>
+			  		<div>:availability</div>
+			  		<div>:available</div>
+			  		<div>:last_check</div>
+			  		<div>:checks_count</div>
+			  	</ul>
+			  </span>
+			  <span class="span6 defs">
+			  	<ul>
+			  		<div class="nav-header">Comments</div>
+			  		<div>Proxy permanent id</div>
+			  		<div>Proxy IP, String</div>
+			  		<div>Proxy Port</div>
+			  		<div>Proxy latency based on number of checks</div>
+						<div>Proxy type, ["HTTP", "HTTPS", "SOCKS#{n}"] type: Array</div>
+			  		<div>Proxy availability based on number of checks</div>
+			  		<div>If proxy is available</div>
+			  		<div>When proxy was checked last time</div>
+			  		<div>Number of our checks for this proxy</div>
+			  	</ul>
+			  </span>
+			</div>
 
-				<li>GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path %></li>
-				<small> # Selects random fast and recent proxy </small>
+<br/>
 
-				<li>GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %></li>
-				<small> # All Proxy list </small>
+	  <div class="row-fluid">
+	  	<span class="span4">
+		  	<ul>
+		  		<div class="nav-header">URL</div>
+		  		<div>GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path %></div>
+					<div>GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %> </div>
+					<div>GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path %></div>
+					<div>GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %></div>
+			  	<div>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id') %></div>
+		  	</ul>
+		  </span>
+		  <span class="span6 defs">
 
-		  	<li>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id') %></li>
-		  	<small> # Shows one proxy defined by :id </small>
-
-		  </ul>
+		  	<ul>
+		  		<div class="nav-header">Comments</div>
+					<div> Starting from most recent proxies </div>
+					<div> Starting from the fastest proxies </div>
+					<div> Selects random fast and recent proxy </div>
+					<div> All Proxy list </div>
+			  	<div> Shows one proxy defined by :id </div>
+		  	</ul>
+		  </span>
 		</div>
+
 	</section>
 
 	<section id="countries">
-	  <h3>Countries <small>:index, :show</small></h3>
-		<div class="well" style="margin-bottom: 9px;">
-			<ul>
-				<li>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></li>
-		  	<li>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %></li>
-		  </ul>
+	  <h3 class="offset3">Countries <small>:index, :show</small></h3>
+	  <div class="row-fluid">
+	  	<span class="span4">
+		  	<ul>
+		  		<div class="nav-header">URL</div>
+					<div>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></div>
+			  	<div>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %></div>
+		  	</ul>
+		  </span>
+		  <span class="span6 defs">
+
+		  	<ul>
+		  		<div class="nav-header">Comments</div>
+		  		<div>Index</div>
+		  		<div>Show</div>
+		  	</ul>
+		  </span>
 		</div>
 	</section>
 
 	<section id="country_proxies">
-	  <h3>Country / Proxies <small>:index, :show</small></h3>
-		<div class="well" style="margin-bottom: 9px;">
-			<ul>
-				<li>GET: /api/countries/:counry_id/proxies(.:format)</li>
-		  	<li>GET: /api/countries/:counry_id/:id(.:format)</li>
-		  </ul>
+	  <h3 class="offset3">Country / Proxies <small>:index, :show</small></h3>
+	  <div class="row-fluid">
+	  	<span class="span4">
+		  	<ul>
+		  		<div class="nav-header">URL</div>
+					<div>GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || country_id) %></div>
+		  	</ul>
+		  </span>
+		  <span class="span6 defs">
+
+		  	<ul>
+		  		<div class="nav-header">Comments</div>
+		  		<div>Index</div>
+		  	</ul>
+		  </span>
 		</div>
 	</section>
 

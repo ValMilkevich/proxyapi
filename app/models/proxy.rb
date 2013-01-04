@@ -1,9 +1,11 @@
+require 'net/https'
+require 'open-uri'
+
 class Proxy
 	include Mongoid::Document
 	include Mongoid::Timestamps
-	include Mongoid::Versioning
+	include ::Proxy::Formatter
 
-	max_versions 100
 
 	field :ip
 	field :port
@@ -15,10 +17,13 @@ class Proxy
 	field :anonymity
 	field :url
 
-	field :check_count, type: Integer, default: 0
-	field :check_time
+	field :availability, type: Float, default: 1.0
+	field :available, type: Boolean, default: true
+	field :last_check, type: Time
+	field :checks_count, type: Integer, default: 0
 
 	belongs_to :country
+	embeds_many :checks, class_name: "::Proxy::Check"
 
 	validates_presence_of :ip
 	validates_presence_of :port
@@ -26,38 +31,19 @@ class Proxy
 	validates_numericality_of :latency, greater_than: 0
 
 	before_save :assign_country
+	after_create :check!
 
+	scope :available, where(available: true)
 	scope :http, where(type: "HTTP")
 
 	def as_json(options={})
-    options.merge!(:only => [:_id, :ip, :port, :latency, :type, :check_time] )
+    options.merge!(:only => [:_id, :ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count] )
     super(options)
   end
 
-	def check_time=(val)
-		if val.is_a?(String)
-			self[:check_time] = Chronic.parse(val)
-		else
-			self[:check_time] = val
-		end
-	end
-
-	def latency=(val)
-		self[:latency]= val.to_i
-	end
-
-	def type=(val)
-		if val.is_a?(Array)
-			self[:type] = val
-		else
-			self[:type] = val.to_s.split(',')
-		end
-	end
-
-
 	def self.create_or_update(hash)
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
-		el.check_count += 1
+
 		el.attributes = hash
 		el.check_time ||= Time.now
 		el.save
@@ -65,6 +51,20 @@ class Proxy
 
 	def self.random
 		ne(:check_time => nil, :latency => nil).where({:latency.lt => 1500}).order_by(:check_time.asc).limit(100).sample
+	end
+
+	def from_last_check!
+		update_attributes(
+			latency: self.checks.avg(:latency).round(2),
+			availability: self.checks.avg(:available_to_i).round(2),
+			available: self.checks.last.available,
+			last_check: self.checks.last.created_at,
+			checks_count: self.checks.count
+		)
+	end
+
+	def check!
+		self.checks.create
 	end
 
 	protected
