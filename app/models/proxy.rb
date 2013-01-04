@@ -29,6 +29,7 @@ class Proxy
 	validates_presence_of :port
 	validates_presence_of :country_name
 	validates_numericality_of :latency, greater_than: 0
+	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
 
 	before_save		:assign_country
 	after_create	:delayed_check
@@ -45,9 +46,8 @@ class Proxy
 
 	def self.create_or_update(hash)
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
-
 		el.attributes = hash
-		el.check_time ||= Time.now
+		el.last_check ||= Time.now
 		el.save
 	end
 
@@ -72,6 +72,15 @@ class Proxy
 	def self.check(id)
 		find_by(id: id).checks.create
 	end
+
+	def check_time=(val)
+		if val.is_a?(String)
+			self[:last_check] = Chronic.parse(val) rescue Time.now
+		else
+			self[:last_check] = val
+		end
+	end
+
 
 	protected
 

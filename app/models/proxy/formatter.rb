@@ -8,14 +8,6 @@ require 'active_support/concern'
 module Proxy::Formatter
   extend ActiveSupport::Concern
 
-  	def check_time=(val)
-		if val.is_a?(String)
-			self[:check_time] = Chronic.parse(val)
-		else
-			self[:check_time] = val
-		end
-	end
-
 	def initial_latency=(val)
 		self.latency = val.to_i
 	end
