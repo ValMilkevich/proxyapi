@@ -1,6 +1,20 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.10'
+ruby '1.9.3'
+
+if RUBY_VERSION =~ /1.9/
+    Encoding.default_external = Encoding::UTF_8
+    Encoding.default_internal = Encoding::UTF_8
+end
+
+gem 'rails', ">=3.2.10"
+
+
+# Additional check to solve encoding issues
+if RUBY_VERSION =~ /1.9/
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
