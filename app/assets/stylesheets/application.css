@@ -11,7 +11,10 @@
 	border-left: 1px solid #ccc; background: #fdfdfd
 }
 
-.documentation section .span4{
+.documentation section .span6{
 	text-align: right;
 }
 
+.documentation section .span6.defs{
+	text-align: left;
+}

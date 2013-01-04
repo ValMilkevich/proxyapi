@@ -9,6 +9,7 @@ namespace :api do
       get :fast
       get :recent
       get :random
+      get :available
     end
   end
 
@@ -18,6 +19,8 @@ namespace :api do
     end
   end
 end
+
+match "api/proxies/selector/*selector", to: "api/proxies#selector"
 
 
   # The priority is based upon order of creation:
