@@ -37,92 +37,67 @@
 	  <h3 class="offset6">Proxies</h3>
 
 			<div class="row-fluid">
-		  	<span class="span6">
-			  	<ul>
-			  		<div class="nav-header">Fields</div>
-			  		<div>:_id</div>
-			  		<div>:ip</div>
-			  		<div>:port</div>
-			  		<div>:latency</div>
-			  		<div>:type</div>
-			  		<div>:availability</div>
-			  		<div>:available</div>
-			  		<div>:last_check</div>
-			  		<div>:checks_count</div>
-			  	</ul>
-			  </span>
-			  <span class="span6 defs">
-			  	<ul>
-			  		<div class="nav-header">Comments</div>
-			  		<div>Proxy permanent id</div>
-			  		<div>Proxy IP, String</div>
-			  		<div>Proxy Port</div>
-			  		<div>Proxy latency based on number of checks</div>
-						<div>Proxy type, ["HTTP", "HTTPS", "SOCKS#{n}"] type: Array</div>
-			  		<div>Proxy availability based on number of checks</div>
-			  		<div>If proxy is available</div>
-			  		<div>When proxy was checked last time</div>
-			  		<div>Number of our checks for this proxy</div>
-			  	</ul>
-			  </span>
+				<%= doc_row  "Fields", "Comments", true %>
+				<%= doc_row  "_id", "Proxy permanent id, type: Integer" %>
+				<%= doc_row  "ip", "Proxy IP, type: String" %>
+				<%= doc_row  "port", "Proxy Port, type: String" %>
+				<%= doc_row  "type", "Proxy type, [\"HTTP\", \"HTTPS\", \"SOCKS\#{n}\"] type: Array" %>
+				<%= doc_row  "availability", "Proxy availability based on number of checks, type: Float" %>
+				<%= doc_row  "available", "If Proxy is available, type: Boolean" %>
+				<%= doc_row  "last_check", "Time of the last check, type: Time" %>
+				<%= doc_row  "latency", "Proxy latency based on number of checks, type: Integer" %>
+				<%= doc_row  "checks_count", "Number of our checks for this proxy, type: Integer" %>
 			</div>
 
-<br/>
 
 	  <div class="row-fluid">
-	  	<span class="span6">
-		  	<ul>
-		  		<div class="nav-header">URL</div>
-		  		<div>GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path %></div>
-					<div>GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %> </div>
-					<div>GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path %></div>
-					<div>GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %></div>
-			  	<div>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id') %></div>
-		  	</ul>
-		  </span>
-		  <span class="span6 defs">
+	  	<%= doc_row  "URLs", "Comments", true %>
 
-		  	<ul>
-		  		<div class="nav-header">Comments</div>
-					<div> Starting from most recent proxies </div>
-					<div> Starting from the fastest proxies </div>
-					<div> Selects random fast and recent proxy </div>
-					<div> All Proxy list </div>
-			  	<div> Shows one proxy defined by :id </div>
-		  	</ul>
-		  </span>
+			<%= doc_row "Starting from most recent proxies" do %>
+				GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path%>
+			<% end %>
+					<%= doc_row "Starting from the fastest proxies" do %>
+				GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %>
+			<% end %>
+					<%= doc_row "Selects random fast and recent proxy" do %>
+				GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path  %>
+			<% end %>
+					<%= doc_row "All Proxy list" do %>
+				GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %>
+			<% end %>
+					<%= doc_row "Shows one proxy defined by :id " do %>
+				GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id')%>
+			<% end %>
 		</div>
 
-<br/>
 
 	  <div class="row-fluid">
 
+			<%= doc_row  "Selectors", "Comments", true %>
 
-		<%= doc_row  "Selectors", "Comments", true %>
+			<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
+			  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
 
-		<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
-		  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
+			<%= doc_row "Proxies with latency from 0 to 500ms" do %>
+				GET: <%= link_to("/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json") %>
+			<% end %>
 
-		<%= doc_row "Proxies with latency from 0 to 500ms" do %>
-			GET: <%= link_to("/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json") %>
-		<% end %>
-
-		<%= doc_row "Proxies with latency from 0 to 500ms and availabiltiy higher then 95%" do %>
-			GET: <%= link_to("/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json") %>
-		<% end %>
+			<%= doc_row "Proxies with latency from 0 to 500ms and availabiltiy higher then 95%" do %>
+				GET: <%= link_to("/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json") %>
+			<% end %>
 
 
-		<%= doc_row "8888, 8080, 80 proxies ordered by latency in descending order" do %>
-			GET: <%= link_to("/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json") %>
-		<% end %>
+			<%= doc_row "8888, 8080, 80 proxies ordered by latency in descending order" do %>
+				GET: <%= link_to("/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json") %>
+			<% end %>
 
-		<%= doc_row "Proxies ordered by latency in descending order and availability in ascending order" do %>
-			GET: <%= link_to("/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json") %>
-		<% end %>
+			<%= doc_row "Proxies ordered by latency in descending order and availability in ascending order" do %>
+				GET: <%= link_to("/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json") %>
+			<% end %>
 
-		<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
-			GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
-		<% end %>
+			<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
+				GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
+			<% end %>
 
 		</div>
 

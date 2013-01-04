@@ -1,10 +1,15 @@
 module ApplicationHelper
 	def doc nav = false, &block
-		content_tag(:div, content_tag(:ul, capture(&block), :class => nav ? 'nav-header' : ''), :class => "span6")
+		content = capture(&block)
+		# content += content_tag(:hr) if !capture(&block).blank?
+
+		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : ''), :class => "span6")
 	end
 
 	def desc nav = false, &block
-		content_tag(:div, content_tag(:ul, capture(&block), :class => nav ? 'nav-header' : ''), :class => "span6 defs")
+		content = capture(&block)
+		# content += content_tag(:hr) if !capture(&block).blank?
+		content_tag(:div, content_tag(:ul, content, :class => nav ? 'nav-header' : '') , :class => "span6 defs")
 	end
 
 	def row &block
