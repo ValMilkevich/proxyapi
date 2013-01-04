@@ -3,19 +3,19 @@ class Api::ProxiesController < ApiController
 	expose(:proxies)
 
 	def index
-		render :json => proxies.to_json
+		render :json => proxies.limit(100)
 	end
 
 	def recent
-		render :json => proxies.order_by(:check_time.desc)
+		render :json => proxies.recent.limit(100)
 	end
 
 	def fast
-		render :json => proxies.order_by(:latency.asc)
+		render :json => proxies.fast.limit(100)
 	end
 
 	def random
-		render :json => Proxy.random
+		render :json => Proxy.random.limit(100)
 	end
 
 	def show

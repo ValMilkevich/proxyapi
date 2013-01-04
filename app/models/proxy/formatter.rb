@@ -16,8 +16,8 @@ module Proxy::Formatter
 		end
 	end
 
-	def latency=(val)
-		self[:latency]= val.to_i
+	def initial_latency=(val)
+		self.latency = val.to_i
 	end
 
 	def type=(val)

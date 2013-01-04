@@ -30,10 +30,12 @@ class Proxy
 	validates_presence_of :country_name
 	validates_numericality_of :latency, greater_than: 0
 
-	before_save :assign_country
-	after_create :check!
+	before_save		:assign_country
+	after_create	:delayed_check
 
 	scope :available, where(available: true)
+	scope :recent, order_by(:last_check.desc)
+	scope :fast, order_by(:latency.asc)
 	scope :http, where(type: "HTTP")
 
 	def as_json(options={})
@@ -63,8 +65,12 @@ class Proxy
 		)
 	end
 
-	def check!
-		self.checks.create
+	def delayed_check(hash = {priority: 1})
+		self.class.delay(hash).check(self.id)
+	end
+
+	def self.check(id)
+		find_by(id: id).checks.create
 	end
 
 	protected

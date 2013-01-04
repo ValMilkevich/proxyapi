@@ -3,6 +3,6 @@ class Api::Countries::ProxiesController < Api::ProxiesController
 	expose(:proxies, ancestor: :country)
 
 	def index
-		render :json => proxies
+		render :json => proxies.limit(100)
 	end
 end

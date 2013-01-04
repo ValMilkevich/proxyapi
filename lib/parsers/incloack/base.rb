@@ -4,7 +4,7 @@ module Parsers::Incloack
     cattr_accessor :latency, :headers, :host
 
     @@latency = 1500
-    @@headers = [:ip, :port, :country_name, :city_name, :latency, :type, :anonymity, :check_time, :port_image_url]
+    @@headers = [:ip, :port, :country_name, :city_name, :initial_latency, :type, :anonymity, :check_time, :port_image_url]
 
     @@host = "http://incloak.com"
 
