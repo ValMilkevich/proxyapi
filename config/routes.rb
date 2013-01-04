@@ -4,7 +4,19 @@ root :to => "dashboard#show"
 resource :dashboard, only: [:show]
 
 namespace :api do
-  resources :proxies, only: [:index, :show]
+  resources :proxies, only: [:index, :show] do
+    collection do
+      get :fast
+      get :recent
+      get :random
+    end
+  end
+
+  resources :countries, only: [:index, :show] do
+    scope :module => :countries do
+      resources :proxies, only: [:index, :show]
+    end
+  end
 end
 
 

@@ -56,8 +56,8 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
-          <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="0" >
+        <div class="span2 hidden-phone">
+          <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="00" >
             <ul class="nav nav-list">
               <li class="nav-header">Proxy API</li>
               <li><%= link_to "Home", "#home"  %></li>
@@ -66,15 +66,26 @@
 
               <li><%= link_to "Formats", "#formats"  %></li>
               <li><%= link_to "Proxies", "#proxies"  %></li>
+              <li><%= link_to "Countries", "#countries"  %></li>
+              <li><%= link_to "Country / Proxies", "#country_proxies"  %></li>
 
               <li class="nav-header">API</li>
-              <li><%= link_to "Proxies", api_proxies_path  %></li>
+              <li class="clearfix">
+                <span class="badge badge-info pull-right"><%= Proxy.count %></span>
+                <%= link_to "Proxies", api_proxies_path, class: "pull-left"  %>
+              </li>
+
+              <li>
+                <span class="badge badge-info pull-right"><%= Country.count %></span>
+                <%= link_to "Countries", api_countries_path, class: "pull-left"  %>
+              </li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-        <div class="span9">
+        <div class="span10">
           <%= yield %>
         </div>
+
       </div><!--/row-->
 
       <footer>

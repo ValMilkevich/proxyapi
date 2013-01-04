@@ -16,6 +16,14 @@ GIT
       execjs
       railties (>= 3.1)
 
+GIT
+  remote: https://github.com/voxdolo/decent_exposure.git
+  revision: 502caa1cddad9207a3af4a439507efca7e9ac60f
+  ref: HEAD
+  branch: master
+  specs:
+    decent_exposure (2.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -52,6 +60,7 @@ GEM
     bson_ext (1.8.0)
       bson (~> 1.8.0)
     builder (3.0.4)
+    chronic (0.9.0)
     commonjs (0.2.6)
     erubis (2.7.0)
     execjs (1.4.0)
@@ -129,6 +138,8 @@ PLATFORMS
 
 DEPENDENCIES
   bson_ext
+  chronic
+  decent_exposure!
   jquery-rails
   less-rails
   libv8 (~> 3.11.8)

@@ -1,6 +1,7 @@
-<div class="row">
+<div>
 
 	<section id="home">
+
 	</section>
 
 	<section id="documentation">
@@ -20,13 +21,47 @@
 
 
 	<section id="proxies">
-	  <h3>Proxies <small>:index, :show</small></h3>
+	  <h3>Proxies <small>many actions</small></h3>
 		<div class="well" style="margin-bottom: 9px;">
 			<ul>
-				<li>GET: /api/proxies(.:format)</li>
-		  	<li>GET: /api/proxies/:id(.:format)</li>
+				<li>GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path %></li>
+				<small> # Starting from most recent proxies </small>
+
+				<li>GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %> </li>
+				<small> # Starting from the fastest proxies </small>
+
+				<li>GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path %></li>
+				<small> # Selects random fast and recent proxy </small>
+
+				<li>GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %></li>
+				<small> # All Proxy list </small>
+
+		  	<li>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random) %></li>
+		  	<small> # Shows one proxy defined by :id </small>
+
 		  </ul>
 		</div>
 	</section>
+
+	<section id="countries">
+	  <h3>Countries <small>:index, :show</small></h3>
+		<div class="well" style="margin-bottom: 9px;">
+			<ul>
+				<li>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></li>
+		  	<li>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first) %></li>
+		  </ul>
+		</div>
+	</section>
+
+	<section id="country_proxies">
+	  <h3>Country / Proxies <small>:index, :show</small></h3>
+		<div class="well" style="margin-bottom: 9px;">
+			<ul>
+				<li>GET: /api/countries/:counry_id/proxies(.:format)</li>
+		  	<li>GET: /api/countries/:counry_id/:id(.:format)</li>
+		  </ul>
+		</div>
+	</section>
+
 
 </div>

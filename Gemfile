@@ -8,6 +8,8 @@ gem 'rails', '3.2.10'
 gem 'rails-api', :git => "git://github.com/rails-api/rails-api.git"
 gem 'mongoid'
 gem 'bson_ext'
+gem 'chronic'
+gem 'decent_exposure', :git => "https://github.com/voxdolo/decent_exposure.git", :branch => "master", :ref => "HEAD"
 
 gem 'nokogiri'
 gem 'jquery-rails'
