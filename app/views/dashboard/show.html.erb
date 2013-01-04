@@ -34,7 +34,7 @@
 
 
 	<section id="proxies">
-	  <h5 class="offset6">Proxies</h5>
+	  <h3 class="offset6">Proxies</h3>
 
 			<div class="row-fluid">
 		  	<span class="span6">
@@ -96,33 +96,34 @@
 <br/>
 
 	  <div class="row-fluid">
-	  	<span class="span6">
-		  	<ul>
-		  		<div class="nav-header">Selectors</div>
-		  		<br/><br/><br/><br/>
-		  		<div>GET: <%= link_to "/api/proxies/selector/.json", "/api/proxies/selector/.json" %></div>
-		  		<div>GET: <%= link_to "/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json" %></div>
-		  		<div>GET: <%= link_to "/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json" %></div>
-		  		<div>GET: <%= link_to "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json" %></div>
-		  		<div>GET: <%= link_to "/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json" %></div>
-				</ul>
-		  </span>
 
-		  <span class="span6 defs">
-		  	<ul>
-		  		<div class="nav-header">Comments</div>
-		  		<div>
-		  			You can send an orbitrary query to set conditions & sorting
-		  			Please not that you should set .format with each query so that last param will be not mixed with format
-		  		</div>
-		  		<br/>
-					<div> Proxies without conditions or sorting </div>
-					<div> Proxies with latency from 0 to 500ms</div>
-					<div> Proxies with latency from 0 to 500ms and availabiltiy higher then 95% </div>
-					<div> 8888, 8080, 80 proxies ordered by latency in descending order</div>
-					<div> Proxies ordered by latency in descending order and availability in ascending order </div>
-		  	</ul>
-		  </span>
+
+		<%= doc_row  "Selectors", "Comments", true %>
+
+		<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
+		  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
+
+		<%= doc_row "Proxies with latency from 0 to 500ms" do %>
+			GET: <%= link_to("/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json") %>
+		<% end %>
+
+		<%= doc_row "Proxies with latency from 0 to 500ms and availabiltiy higher then 95%" do %>
+			GET: <%= link_to("/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json") %>
+		<% end %>
+
+
+		<%= doc_row "8888, 8080, 80 proxies ordered by latency in descending order" do %>
+			GET: <%= link_to("/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json") %>
+		<% end %>
+
+		<%= doc_row "Proxies ordered by latency in descending order and availability in ascending order" do %>
+			GET: <%= link_to("/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json") %>
+		<% end %>
+
+		<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
+			GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
+		<% end %>
+
 		</div>
 
 	</section>
