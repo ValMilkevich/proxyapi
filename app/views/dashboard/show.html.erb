@@ -1,7 +1,7 @@
 <div>
 
 	<section id="home">
-
+		Last proxy check: <%= Proxy.order_by(:updated_at.desc).first.updated_at %>
 	</section>
 
 	<section id="documentation">
