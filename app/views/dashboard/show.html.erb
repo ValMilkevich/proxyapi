@@ -1,10 +1,13 @@
 <div>
 
 	<section id="home">
-		Last proxy check:
-		<span class="label label-important">
-			<%= Proxy.order_by(:updated_at.desc).first.updated_at %>
-		</span>
+		<% if Proxy.order_by(:updated_at.desc).first %>
+			Last proxy check:
+			<span class="label label-important">
+				<%= Proxy.order_by(:updated_at.desc).first.updated_at %>
+			</span>
+		<% end %>
+
 	</section>
 
 	<section id="documentation">
@@ -39,7 +42,7 @@
 				<li>GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %></li>
 				<small> # All Proxy list </small>
 
-		  	<li>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random) %></li>
+		  	<li>GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id') %></li>
 		  	<small> # Shows one proxy defined by :id </small>
 
 		  </ul>
@@ -51,7 +54,7 @@
 		<div class="well" style="margin-bottom: 9px;">
 			<ul>
 				<li>GET: <%= link_to "/api/countries(.:format)", api_countries_path %></li>
-		  	<li>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first) %></li>
+		  	<li>GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %></li>
 		  </ul>
 		</div>
 	</section>
