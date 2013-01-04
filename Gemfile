@@ -24,6 +24,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'chronic'
 gem 'decent_exposure', :git => "https://github.com/voxdolo/decent_exposure.git", :branch => "master", :ref => "HEAD"
+gem 'delayed_job_mongoid'
 
 gem 'nokogiri'
 gem 'jquery-rails'
