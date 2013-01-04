@@ -6,7 +6,7 @@ namespace :proxies do
     task :check => :environment do
       per_batch = 1000
       0.step(Proxy.count, per_batch) do |offset|
-          Proxy.recent.limit(per_batch).skip(offset).map{|p| p.delayed_check({priority: 2})}
+          ::Proxy.recent.limit(per_batch).skip(offset).map{|p| p.delayed_check({priority: 2})}
       end
     end
   end
@@ -21,8 +21,32 @@ namespace :proxies do
   namespace :incloack do
     task :get => :environment do
       Parsers::Incloack::Collection.each_country do |hash|
-        Proxy.create_or_update(hash)
+        begin
+          ::Proxy.create_or_update(hash)
+        rescue => e
+          puts "ERROR: #{e.to_s}"
+          puts hash
+          puts e.backtrace
+          []
+        end
       end
     end
   end
+
+  desc "hidemyass.com list"
+  namespace :hidemyass do
+    task :get => :environment do
+      Parsers::Hidemyass::Collection.each_page do |hash|
+        begin
+          ::Proxy.create_or_update(hash)
+        rescue => e
+          puts "ERROR: #{e.to_s}"
+          puts hash
+          puts e.backtrace
+          []
+        end
+      end
+    end
+  end
+
 end
