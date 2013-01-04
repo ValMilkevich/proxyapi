@@ -5,22 +5,37 @@
 	</section>
 
 	<section id="documentation">
-		<div class="page-header">
-	    <h2>Documentation</h2>
-	  </div>
+		<div class="row-fluid">
+			<%= row do %>
+				<%= desc do %>
+					<div class="page-header">
+						<h1>Documentation<h1>
+					</div>
+				<% end %>
+
+				<%= doc do %>
+					<br/>
+					<p>
+						This documentation aims to make your life easier when setting your proxy based solution.
+					</p>
+				<% end %>
+			<% end %>
+		</div>
 	</section>
 
 	<section id="formats">
 		<div class="row-fluid">
-			<%= doc_row  "Format", true %>
 			<%= doc_row  "JSON", "The only format currently" %>
 		</div>
 	</section>
 
 
 	<section id="proxies">
+		<%= doc_row  "Proxies", true %>
+	</section>
 
-			<div class="row-fluid">
+		<section id="proxies_fields">
+			<div class="row-fluid" id="proxies_fields">
 				<%= doc_row  "Fields", true %>
 				<%= doc_row  "_id", "Proxy permanent id, type: Integer" %>
 				<%= doc_row  "ip", "Proxy IP, type: String" %>
@@ -32,58 +47,59 @@
 				<%= doc_row  "latency", "Proxy latency based on number of checks, type: Integer" %>
 				<%= doc_row  "checks_count", "Number of our checks for this proxy, type: Integer" %>
 			</div>
+		</section>
+		<section id="proxies_urls">
+		  <div class="row-fluid">
+		  	<%= doc_row  "URLs", true %>
+
+				<%= doc_row "Starting from most recent proxies" do %>
+					GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path%>
+				<% end %>
+						<%= doc_row "Starting from the fastest proxies" do %>
+					GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %>
+				<% end %>
+						<%= doc_row "Selects random fast and recent proxy" do %>
+					GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path  %>
+				<% end %>
+						<%= doc_row "All Proxy list" do %>
+					GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %>
+				<% end %>
+						<%= doc_row "Shows one proxy defined by :id " do %>
+					GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id')%>
+				<% end %>
+			</div>
+		</section>
+
+		<section id="proxies_selectors">
+		  <div class="row-fluid">
+
+				<%= doc_row  "Selectors", true %>
+
+				<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
+				  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
+
+				<%= doc_row "Proxies with latency from 0 to 500ms" do %>
+					GET: <%= link_to("/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json") %>
+				<% end %>
+
+				<%= doc_row "Proxies with latency from 0 to 500ms and availabiltiy higher then 95%" do %>
+					GET: <%= link_to("/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json") %>
+				<% end %>
 
 
-	  <div class="row-fluid">
-	  	<%= doc_row  "URLs", true %>
+				<%= doc_row "8888, 8080, 80 proxies ordered by latency in descending order" do %>
+					GET: <%= link_to("/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json") %>
+				<% end %>
 
-			<%= doc_row "Starting from most recent proxies" do %>
-				GET: <%= link_to "/api/proxies/recent(.:format)", recent_api_proxies_path%>
-			<% end %>
-					<%= doc_row "Starting from the fastest proxies" do %>
-				GET: <%= link_to "/api/proxies/fast(.:format)", fast_api_proxies_path %>
-			<% end %>
-					<%= doc_row "Selects random fast and recent proxy" do %>
-				GET: <%= link_to "/api/proxies/random(.:format)", random_api_proxies_path  %>
-			<% end %>
-					<%= doc_row "All Proxy list" do %>
-				GET: <%= link_to "/api/proxies(.:format)", api_proxies_path %>
-			<% end %>
-					<%= doc_row "Shows one proxy defined by :id " do %>
-				GET: <%= link_to "/api/proxies/:id(.:format)", api_proxy_path(Proxy.random || 'proxy_id')%>
-			<% end %>
-		</div>
+				<%= doc_row "Proxies ordered by latency in descending order and availability in ascending order" do %>
+					GET: <%= link_to("/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json") %>
+				<% end %>
 
-
-	  <div class="row-fluid">
-
-			<%= doc_row  "Selectors", true %>
-
-			<%= doc_row "", "You can send an orbitrary query to set conditions & sorting
-			  			Please not that you should set .format with each query so that last param will be not mixed with format" %>
-
-			<%= doc_row "Proxies with latency from 0 to 500ms" do %>
-				GET: <%= link_to("/api/proxies/selector/latency(0-500).json", "/api/proxies/selector/latency(0-500).json") %>
-			<% end %>
-
-			<%= doc_row "Proxies with latency from 0 to 500ms and availabiltiy higher then 95%" do %>
-				GET: <%= link_to("/api/proxies/selector/latency(0-500):availability(0.95-1).json", "/api/proxies/selector/latency(0-500):availability(0.95-1).json") %>
-			<% end %>
-
-
-			<%= doc_row "8888, 8080, 80 proxies ordered by latency in descending order" do %>
-				GET: <%= link_to("/api/proxies/selector/port(8888,8080,80):order(latency.desc).json", "/api/proxies/selector/port(8888,8080,80):order(latency.desc).json") %>
-			<% end %>
-
-			<%= doc_row "Proxies ordered by latency in descending order and availability in ascending order" do %>
-				GET: <%= link_to("/api/proxies/selector/order(latency.desc,availability.asc).json", "/api/proxies/selector/order(latency.desc,availability.asc).json") %>
-			<% end %>
-
-			<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
-				GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
-			<% end %>
-		</div>
-	</section>
+				<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
+					GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
+				<% end %>
+			</div>
+		</section>
 
 
 	<section id="countries">
