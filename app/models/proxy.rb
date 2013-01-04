@@ -11,7 +11,7 @@ class Proxy
 	field :city_name
 	field :latency, type: Integer
 	field :ssl
-	field :type
+	field :type, type: Array
 	field :anonymity
 	field :url
 
@@ -44,6 +44,14 @@ class Proxy
 
 	def latency=(val)
 		self[:latency]= val.to_i
+	end
+
+	def type=(val)
+		if val.is_a?(Array)
+			self[:type] = val
+		else
+			self[:type] = val.to_s.split(',')
+		end
 	end
 
 
