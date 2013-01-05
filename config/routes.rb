@@ -30,7 +30,7 @@ namespace :api do
 end
 
 match "api/proxies/selector/*selector", to: "api/proxies#selector"
-
+match "api/test", to: "api#test"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

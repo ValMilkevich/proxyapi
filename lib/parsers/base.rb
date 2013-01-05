@@ -8,10 +8,11 @@ require 'iconv'
 # Declares Parsers most common methods, aka headers, net/http functions
 #
 module Parsers
+  module Base
+    extend ActiveSupport::Concern
 
-  class Base
     def raw_document
-      @raw_document ||= Parsers::Base.open(self.url)
+      @raw_document ||= self.class.open(self.url)
     end
 
     def doc
@@ -30,9 +31,7 @@ module Parsers
       index
     end
 
-    protected
-
-    class << self
+    module ClassMethods
       # Returns the most basic headers configuration ( should be possible variable?, to mimic different users)
       #
       def headers
@@ -47,24 +46,27 @@ module Parsers
         uri = URI(url)
         req = Net::HTTP::Get.new(uri.request_uri)
 
+        pp headers
+
         headers.each do |key, value|
           req[key] = value
         end
 
+
         if proxy
-            puts "PROXY: #{[proxy.ip, proxy.port]}"
+          puts "PROXY: #{[proxy.ip, proxy.port]}"
 
-            res = Net::HTTP::Proxy(proxy.ip, proxy.port).start(uri.hostname, uri.port) {|http|
-              http.request(req)
-            }
-          else
-            res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-              http.request(req)
-            }
-          end
-
-          res
+          res = Net::HTTP::Proxy(proxy.ip, proxy.port).start(uri.hostname, uri.port) {|http|
+            http.request(req)
+          }
+        else
+          res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+            http.request(req)
+          }
         end
+
+        res
+      end
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #

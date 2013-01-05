@@ -24,9 +24,13 @@ module Parsers::Bullshit
 			rand.to_s[2,40]
 		end
 
+		def google_cookies
+			"__utma=#{Parsers::Bullshit::Headers.rand_numbers[0,9]}.#{Parsers::Bullshit::Headers.rand_numbers[0,10]}.#{Parsers::Bullshit::Headers.rand_numbers[0,6]}.#{Parsers::Bullshit::Headers.rand_numbers[0,10]}.#{Parsers::Bullshit::Headers.rand_numbers[0,10]}.#{Parsers::Bullshit::Headers.rand_numbers[0,2]}; __utmb=#{Parsers::Bullshit::Headers.rand_numbers[0,9]}.#{rand(9)}.#{Parsers::Bullshit::Headers.rand_numbers[0,2]}.#{Parsers::Bullshit::Headers.rand_numbers[0,10]}; __utmc=#{Parsers::Bullshit::Headers.rand_numbers[0,9]}; __utmz=#{Parsers::Bullshit::Headers.rand_numbers[0,9]}.#{Parsers::Bullshit::Headers.rand_numbers[0,10]}.#{rand(9)}.#{rand(9)}.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)"
+		end
+
 		def cooky
 			[
-				"b=b; b=b; muid=#{rand_numbers[0,11] }; OABLOCK=#{rand_numbers[0,3]}.#{rand_numbers[0,10]}; OAID=#{rand_string[0,32]}; b=b; fe_typo_user=#{rand_string[0,32]}; __utma=#{rand_numbers[0,9]}.#{rand_numbers[0,10]}.#{rand_numbers[0,6]}.#{rand_numbers[0,10]}.#{rand_numbers[0,10]}.#{rand_numbers[0,2]}; __utmb=#{rand_numbers[0,9]}.#{rand(9)}.#{rand_numbers[0,2]}.#{rand_numbers[0,10]}; __utmc=#{rand_numbers[0,9]}; __utmz=#{rand_numbers[0,9]}.#{rand_numbers[0,10]}.#{rand(9)}.#{rand(9)}.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)",
+				"b=b; b=b; muid=#{rand_numbers[0,11] }; OABLOCK=#{rand_numbers[0,3]}.#{rand_numbers[0,10]}; OAID=#{rand_string[0,32]}; b=b; fe_typo_user=#{rand_string[0,32]}; #{google_cookies}",
 				"b=b; b=b; muid=#{rand_numbers[0,11] }; OABLOCK=#{rand_numbers[0,3]}.#{rand_numbers[0,10]}; OAID=#{rand_string[0,32]};",
 				"b=b; fe_typo_user=#{rand_string[0,32]};"
 			]

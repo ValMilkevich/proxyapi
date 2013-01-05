@@ -1,5 +1,12 @@
 class ApiController < ActionController::API
 
+def test
+	render :json => request.headers.inject({}){|memo, k| memo[k.first] = k.last if (k.first =~ /^[A-Z_\-0-9]+$/); memo }.diff(
+			Parsers::Localhost::Base::EXAMPLE_HEADER
+		)
+	# render :json => {:env => request.env.map{|k,v| {k => v}}, :headers => request.headers.map{|k,v| {k => v}}}.to_json
+end
+
 protected
 
 def construct_query(obj)
