@@ -7,10 +7,9 @@ devise_for :users, :path => "",
 root :to => "dashboard#show"
 resource :dashboard, only: [:show]
 
-authenticate :user, lambda {|u| u.admin? } do
-  namespace :admin do
-    root :to => "dashboard#show"
-  end
+
+namespace :admin do
+  root :to => "dashboard#show"
 end
 
 namespace :api do

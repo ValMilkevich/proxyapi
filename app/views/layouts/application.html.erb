@@ -58,13 +58,14 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span2 hidden-phone">
-          <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="100" >
+          <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="0" >
             <ul class="nav nav-list">
               <li class="nav-header">Proxy API</li>
 
               <% if user_signed_in? %>
                 <li>
                   <%= link_to(t('helpers.link.logout'), destroy_user_session_path, :method => :delete) %>
+                  <%= link_to("Admin", admin_root_url) if current_user.admin? %>
                 </li>
               <% else %>
                 <%= link_to glyphicon("facebook-sign"), omniauth_authorize_path(:user, :facebook), :class => "omniauth-authorize"  %>
