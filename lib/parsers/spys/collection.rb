@@ -14,37 +14,29 @@ module Parsers::Spys
     end
 
     def page_numbers
-      @pages ||= (1..doc.css('.pagination li a').map{|a| a['href'].scan(/[\d]+/) }.flatten.compact.map(&:to_i).max) rescue [1]
+      @pages ||= (1..doc.css('.spy1xx a').map{|a| a['href'].scan(/[\d]+/) }.flatten.compact.map(&:to_i).max) rescue [1]
     end
 
     def pages
-      page_numbers.map{|pn| self.class.host + "/proxy-list/#{pn}"}
-    end
-
-    def all_children(el, options, lmbd = lambda{} )
-      el.children.map{|c| ((c.children.present? ? all_children(c, options, lmbd) : c) if lmbd[c] ) }.compact.flatten
+      page_numbers.map{|pn| self.class.host + "/proxies#{pn}/"}
     end
 
     def index
       return @index if @index.present?
       list = []
-      doc.css('#listtable tr').each do |tr|
+      doc.css('tr.spy1x').each do |tr|
 
         tds = tr.css('td')
 
         list << {
-          :check_time => (tds[0].text + ' ago').strip,
-          :ip => childs = all_children(tds[1], {:tr => tr}, lambda{|el|
-              ["text", "span"].include?(el.name) &&
-              (el['style'].blank? || !(el['style'] =~ /none/)) &&
-              !el.ancestors('td').first.css('style').text.scan(/\.([^{]+)\{display:none/).flatten.include?(el['class'])
-            }).join,
-          :port => tds[2].text.strip,
-          :country_name => tds[3].text.strip,
-          :initial_speed => (tds[4].css('.speedbar').first || {})['rel'].to_s.strip,
-          :initial_latency => (tds[5].css('.speedbar').first || {})['rel'].to_s.strip,
-          :type => tds[6].text.to_s.strip,
-          :anonymity => tds[7].text.to_s.strip,
+          :ip => tds[0].css('.spy14').text.split(':').first,
+          :port => tds[0].css('.spy14').text.split(':').last,
+          :type => tds[1].text,
+          :anonymity => tds[2].text,
+          :initial_latency => tds[3].text.to_f * 1000,
+          :country_name => tds[4].text.gsub(tds[4].css('font font').text, '').strip,
+          :city_name => tds[4].css('font font').text.strip,
+          :check_time => [tds[6].text.split('-').first.gsub(":", "/"), tds[6].text.split('-').last].compact.join(' '),
           :url => url,
           :from => self.class.from
          }
