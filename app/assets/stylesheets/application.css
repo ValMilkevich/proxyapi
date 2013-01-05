@@ -19,7 +19,7 @@
 
 .documentation section .defs{
 	border-right: 1px solid #eee; background: #fafafe;
-	padding-left: 10px;
+	padding-left: 30px;
 }
 
 .documentation section .docs{
@@ -27,8 +27,7 @@
 	padding-left: 0px;
 }
 
-.documentation section .defs dd{
-}
-
-.documentation section .docs dd{
+.documentation section dd{
+	padding-left: 0px;
+	margin-left: 0px;
 }

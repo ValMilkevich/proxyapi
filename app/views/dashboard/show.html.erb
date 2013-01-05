@@ -7,14 +7,11 @@
 	<section id="documentation">
 		<div class="row-fluid">
 			<%= row do %>
-				<%= desc do %>
-					<div class="page-header">
-						<h1>Documentation<h1>
-					</div>
+				<%= desc(true) do %>
+					<h1>Documentation<h1>
 				<% end %>
 
 				<%= doc do %>
-					<br/>
 					<p>
 						This documentation aims to make your life easier when setting your proxy based solution.
 					</p>
@@ -37,15 +34,15 @@
 		<section id="proxies_fields">
 			<div class="row-fluid" id="proxies_fields">
 				<%= doc_row  "Fields", true %>
-				<%= doc_row  "<dt>:_id<dt>".html_safe, "Proxy permanent id, type: Integer" %>
-				<%= doc_row  "<dt>:ip<dt>".html_safe, "Proxy IP, type: String" %>
-				<%= doc_row  "<dt>:port<dt>".html_safe, "Proxy Port, type: String" %>
-				<%= doc_row  "<dt>:type<dt>".html_safe, "Proxy type, [\"HTTP\", \"HTTPS\", \"SOCKS\#{n}\"] type: Array" %>
-				<%= doc_row  "<dt>:availability<dt>".html_safe, "Proxy availability based on number of checks, type: Float" %>
-				<%= doc_row  "<dt>:available<dt>".html_safe, "If Proxy is available, type: Boolean" %>
-				<%= doc_row  "<dt>:last_check<dt>".html_safe, "Time of the last check, type: Time" %>
-				<%= doc_row  "<dt>:latency<dt>".html_safe, "Proxy latency based on number of checks, type: Integer" %>
-				<%= doc_row  "<dt>:checks_count<dt>".html_safe, "Number of our checks for this proxy, type: Integer" %>
+				<%= doc_row  "_id", "Proxy permanent id, type: Integer" %>
+				<%= doc_row  "ip", "Proxy IP, type: String" %>
+				<%= doc_row  "port", "Proxy Port, type: String" %>
+				<%= doc_row  "type", "Proxy type, [\"HTTP\", \"HTTPS\", \"SOCKS\#{n}\"] type: Array" %>
+				<%= doc_row  "availability", "Proxy availability based on number of checks, type: Float" %>
+				<%= doc_row  "available", "If Proxy is available, type: Boolean" %>
+				<%= doc_row  "last_check", "Time of the last check, type: Time" %>
+				<%= doc_row  "latency", "Proxy latency based on number of checks, type: Integer" %>
+				<%= doc_row  "checks_count", "Number of our checks for this proxy, type: Integer" %>
 			</div>
 		</section>
 		<section id="proxies_urls">
