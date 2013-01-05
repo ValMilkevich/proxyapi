@@ -46,8 +46,6 @@ module Parsers
         uri = URI(url)
         req = Net::HTTP::Get.new(uri.request_uri)
 
-        pp headers
-
         headers.each do |key, value|
           req[key] = value
         end
