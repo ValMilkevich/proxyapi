@@ -38,7 +38,7 @@ module Parsers::Incloack
       list_hash = []
       doc.css('div#tgr table.pl tr').map{|a| [*a.css('td').map(&:text), (a.css('td img').first['src'] rescue nil)].compact }.each do |arr|
         hash = {}
-        @@headers.each_with_index do |h, i|
+        @@table_headers.each_with_index do |h, i|
           hash[h] = arr[i]
         end
         port_image_url = hash.delete(:port_image_url)
