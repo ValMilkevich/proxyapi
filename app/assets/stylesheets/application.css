@@ -7,19 +7,34 @@
 */
 
 .docs-def{
-	border-bottom: 1px solid #eee;
-}
-
-.defs{
-	border-right: 1px solid #ccc; background: #fdfdfd;
-	padding-right: 20px;
+	border-bottom: 1px solid #fafafe;
 }
 
 .documentation section .docs, .documentation section .defs{
 	text-align: left; height: 100%;
-	padding: 12px 0;
-	padding-left: 0px;
-	margin-left: 0px;
+	padding: 6px 0;
 	padding-right: 12px;
 	margin-right: 12px;
+}
+
+.documentation section .defs{
+	border-right: 1px solid #eee; background: #fafafe;
+	padding-left: 30px;
+}
+
+.documentation section .docs{
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+.documentation section dd{
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+.omniauth-authorize:hover{
+	text-decoration: none;
+}
+.omniauth-authorize i{
+	font-size: 24px;
 }

@@ -1,0 +1,6 @@
+development:
+  consumer_key: 219988244799303
+  consumer_secret: 9dfdb0ddaba1b2a14cf64802d0265a02
+production:
+  consumer_key: 446996908687834
+  consumer_secret: f1638bac96da4abb190278e9b032e05b

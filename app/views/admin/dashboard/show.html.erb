@@ -1,0 +1,82 @@
+<h3>PRX:</h3>
+
+<% Proxy.all.distinct(:from).each do |from| %>
+	<section>
+		<div class="row-fluid span4">
+			<h4><%= from %></h4>
+
+			<span class="span1 docs">
+				<dt><%= Proxy.where(from: from).count %></dt>
+				<dt><%= Proxy.where(from: from).available.count %></dt>
+				<dt><%= Proxy.where(from: from).unavailable.count %></dt>
+
+				<hr/>
+				<dt><%= Proxy.where(:from => from, :created_at.gte => 5.minutes.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :created_at.gte => 20.minutes.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :created_at.gte => 1.hour.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :created_at.gte => 3.hour.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :created_at.gte => 12.hour.ago).count %></dt>
+
+				<hr/>
+				<dt><%= Proxy.where(:from => from, :last_check.gte => 5.minutes.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :last_check.gte => 20.minutes.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :last_check.gte => 1.hour.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :last_check.gte => 3.hour.ago).count %></dt>
+				<dt><%= Proxy.where(:from => from, :last_check.gte => 12.hour.ago).count %></dt>
+			</span>
+
+			<span class="span5 defs">
+				<dd>All</dd>
+				<dd>Active</dd>
+				<dd>Inactive</dd>
+
+				<hr/>
+				<dd>Proxies 5 Mins</dd>
+				<dd>Proxies 20 Mins</dd>
+				<dd>Proxies 1 Hour</dd>
+				<dd>Proxies 3 Hours</dd>
+				<dd>Proxies 12 Hours</dd>
+
+				<hr/>
+				<dd>Checks 5 Mins</dd>
+				<dd>Checks 20 Mins</dd>
+				<dd>Checks 1 Hour</dd>
+				<dd>Checks 3 Hours</dd>
+				<dd>Checks 12 Hours</dd>
+			</span>
+
+		</div>
+	</section>
+<% end %>
+
+<div class="span6">
+	<section>
+		<h3>DJ:</h3>
+		<%= Delayed::Job.count %>
+
+		<h3>SA:</h3>
+		<% System::Activity.started.each do |sa| %>
+			<div>
+				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+
+				<b><%= sa.name %></b>
+				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+
+			</div>
+		<% end %>
+
+		<% System::Activity.completed.limit(30).each do |sa| %>
+			<div>
+				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+
+				<b><%= sa.name %></b>
+				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+
+			</div>
+		<% end %>
+	</section>
+	</div>

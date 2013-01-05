@@ -1,12 +1,13 @@
 module Parsers::Hidemyass
 
   class Base < Parsers::Base
-    cattr_accessor :latency, :headers, :host
+    cattr_accessor :latency, :headers, :host, :from
 
     @@latency = 1500
     @@headers = [:check_time, :ip, :port, :country_name, :initial_speed, :initial_latency, :type, :anonymity]
 
     @@host = "http://www.hidemyass.com"
+    @@from = "hidemyass.com"
 
     def url
       @url || "http://www.hidemyass.com/proxy-list/#{@page}"

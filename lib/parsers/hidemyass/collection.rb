@@ -45,7 +45,8 @@ module Parsers::Hidemyass
           :initial_latency => (tds[5].css('.speedbar').first || {})['rel'].to_s.strip,
           :type => tds[6].text.to_s.strip,
           :anonymity => tds[7].text.to_s.strip,
-          :url => url
+          :url => url,
+          :from => self.class.from
          }
 
       end
