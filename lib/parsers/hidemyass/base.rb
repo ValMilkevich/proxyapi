@@ -1,6 +1,6 @@
 module Parsers::Hidemyass
-
-  class Base < Parsers::Base
+  class Base
+    include Parsers::Base
     cattr_accessor :latency, :headers, :host, :from
 
     @@latency = 1500
@@ -17,7 +17,12 @@ module Parsers::Hidemyass
       @url = url
     end
 
+    def self.headers
+      super.merge(
+        "Host" => self.from,
+        "Referer" => self.host
+      )
+    end
   end
-
 end
 
