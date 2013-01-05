@@ -1,0 +1,4 @@
+<%- if devise_mapping.omniauthable? %>
+  <%= link_to glyphicon("facebook-sign"), omniauth_authorize_path(resource_name, :facebook), :class => "omniauth-authorize"  %>
+  <%= link_to glyphicon("twitter-sign"), omniauth_authorize_path(resource_name, :twitter), :class => "omniauth-authorize"  %>
+<% end -%>

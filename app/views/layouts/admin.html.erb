@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "Prxapi" %></title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag "application", :media => "all" %>
+  </head>
+  <body data-spy="scroll" data-target=".sidebar-nav" data-twttr-rendered="true">
+
+<br/>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2 hidden-phone">
+          <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="100" >
+            <ul class="nav nav-list">
+              <li class="nav-header">Proxy API Admin</li>
+              <li><%= link_to "Home", admin_root_path  %></li>
+
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span10">
+          <%= yield %>
+        </div>
+
+      </div><!--/row-->
+
+      <footer>
+        <p>&copy; Proxy API 2013</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Javascripts
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <%= javascript_include_tag "application" %>
+
+    <%= javascript_include_tag do %>
+      $('#nav-list').affix()
+      $('#nav-list').scrollspy()
+    <% end %>
+  </body>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-37412158-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</html>

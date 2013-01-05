@@ -16,6 +16,7 @@ class Proxy
 	field :type, type: Array
 	field :anonymity
 	field :url
+	field :from
 
 	field :availability, type: Float, default: 1.0
 	field :available, type: Boolean, default: true
@@ -35,6 +36,7 @@ class Proxy
 	after_create	:delayed_check
 
 	scope :available, where(available: true)
+	scope :unavailable, where(available: false)
 	scope :recent, order_by(:last_check.desc)
 	scope :fast, order_by(:latency.asc)
 	scope :http, where(type: "HTTP")

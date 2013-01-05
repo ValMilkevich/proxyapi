@@ -31,3 +31,10 @@
 	padding-left: 0px;
 	margin-left: 0px;
 }
+
+.omniauth-authorize:hover{
+	text-decoration: none;
+}
+.omniauth-authorize i{
+	font-size: 24px;
+}

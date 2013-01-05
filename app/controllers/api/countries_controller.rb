@@ -3,7 +3,7 @@ class Api::CountriesController < ApiController
 	expose(:countries)
 
 	def index
-		render json: countries
+		render json: countries.limit(100)
 	end
 
 	def show

@@ -1,4 +1,9 @@
 module ApplicationHelper
+
+	def glyphicon(klass = '', text = '', options = {})
+	 content_tag(:i, '', options.merge(:class => "icon-#{klass.to_s}")) + " #{text}"
+	end
+
 	def doc nav = false, &block
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
@@ -18,18 +23,18 @@ module ApplicationHelper
 
 	def doc_row *args, &block
 		if args.size == 1
-			d2 = args[0]
+			d2 = args[0].to_s
 		elsif args.size == 2
 			if args[1].is_a?(TrueClass) || args[1].is_a?(FalseClass)
-				d2 = args[0]
+				d2 = args[0].to_s
 				nav = args[1]
 			else
-				d1 = args[0]
-				d2 = args[1]
+				d1 = args[0].to_s
+				d2 = args[1].to_s
 			end
 		else
-			d1 = args[0]
-			d2 = args[1]
+			d1 = args[0].to_s
+			d2 = args[1].to_s
 			nav = args[2]
 		end
 

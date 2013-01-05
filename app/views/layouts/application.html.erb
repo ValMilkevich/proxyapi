@@ -52,6 +52,7 @@
       </div>
     </div>
 -->
+
 <br/>
 
     <div class="container-fluid">
@@ -60,6 +61,17 @@
           <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="100" >
             <ul class="nav nav-list">
               <li class="nav-header">Proxy API</li>
+
+              <% if user_signed_in? %>
+                <li>
+                  <%= link_to(t('helpers.link.logout'), destroy_user_session_path, :method => :delete) %>
+                </li>
+              <% else %>
+                <%= link_to glyphicon("facebook-sign"), omniauth_authorize_path(:user, :facebook), :class => "omniauth-authorize"  %>
+                <%= link_to glyphicon("twitter-sign"), omniauth_authorize_path(:user, :twitter), :class => "omniauth-authorize"  %>
+              <% end %>
+
+
               <li><%= link_to "Home", "#home"  %></li>
 
               <li class="nav-header">Documentation</li>

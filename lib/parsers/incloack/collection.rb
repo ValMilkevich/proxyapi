@@ -45,6 +45,7 @@ module Parsers::Incloack
 
         hash[:port] = Parsers::Incloack::Image.new( self.class.host + port_image_url.to_s).detect_port if port_image_url
         hash[:url] = url
+        hash[:from] = self.class.from
         list_hash << hash
       end
 

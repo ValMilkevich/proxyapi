@@ -1,7 +1,16 @@
 Prxapi::Application.routes.draw do
 
+devise_for :users, :path => "",
+  :path_names => { :sign_in => 'login', :sign_out => 'logout', :password => 'secret', :confirmation => 'verification', :unlock => 'unblock', :registration => 'register', :sign_up => 'cmon_let_me_in' },
+  controllers: { omniauth_callbacks: "omniauth_callbacks", sessions: "sessions" }
+
+
 root :to => "dashboard#show"
 resource :dashboard, only: [:show]
+
+namespace :admin do
+  root :to => "dashboard#show"
+end
 
 namespace :api do
   resources :proxies, only: [:index, :show] do

@@ -25,14 +25,15 @@ gem 'bson_ext'
 gem 'chronic'
 gem 'decent_exposure', :git => "https://github.com/voxdolo/decent_exposure.git", :branch => "master", :ref => "HEAD"
 gem 'delayed_job_mongoid'
-
 gem 'nokogiri'
 gem 'jquery-rails'
 gem 'libv8', '~> 3.11.8'
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-
+gem 'devise'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
 
 group :production do
 	gem 'uglifier'
