@@ -95,6 +95,9 @@
 				<%= doc_row "Proxies from 2013-01-01 12:00 (in your local time) till 2013-12-01" do %>
 					GET: <%= link_to("/api/proxies/selector/last_check(201301011200-20131201).json", "/api/proxies/selector/last_check(201301011200-20131201).json") %>
 				<% end %>
+				<%= doc_row "Proxies with 100% availability, with at least 5 overall checks, with type HTTP, with latency not more then 300 ms ordered by the time of the last check " do %>
+					GET: <%= link_to "/api/proxies/selector/:checks_count(5-1000):availability(1.0):type(HTTP):latency(0-300):order(last_check.desc).json", "/api/proxies/selector/:checks_count(5-1000):availability(1.0):type(HTTP):latency(0-300):order(last_check.desc).json" %>
+				<% end %>
 			</div>
 		</section>
 
