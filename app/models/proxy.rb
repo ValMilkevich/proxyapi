@@ -10,6 +10,7 @@ class Proxy
 	field :ip
 	field :port
 	field :country_name
+	field :country_code
 	field :city_name
 	field :latency, type: Integer
 	field :ssl
@@ -28,7 +29,6 @@ class Proxy
 
 	validates_presence_of :ip
 	validates_presence_of :port
-	validates_presence_of :country_name
 	validates_numericality_of :latency, greater_than: 0
 	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
 
@@ -83,11 +83,17 @@ class Proxy
 		end
 	end
 
+	def country_code=(val)
+		self.country_name ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
+	end
+
 
 	protected
 
 	def assign_country
-		self.country = Country.find_or_create_by(name: self.country_name)
+		if self.country_name
+			self.country = Country.where(name: /#{self.country_name}/i).first || Country.create(name: self.country_name)
+		end
 	end
 
 end

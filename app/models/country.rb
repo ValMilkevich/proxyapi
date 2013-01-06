@@ -5,6 +5,8 @@ class Country
 	max_versions 100
 
 	field :name
+	field :code
+
 	validates_presence_of :name
 
 	has_many :proxies

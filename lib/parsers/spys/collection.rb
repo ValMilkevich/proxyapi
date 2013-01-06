@@ -29,17 +29,17 @@ module Parsers::Spys
         tds = tr.css('td')
 
         list << {
-          :ip => tds[0].css('.spy14').text.split(':').first,
-          :port => tds[0].css('.spy14').text.split(':').last,
+          :ip => tds[0].css('.spy14').first.children.map { |e| e.text if e.text? }.compact.first,
+          :port => tds[0].css('.spy14').first.children.map { |e| e.text if e.text? }.compact.last,
           :type => tds[1].text,
           :anonymity => tds[2].text,
           :initial_latency => tds[3].text.to_f * 1000,
-          :country_name => tds[4].text.gsub(tds[4].css('font font').text, '').strip,
-          :city_name => tds[4].css('font font').text.strip,
+          :country_code => tds[4].text.gsub(tds[4].css('font font').text, '').strip,
+          :city_name => tds[4].css('font font').text.gsub('!', '').strip,
           :check_time => [tds[6].text.split('-').first.gsub(":", "/"), tds[6].text.split('-').last].compact.join(' '),
           :url => url,
           :from => self.class.from
-         }
+         } if tds[0].css('.spy14').first
 
       end
 

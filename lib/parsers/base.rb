@@ -17,7 +17,7 @@ module Parsers
 
     def doc
       @doc ||= Nokogiri::HTML(raw_document)
-    rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED
+    rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Capybara::Poltergeist::DeadClient
       refresh!
       doc
     end
@@ -41,38 +41,17 @@ module Parsers
       # Returns net/http opened page
       #
       def raw_open(url, proxy = false)
-        puts "URL: #{url}"
-
         uri = URI(url)
-        req = Net::HTTP::Get.new(uri.request_uri)
+        puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
+        # puts headers.inspect
+        Parsers::Proxygeist.new("#{uri.scheme}://#{uri.host}" , proxy).open(uri.request_uri, headers)
 
-        headers.each do |key, value|
-          req[key] = value
-        end
-
-
-        if proxy
-          puts "PROXY: #{[proxy.ip, proxy.port]}"
-
-          res = Net::HTTP::Proxy(proxy.ip, proxy.port).start(uri.hostname, uri.port) {|http|
-            http.request(req)
-          }
-        else
-          res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-            http.request(req)
-          }
-        end
-
-        res
       end
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, Proxy.http.random)
-
-        ic = Iconv.new('UTF-8', 'windows-1251')
-        ic.iconv(res.body)
+        res = raw_open(url, nil && Proxy.http.random).body
       end
     end
 

@@ -34,6 +34,8 @@ gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootst
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
+gem 'capybara', "~> 1.1.0"
+gem 'poltergeist', :git => "git://github.com/jonleighton/poltergeist.git", :branch => "master", :ref => "HEAD"
 
 group :production do
 	gem 'uglifier'
