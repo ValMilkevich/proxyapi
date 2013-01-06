@@ -17,7 +17,7 @@ module Parsers
 
     def doc
       @doc ||= Nokogiri::HTML(raw_document)
-    rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Capybara::Poltergeist::DeadClient
+    rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED
       refresh!
       doc
     end
@@ -44,14 +44,13 @@ module Parsers
         uri = URI(url)
         puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
         # puts headers.inspect
-        Parsers::Proxygeist.new("#{uri.scheme}://#{uri.host}" , proxy).open(uri.request_uri, headers)
-
+        Parsers::Phantomjs.new( :url => url, :prox => proxy, :headers => headers).open
       end
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, nil && Proxy.http.random).body
+        res = raw_open(url, nil && Proxy.http.random)
       end
     end
 

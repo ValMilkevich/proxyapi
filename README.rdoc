@@ -5,7 +5,9 @@
     git co worker
     git push hw0 worker:master
     heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git --app prxw0
-    heroku config:add MONGO_LAB_URL=mongodb://heroku_app10640832:rfk895f2pv7ngdf2psc41k2989@ds047197.mongolab.com:47197/heroku_app10640832 --app prxw0
+    heroku config:add LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib:/app/vendor/phantomjs/lib --app prxw0
+    heroku config:add MONGOLAB_URI=mongodb://heroku_app10640832:rfk895f2pv7ngdf2psc41k2989@ds047197.mongolab.com:47197/heroku_app10640832 --app prxw0
+    heroku config:add PATH=/app/bin:/app/vendor/bundle/ruby/1.9.1/bin:/usr/local/bin:/usr/bin:/bin:/app/vendor/phantomjs/bin --app prxw0
 
     heroku ps:scale worker=0 web=0 --app prxw0
 
