@@ -18,7 +18,8 @@ module Parsers::Spys
 		def self.headers
       super.merge(
         "Host" => self.from,
-        "Referer" => self.host
+        "Referer" => self.host,
+        "Cookies" => nil
       )
     end
 
