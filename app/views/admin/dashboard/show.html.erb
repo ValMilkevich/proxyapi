@@ -49,34 +49,72 @@
 	</section>
 <% end %>
 
-<div class="span6">
-	<section>
-		<h3>DJ:</h3>
-		<%= Delayed::Job.count %>
 
-		<h3>SA:</h3>
-		<% System::Activity.started.each do |sa| %>
-			<div>
-				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+	<% heroku.get_apps.each do |app| %>
+		<% if app["name"] =~ /prx/ %>
+		<div class="span4">
+			<div class="row-fluid">
+				<section>
+					<h4><%= app["name"] %></h4>
+					<span class="span2 docs">
+						<dt><%= app["dynos"] %></dt>
+						<dt><%= app["workers"] %></dt>
+						<dt><%= app["repo_migrate_status"] %></dt>
 
-				<b><%= sa.name %></b>
-				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+						<hr/>
+						<dt>Processes</dt>
+						<% heroku.get_ps(app["name"]).each do |ps| %>
+							<dt><%= ps["process"] %></dt>
+						<% end %>
+					</span>
 
+					<span class="span4 defs">
+						<dd>Dynos</dd>
+						<dd>Workers</dd>
+						<dd>Migrate Status</dd>
+						<hr/>
+						<dd>&nbsp;</dd>
+						<% heroku.get_ps(app["name"]).each do |ps| %>
+							<dd><%= ps["pretty_state"] %></dd>
+						<% end %>
+					</span>
+				</section>
 			</div>
+		</div>
+
 		<% end %>
+	<% end %>
 
-		<% System::Activity.completed.limit(30).each do |sa| %>
-			<div>
-				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+<div class="span4">
+	<div class="row-fluid">
+		<section>
+			<h3>DJ:</h3>
+			<%= Delayed::Job.count %>
 
-				<b><%= sa.name %></b>
-				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+			<h3>SA:</h3>
+			<% System::Activity.started.each do |sa| %>
+				<div>
+					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-			</div>
-		<% end %>
-	</section>
+					<b><%= sa.name %></b>
+					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+
+				</div>
+			<% end %>
+
+			<% System::Activity.completed.limit(30).each do |sa| %>
+				<div>
+					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+
+					<b><%= sa.name %></b>
+					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+
+				</div>
+			<% end %>
+		</section>
+	</div>
 	</div>
