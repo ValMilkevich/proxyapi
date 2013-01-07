@@ -1,5 +1,6 @@
 module Parsers::Incloack
-  class Image
+  class Image < ::Parsers::Incloack::Base
+
   	attr_accessor :url
 
     @@dictionary_path = "#{Rails.root}/lib/parsers/incloack/images/"
@@ -10,13 +11,16 @@ module Parsers::Incloack
 
     def file
     	begin
-	      @file ||= Parsers::Base.raw_open(@url).body.to_s
+	      @file ||= self.class.raw_open(@url).body.to_s
 	    rescue
 	    	nil
 	    end
     end
 
     def detect_port
+      puts "URL: #{@url}"
+      puts self.class.open(@url).to_s
+
     	return nil if !file
 
       dictionary.each do |k|

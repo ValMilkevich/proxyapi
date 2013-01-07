@@ -1,2 +1,3 @@
 https://github.com/heroku/heroku-buildpack-ruby
 http://github.com/stomita/heroku-buildpack-phantomjs
+http://github.com/misza222/heroku-buildpack-casperjs

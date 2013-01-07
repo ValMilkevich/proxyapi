@@ -23,8 +23,12 @@ namespace :proxies do
   namespace :incloack do
     task :get => :environment do |task|
       system_activity task.name do
-        Parsers::Incloack::Collection.each_country do |hash|
+        Parsers::Incloack::Collection.main_page do |hash|
           begin
+            puts "PRX:"
+            puts hash.inspect
+            puts "==========="
+
             ::Proxy.create_or_update(hash)
           rescue => e
             puts "ERROR: #{e.to_s}"

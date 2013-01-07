@@ -3,6 +3,7 @@ module Parsers::Incloack
   	include Parsers::Base
 
     cattr_accessor :latency, :headers, :host, :from
+    attr_accessor :url_options
 
     @@latency = 1500
     @@table_headers = [:ip, :port, :country_name, :city_name, :initial_latency, :type, :anonymity, :check_time, :port_image_url]
@@ -11,8 +12,19 @@ module Parsers::Incloack
     @@from = "incloak.com"
 
     def url
-      "http://incloak.com/proxy-list/?country=#{@country}&maxtime=#{@latency}"
+      "http://incloak.com/proxy-list/?#{url_options_string}"
     end
+
+    def url_options_string
+    	url_options.reject{|k,v| v.blank?}.to_query
+    end
+
+		def initialize(hash = {})
+      @url_options = hash
+      @latency = hash[:latency] || @@latency
+      @country = hash[:country]
+    end
+
 
 		def self.headers
       super.merge(

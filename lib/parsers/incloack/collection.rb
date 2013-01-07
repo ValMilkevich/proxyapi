@@ -1,5 +1,5 @@
 module Parsers::Incloack
-  class Collection < Base
+  class Collection < ::Parsers::Incloack::Base
     attr_accessor :attributes
 
     @@countries = [
@@ -14,9 +14,9 @@ module Parsers::Incloack
     def self.each_country
       @@countries.each do |country|
         begin
-          country_collection = new({:country => country, :latency => @@latency})
+          country_collection = new({:country => country, :maxtime => @@latency})
           if country_collection.index.size < 64
-            country_collection = new({:country => country, :latency => @@latency * 10 })
+            country_collection = new({:country => country, :maxtime => @@latency * 10 })
           end
 
           country_collection.index.map{|hash| yield hash}
@@ -27,9 +27,13 @@ module Parsers::Incloack
       end
     end
 
-    def initialize(hash = {})
-      @latency = hash[:latency] || @@latency
-      @country = hash[:country]
+    def self.main_page
+      begin
+        new(:maxtime => @@latency ).index.map{|hash| yield hash}
+      rescue
+        puts "ERROR: #{e.to_s}"
+        []
+      end
     end
 
     def index
