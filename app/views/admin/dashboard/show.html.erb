@@ -1,41 +1,4 @@
-
-<div class="span12">
-<h3>PRX:</h3>
-<% Proxy.all.distinct(:from).each do |from| %>
-	<div class="row-fluid">
-		<h3><%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small></h3>
-
-		<h5 class="span4">
-		Last weeks stats
-			<small>
-				<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
-				<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
-			</small>
-		</h5>
-
-		<h5 class="span4">
-		Last day stats
-			<small>
-				<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
-				<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
-			</small>
-		</h5>
-	</div>
-
-	<hr/>
-	<div class="row">
-			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
-			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
-	</div>
-
-	<div class="row">
-		<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 7 } %>
-	</div>
-
-	<hr/>
-<% end %>
-</div>
-
+<% if Rails.env == 'production' %>
 <div class="span12">
 	<h3>HEROKU:</h3>
 	<div class="row">
@@ -66,6 +29,55 @@
 		<% end %>
 	</div>
 </div>
+
+<% end %>
+
+<div class="span12">
+<h3>PRX:</h3>
+<% Proxy.all.distinct(:from).each do |from| %>
+	<div class="row">
+		<h3><%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small></h3>
+
+		<h5 class="span4">
+		Last 6 stats
+			<small>
+				<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 6.hours).available.count %></span>
+				<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours).last_week.unavailable.count %></span>
+			</small>
+		</h5>
+
+		<h5 class="span4">
+		Last day stats
+			<small>
+				<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
+				<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+			</small>
+		</h5>
+
+		<h5 class="span4">
+		Last week stats
+			<small>
+				<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
+				<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+			</small>
+		</h5>
+	</div>
+
+	<hr/>
+	<div class="row">
+			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
+			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
+	</div>
+
+	<div class="row">
+		<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 7 } %>
+	</div>
+
+	<hr/>
+<% end %>
+</div>
+
+
 
 <div class="span12">
 	<h3>DJ: <small><%= Delayed::Job.count %></small></h3>

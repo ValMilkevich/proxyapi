@@ -97,7 +97,7 @@ class Proxy
 	end
 
 	def self.google_chartize(collection, method, range = nil)
-    sent_hash = collection.map{|sms| [sms.send(method).round(3600).to_s(:db), 1]}.group_by(&:first)
+    sent_hash = collection.map{|sms| [sms.send(method).floor(3600 * 6).utc.to_s(:db), 1]}.group_by(&:first)
 
     sent_arr = sent_hash.collect{|key, sms| [key, sms.size]}
 
@@ -113,6 +113,7 @@ class Proxy
     else
       chart = [['',0]]
     end
+
     return chart
   end
 
