@@ -47,7 +47,7 @@
 			<h5 class="span3">
 			Last 1H stats
 				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 1.hours).available.count %></span>
+					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 1.hours).available.count %></span>
 					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours).last_week.unavailable.count %></span>
 				</small>
 			</h5>
@@ -55,7 +55,7 @@
 			<h5 class="span3">
 			Last 6H stats
 				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 6.hours).available.count %></span>
+					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 6.hours).available.count %></span>
 					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours).last_week.unavailable.count %></span>
 				</small>
 			</h5>
