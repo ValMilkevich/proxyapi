@@ -5,7 +5,7 @@ class Proxy
 	include Mongoid::Document
 	include Mongoid::Timestamps
 	include ::Proxy::Formatter
-
+	include Mongoid::CommonScopes
 
 	field :ip
 	field :port
@@ -96,6 +96,25 @@ class Proxy
 		self.country_name ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
 	end
 
+	def self.google_chartize(collection, method, range = nil)
+    sent_hash = collection.map{|sms| [sms.send(method).round(3600), 1]}.group_by(&:first)
+    sent_arr = sent_hash.collect{|key, sms| [key, sms.size]}
+
+    if !sent_arr.map(&:first).blank?
+      chart = []
+      (range || sent_hash.map(&:first).uniq.sort).each do |date|
+        if sent_hash[date]
+          chart << [date.to_time.strftime("%a %dth, %H:00"), sent_hash[date].size]
+        else
+          chart << [date.to_time.strftime("%a %dth, %H:00"), 0]
+        end
+      end
+    else
+      chart = [['',0]]
+    end
+
+    return chart
+  end
 
 	protected
 

@@ -1,120 +1,99 @@
+<div class="span12">
 <h3>PRX:</h3>
-
 <% Proxy.all.distinct(:from).each do |from| %>
-	<section>
-		<div class="row-fluid span4">
-			<h4><%= from %></h4>
+	<div class="row-fluid">
+		<h3><%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small></h3>
 
-			<span class="span1 docs">
-				<dt><%= Proxy.where(from: from).count %></dt>
-				<dt><%= Proxy.where(from: from).available.count %></dt>
-				<dt><%= Proxy.where(from: from).unavailable.count %></dt>
+		<h5 class="span4">
+		Last weeks stats
+			<small>
+				<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
+				<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+			</small>
+		</h5>
 
-				<hr/>
-				<dt><%= Proxy.where(:from => from, :created_at.gte => 5.minutes.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :created_at.gte => 20.minutes.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :created_at.gte => 1.hour.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :created_at.gte => 3.hour.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :created_at.gte => 12.hour.ago).count %></dt>
+		<h5 class="span4">
+		Last day stats
+			<small>
+				<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
+				<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+			</small>
+		</h5>
+	</div>
 
-				<hr/>
-				<dt><%= Proxy.where(:from => from, :last_check.gte => 5.minutes.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :last_check.gte => 20.minutes.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :last_check.gte => 1.hour.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :last_check.gte => 3.hour.ago).count %></dt>
-				<dt><%= Proxy.where(:from => from, :last_check.gte => 12.hour.ago).count %></dt>
-			</span>
+	<hr/>
+	<div class="row">
+			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
+			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
+	</div>
 
-			<span class="span5 defs">
-				<dd>All</dd>
-				<dd>Active</dd>
-				<dd>Inactive</dd>
+	<div class="row">
+		<%= render :partial => "/admin/proxies/chart", locals: {from: from} %>
+	</div>
 
-				<hr/>
-				<dd>Proxies 5 Mins</dd>
-				<dd>Proxies 20 Mins</dd>
-				<dd>Proxies 1 Hour</dd>
-				<dd>Proxies 3 Hours</dd>
-				<dd>Proxies 12 Hours</dd>
-
-				<hr/>
-				<dd>Checks 5 Mins</dd>
-				<dd>Checks 20 Mins</dd>
-				<dd>Checks 1 Hour</dd>
-				<dd>Checks 3 Hours</dd>
-				<dd>Checks 12 Hours</dd>
-			</span>
-
-		</div>
-	</section>
+	<hr/>
 <% end %>
+</div>
 
+<div class="span6">
+	<h3>HEROKU:</h3>
 
 	<% heroku.get_apps.each do |app| %>
 		<% if app["name"] =~ /prx/ %>
-		<div class="span4">
-			<div class="row-fluid">
-				<section>
-					<h4><%= app["name"] %></h4>
-					<span class="span2 docs">
-						<dt><%= app["dynos"] %></dt>
-						<dt><%= app["workers"] %></dt>
-						<dt><%= app["repo_migrate_status"] %></dt>
+			<div class="span6">
+				<h4>
+					<small class="pull-left span2">
+						<%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if app["repo_migrate_status"] == "complete" %>
+					</small>
 
-						<hr/>
-						<dt>Processes</dt>
-						<% heroku.get_ps(app["name"]).each do |ps| %>
-							<dt><%= ps["process"] %></dt>
-						<% end %>
-					</span>
+					<%= app["name"] %>
 
-					<span class="span4 defs">
-						<dd>Dynos</dd>
-						<dd>Workers</dd>
-						<dd>Migrate Status</dd>
-						<hr/>
-						<dd>&nbsp;</dd>
-						<% heroku.get_ps(app["name"]).each do |ps| %>
-							<dd><%= ps["pretty_state"] %></dd>
-						<% end %>
-					</span>
-				</section>
+					<small><%= "#{app["dynos"]} dyno" if app["dynos"].to_i > 0 %></small>
+					<small><%= "#{app["workers"]} worker" if app["workers"].to_i > 0 %></small>
+
+					<small class="pull-right span1">
+						<%= app["repo_migrate_status"] if app["repo_migrate_status"] != "complete"  %>
+					</small>
+				</h4>
+
+				<% heroku.get_ps(app["name"]).each do |ps| %>
+					<h5><%= ps["process"] %> <small> <%= ps["pretty_state"] %>, <%= Time.parse(ps["transitioned_at"]).localtime.strftime('%a %dth, %H:%M') %></small></h5>
+				<% end %>
+				<hr>
 			</div>
-		</div>
-
 		<% end %>
 	<% end %>
+</div>
 
-<div class="span4">
-	<div class="row-fluid">
-		<section>
-			<h3>DJ:</h3>
-			<%= Delayed::Job.count %>
+<div class="span6">
+	<h3>DJ: <small><%= Delayed::Job.count %></small></h3>
+</div>
 
-			<h3>SA:</h3>
-			<% System::Activity.started.each do |sa| %>
-				<div>
-					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+<div class="span6">
+	<section>
+		<h3>SA:</h3>
+		<% System::Activity.started.each do |sa| %>
+			<div>
+				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-					<b><%= sa.name %></b>
-					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+				<b><%= sa.name %></b>
+				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
 
-				</div>
-			<% end %>
+			</div>
+		<% end %>
 
-			<% System::Activity.completed.limit(30).each do |sa| %>
-				<div>
-					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+		<% System::Activity.completed.limit(20).each do |sa| %>
+			<div>
+				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-					<b><%= sa.name %></b>
-					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+				<b><%= sa.name %></b>
+				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
 
-				</div>
-			<% end %>
-		</section>
-	</div>
-	</div>
+			</div>
+		<% end %>
+	</section>
+</div>

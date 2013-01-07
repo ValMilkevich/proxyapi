@@ -19,9 +19,13 @@ class HerokuApp
 
 	def method_missing name, *args, &block
 		if request.respond_to?(name)
-			return (instance_variable_defined?("@#{name}") && instance_variable_get("@#{name}")) || instance_variable_set("@#{name}", request.send(name, *args, &block).status == 200 ? request.send(name, *args, &block).body : {})
+			return (instance_variable_defined?(iname(name, *args)) && instance_variable_get(iname(name, *args))) || instance_variable_set(iname(name, *args), request.send(name, *args, &block).status == 200 ? request.send(name, *args, &block).body : {})
 		end
 
 		super
+	end
+
+	def iname(name, *args)
+		"@#{name}_#{args.map(&:to_s).join('_')}"
 	end
 end
