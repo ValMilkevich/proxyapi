@@ -52,6 +52,13 @@ module Parsers
       def open(url)
         res = raw_open(url, Proxy.http.available.recent.fast[rand(10)])
       end
+
+      def binary(url)
+        uri = URI(url)
+        proxy = Proxy.http.available.recent.fast[rand(10)]
+        puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
+        Parsers::Phantomjs.new( :url => url, :proxy => proxy, :headers => headers).binary
+      end
     end
 
   end

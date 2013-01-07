@@ -9,6 +9,8 @@ class Parsers::Phantomjs
 		load_speed: File.expand_path('../phantomjs/load_speed.js.coffee', __FILE__),
 		open:  File.expand_path('../phantomjs/open.js.coffee', __FILE__),
 		test_headers: File.expand_path('../phantomjs/test_headers.js.coffee', __FILE__),
+		download:  File.expand_path('../phantomjs/download.js', __FILE__),
+		binary:  File.expand_path('../phantomjs/binary.js', __FILE__),
 	}
 
 	attr_accessor :proxy, :url, :headers
@@ -23,6 +25,29 @@ class Parsers::Phantomjs
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:open], self.url.to_json, "'#{self.headers.to_json}'"].join(' ')}"
 		puts cmd
 		`#{cmd}`.strip
+	end
+
+	def download(opts = {})
+		self.opts!(opts)
+		raise "url should be defined" if self.url.blank?
+
+		cmd = "#{[PHANTOMJS, options, SCRIPTS[:download], self.url.to_json, "'#{self.headers.to_json}'", self.tmp_filename.to_json].join(' ')}"
+		puts cmd
+		`#{cmd}`.strip
+	end
+
+	def binary(opts = {})
+		self.opts!(opts)
+		raise "url should be defined" if self.url.blank?
+
+		cmd = "#{[PHANTOMJS, options, SCRIPTS[:binary], self.url.to_json, "'#{self.headers.to_json}'", self.tmp_filename.to_json].join(' ')}"
+		puts cmd
+		res = `#{cmd}`.strip
+		if res.present?
+			Base64.decode64(`#{cmd}`.strip)
+		else
+			nil
+		end
 	end
 
 	def my_ip(opts = {})
@@ -61,6 +86,24 @@ class Parsers::Phantomjs
 		res = `#{cmd}`
 		puts res
 		JSON.parse(res)["headers"]["User-Agent"] == self.headers["User-Agent"]
+	end
+
+	def filename
+		URI(self.url).request_uri.split('/').last
+	end
+
+	def tmp_filename(filename = nil)
+		Dir.mkdir(tmp_dir) if !File.exists?(tmp_dir)
+		@tmp_filename ||= File.join(tmp_dir, filename || "#{Time.now.strftime("%Y%m%d")}_#{Digest::SHA1.hexdigest(Time.now.to_i.to_s)}" )
+	end
+
+	def tmp_filename!(filename = nil)
+		@tmp_filename = nil
+		tmp_filename
+	end
+
+	def tmp_dir
+		File.join("#{Rails.root}/tmp/", "incloack")
 	end
 
 	def options

@@ -11,16 +11,17 @@ module Parsers::Incloack
 
     def file
     	begin
-	      @file ||= self.class.raw_open(@url).body.to_s
+	      @file ||= self.class.binary(@url).to_s
 	    rescue
 	    	nil
 	    end
     end
 
-    def detect_port
-      puts "URL: #{@url}"
-      puts self.class.open(@url).to_s
+    def file_digest
+      @digest ||= Digest::SHA1.hexdigest(file)
+    end
 
+    def detect_port
     	return nil if !file
 
       dictionary.each do |k|
@@ -31,13 +32,13 @@ module Parsers::Incloack
       if Rails.env == "development"
 	      exists = false
 	      Dir[File.join(@@dictionary_path, "*")].flatten.each do |k|
-	        exists = true if Digest::SHA1.hexdigest(File.open(k).read.to_s) == Digest::SHA1.hexdigest(file)
+	        exists = true if Digest::SHA1.hexdigest(File.open(k).read.to_s) == file_digest
 	      end
 	      if !exists
 		      filename = '_' + url.split(/\/+/).last
 		      f = File.open(File.join(@@dictionary_path, filename), 'w+')
 		      f.binmode
-		      f.write(Parsers::Base.raw_open(@url).body)
+		      f.write(file)
 		      f.close
 		    end
 	    end
