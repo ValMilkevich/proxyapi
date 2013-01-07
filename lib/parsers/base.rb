@@ -11,6 +11,8 @@ module Parsers
   module Base
     extend ActiveSupport::Concern
 
+    PROXY_LATENCY = 1500
+
     def raw_document
       @raw_document ||= self.class.open(self.url)
     end
@@ -38,24 +40,32 @@ module Parsers
         @headers ||= Parsers::Bullshit::Headers.new.random_header
       end
 
+      def proxy
+        return @proxy if @proxy && @proxy.available && @proxy.latency < ::Parsers::Base::PROXY_LATENCY
+        collection = Proxy.http.available.fast.where(:latency.lte => ::Parsers::Base::PROXY_LATENCY).limit(100)
+        @proxy = collection.offset(rand(collection.count)).first
+        @proxy.check!
+        self.proxy
+      end
+
       # Returns net/http opened page
       #
-      def raw_open(url, proxy = false)
+      def raw_open(url, prx = false)
         uri = URI(url)
-        puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
+        puts "HOST: #{uri.host}, PROXY: #{[prx.try(:ip), prx.try(:port)].join(':')}, REQ: #{uri.request_uri}"
         # puts headers.inspect
-        Parsers::Phantomjs.new( :url => url, :proxy => proxy, :headers => headers).open
+        Parsers::Phantomjs.new( :url => url, :proxy => prx, :headers => headers).open
       end
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, Proxy.http.available.recent.fast[rand(10)])
+        res = raw_open(url, proxy)
       end
 
       def binary(url)
         uri = URI(url)
-        proxy = Proxy.http.available.recent.fast[rand(10)]
+
         puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
         Parsers::Phantomjs.new( :url => url, :proxy => proxy, :headers => headers).binary
       end

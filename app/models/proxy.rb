@@ -71,6 +71,15 @@ class Proxy
 		self.class.delay(hash).check(self.id)
 	end
 
+	def check!
+		self.check
+		self.reload
+	end
+
+	def check
+		self.class.check(self.id)
+	end
+
 	def self.check(id)
 		find_by(id: id).checks.create
 	end
