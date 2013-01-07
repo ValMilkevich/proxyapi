@@ -13,26 +13,28 @@ module Parsers::Incloack
 
     def self.each_country
       @@countries.each do |country|
-        begin
-          country_collection = new({:country => country, :maxtime => @@latency})
-          if country_collection.index.size < 64
-            country_collection = new({:country => country, :maxtime => @@latency * 10 })
-          end
+        country_collection = new({:country => country, :maxtime => @@latency})
+        if country_collection.index.size < 64
+          country_collection = new({:country => country, :maxtime => @@latency * 10 })
+        end
 
-          country_collection.index.map{|hash| yield hash}
-        rescue => e
-          puts "ERROR: #{e.to_s}"
-          []
+        country_collection.index.map do |hash|
+          begin
+            yield hash
+          rescue => e
+            puts "ERROR: #{e.to_s}"
+          end
         end
       end
     end
 
     def self.main_page
-      begin
-        new(:maxtime => @@latency ).index.map{|hash| yield hash}
-      rescue
-        puts "ERROR: #{e.to_s}"
-        []
+      new(:maxtime => @@latency ).index.map do |hash|
+        begin
+          yield hash
+        rescue => e
+          puts "ERROR: #{e.to_s}"
+        end
       end
     end
 
@@ -53,7 +55,9 @@ module Parsers::Incloack
         list_hash << hash
       end
 
-      @index ||= list_hash
+    ensure
+      @index = list_hash
+      return  @index
     end
 
   end

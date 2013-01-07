@@ -4,11 +4,13 @@ module Parsers::Hidemyass
 
     def self.each_page
       new.pages.each do |page|
-        begin
-          new(page).index.map{|hash| yield hash}
-        rescue => e
-          puts "ERROR: #{e.to_s}"
-          []
+        new(page).index.map do |hash|
+          begin
+            yield hash
+          rescue => e
+            puts "ERROR: #{e.to_s}"
+            []
+          end
         end
       end
     end

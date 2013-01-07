@@ -13,6 +13,7 @@ class Parsers::Phantomjs
 		binary:  File.expand_path('../phantomjs/binary.js', __FILE__),
 	}
 
+	cattr_accessor :debug
 	attr_accessor :proxy, :url, :headers
 
 	def initialize(opts = {})
@@ -23,7 +24,7 @@ class Parsers::Phantomjs
 		self.opts!(opts)
 		raise "url should be defined" if self.url.blank?
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:open], self.url.to_json, "'#{self.headers.to_json}'"].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		`#{cmd}`.strip
 	end
 
@@ -32,7 +33,7 @@ class Parsers::Phantomjs
 		raise "url should be defined" if self.url.blank?
 
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:download], self.url.to_json, "'#{self.headers.to_json}'", self.tmp_filename.to_json].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		`#{cmd}`.strip
 	end
 
@@ -41,7 +42,7 @@ class Parsers::Phantomjs
 		raise "url should be defined" if self.url.blank?
 
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:binary], self.url.to_json, "'#{self.headers.to_json}'", self.tmp_filename.to_json].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		res = `#{cmd}`.strip
 		if res.present?
 			Base64.decode64(`#{cmd}`.strip)
@@ -54,7 +55,7 @@ class Parsers::Phantomjs
 		self.opts!(opts)
 
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:my_ip]].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		`#{cmd}`.strip
 	end
 
@@ -74,7 +75,7 @@ class Parsers::Phantomjs
 		raise "url should be defined" if self.url.blank?
 
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:load_speed], self.url].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		eval(`#{cmd}`)
 	end
 
@@ -82,7 +83,7 @@ class Parsers::Phantomjs
 		opts!(opts)
 
 		cmd = "#{[PHANTOMJS, options, SCRIPTS[:test_headers], PORT, "'#{self.headers.to_json}'"].join(' ')}"
-		puts cmd
+		puts cmd if self.class.debug
 		res = `#{cmd}`
 		puts res
 		JSON.parse(res)["headers"]["User-Agent"] == self.headers["User-Agent"]
