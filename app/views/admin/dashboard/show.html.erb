@@ -37,30 +37,39 @@
 <% Proxy.all.distinct(:from).each do |from| %>
 	<div class="row">
 		<h3><%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small></h3>
+		<div class="row">
+			<h5 class="span3">
+			Last 1H stats
+				<small>
+					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 1.hours).available.count %></span>
+					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours).last_week.unavailable.count %></span>
+				</small>
+			</h5>
 
-		<h5 class="span4">
-		Last 6 stats
-			<small>
-				<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 6.hours).available.count %></span>
-				<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours).last_week.unavailable.count %></span>
-			</small>
-		</h5>
+			<h5 class="span3">
+			Last 6H stats
+				<small>
+					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at.gte" => 6.hours).available.count %></span>
+					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours).last_week.unavailable.count %></span>
+				</small>
+			</h5>
 
-		<h5 class="span4">
-		Last day stats
-			<small>
-				<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
-				<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
-			</small>
-		</h5>
+			<h5 class="span3">
+			Last day stats
+				<small>
+					<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
+					<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+				</small>
+			</h5>
 
-		<h5 class="span4">
-		Last week stats
-			<small>
-				<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
-				<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
-			</small>
-		</h5>
+			<h5 class="span3">
+			Last week stats
+				<small>
+					<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
+					<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+				</small>
+			</h5>
+		</div>
 	</div>
 
 	<hr/>
