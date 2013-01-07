@@ -44,13 +44,13 @@ module Parsers
         uri = URI(url)
         puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"
         # puts headers.inspect
-        Parsers::Phantomjs.new( :url => url, :prox => proxy, :headers => headers).open
+        Parsers::Phantomjs.new( :url => url, :proxy => proxy, :headers => headers).open
       end
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, Proxy.http.available.recent[random(10)])
+        res = raw_open(url, Proxy.http.available.recent.fast[rand(10)])
       end
     end
 
