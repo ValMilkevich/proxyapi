@@ -1,3 +1,4 @@
+
 <div class="span12">
 <h3>PRX:</h3>
 <% Proxy.all.distinct(:from).each do |from| %>
@@ -35,65 +36,70 @@
 <% end %>
 </div>
 
-<div class="span6">
+<div class="span12">
 	<h3>HEROKU:</h3>
+	<div class="row">
+		<% heroku.get_apps.each do |app| %>
+			<% if app["name"] =~ /prx/ %>
+				<div class="span3">
+					<h4>
+						<small class="pull-left span2">
+							<%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if app["repo_migrate_status"] == "complete" %>
+						</small>
 
-	<% heroku.get_apps.each do |app| %>
-		<% if app["name"] =~ /prx/ %>
-			<div class="span6">
-				<h4>
-					<small class="pull-left span2">
-						<%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if app["repo_migrate_status"] == "complete" %>
-					</small>
+						<%= app["name"] %>
 
-					<%= app["name"] %>
+						<small><%= "#{app["dynos"]} dyno" if app["dynos"].to_i > 0 %></small>
+						<small><%= "#{app["workers"]} worker" if app["workers"].to_i > 0 %></small>
 
-					<small><%= "#{app["dynos"]} dyno" if app["dynos"].to_i > 0 %></small>
-					<small><%= "#{app["workers"]} worker" if app["workers"].to_i > 0 %></small>
+						<small class="pull-right span1">
+							<%= app["repo_migrate_status"] if app["repo_migrate_status"] != "complete"  %>
+						</small>
+					</h4>
 
-					<small class="pull-right span1">
-						<%= app["repo_migrate_status"] if app["repo_migrate_status"] != "complete"  %>
-					</small>
-				</h4>
-
-				<% heroku.get_ps(app["name"]).each do |ps| %>
-					<h5><%= ps["process"] %> <small> <%= ps["pretty_state"] %>, <%= Time.parse(ps["transitioned_at"]).localtime.strftime('%a %dth, %H:%M') %></small></h5>
-				<% end %>
-				<hr>
-			</div>
+					<% heroku.get_ps(app["name"]).each do |ps| %>
+						<h5><%= ps["process"] %> <small> <%= ps["pretty_state"] %>, <%= Time.parse(ps["transitioned_at"]).localtime.strftime('%a %dth, %H:%M') %></small></h5>
+					<% end %>
+					<hr>
+				</div>
+			<% end %>
 		<% end %>
-	<% end %>
+	</div>
 </div>
 
-<div class="span6">
+<div class="span12">
 	<h3>DJ: <small><%= Delayed::Job.count %></small></h3>
 </div>
 
-<div class="span6">
-	<section>
-		<h3>SA:</h3>
-		<% System::Activity.started.each do |sa| %>
-			<div>
-				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+<div class="span12">
+	<div class="row">
+		<div class="span6">
+			<% System::Activity.completed.limit(10).each do |sa| %>
+				<div>
+					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-				<b><%= sa.name %></b>
-				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+					<b><%= sa.name %></b>
+					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
 
-			</div>
-		<% end %>
+				</div>
+			<% end %>
+		</div>
 
-		<% System::Activity.completed.limit(20).each do |sa| %>
-			<div>
-				<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-		    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-		    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+		<div class="span6">
+			<h3>SA:</h3>
+			<% System::Activity.started.each do |sa| %>
+				<div>
+					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-				<b><%= sa.name %></b>
-				<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+					<b><%= sa.name %></b>
+					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
 
-			</div>
-		<% end %>
-	</section>
+				</div>
+			<% end %>
+		</div>
+	</div>
 </div>
