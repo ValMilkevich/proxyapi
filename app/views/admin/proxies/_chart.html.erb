@@ -1,11 +1,11 @@
 <% checks_week = Proxy.where(:from => from, :last_check.gte => 1.week.ago) %>
 <% proxy_week = Proxy.where(:from => from, :created_at.gte => 1.week.ago) %>
 
-<%=
+<%
 checks_chart = [['Date', 'Checks']] + Proxy.google_chartize(checks_week, :last_check, (1..(n+5)*4).map{|h| n.days.ago.to_date.to_time.utc.at_beginning_of_day + (h*6).hours}.reject{|t| t > Time.now })
 %>
 
-<%=
+<%
 proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created_at, (1..(n+5)*4).map{|h| n.days.ago.to_date.to_time.utc.at_beginning_of_day + (h*6).hours}.reject{|t| t > Time.now })
 %>
 
