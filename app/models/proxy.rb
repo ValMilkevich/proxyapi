@@ -33,7 +33,6 @@ class Proxy
 	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
 
 	before_save		:assign_country
-	after_create	:delayed_check
 
 	scope :available, where(available: true)
 	scope :unavailable, where(available: false)
@@ -51,6 +50,7 @@ class Proxy
 		el.attributes = hash
 		el.last_check ||= Time.now
 		el.save
+		el.delayed_check
 	end
 
 	def self.random
