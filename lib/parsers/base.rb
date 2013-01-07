@@ -50,7 +50,7 @@ module Parsers
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
       def open(url)
-        res = raw_open(url, nil && Proxy.http.random)
+        res = raw_open(url, nil && Proxy.http.available.recent[random(10)])
       end
     end
 
