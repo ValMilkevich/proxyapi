@@ -6,8 +6,8 @@ namespace :proxies do
     task :check => :environment  do |task|
       system_activity task.name do
         per_batch = 1000
-        0.step(Proxy.count, per_batch) do |offset|
-            ::Proxy.recent.limit(per_batch).skip(offset).map{|p| p.delayed_check({priority: 2})}
+        0.step(Proxy.where(:last_check.lte => 12.hours.ago).count, per_batch) do |offset|
+            ::Proxy.where(:last_check.lte => 12.hours.ago).recent.limit(per_batch).skip(offset).map{|p| p.delayed_check({priority: 2})}
         end
       end
     end
