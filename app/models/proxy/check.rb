@@ -36,29 +36,31 @@ class ::Proxy::Check
 
     check.available = !!(response.code =~ /2\d\d/)
     check.latency = time * 1000 # in milliseconds
-    check
   rescue Errno::ECONNREFUSED => e
   	check.available = false
   	check.exception = e.to_s
-  	check
   rescue => e
   	check.available = false
   	check.exception = e.to_s
+  ensure
+  	check.latency ||= ::Parsers::Base::CONNECTION_TIMEOUT * 1000
   	check
-	end
+  end
 
 	def self.test_request(prx, url = @@latency_check_url)
-
-		uri = URI(url)
-    req = Net::HTTP::Get.new(uri.request_uri)
-    t1 = Time.now
-    resp = Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
-    t2 = Time.now
-		if resp.code =~ /3[\d]{2,}/
-			test_request(prx, resp.header['location'])
-		else
-			return resp, (t2 - t1)
+		status = Timeout.timeout(::Parsers::Base::CONNECTION_TIMEOUT) do
+			uri = URI(url)
+	    req = Net::HTTP::Get.new(uri.request_uri)
+	    t1 = Time.now
+	    resp = Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
+	    t2 = Time.now
+			if resp.code =~ /3[\d]{2,}/
+				test_request(prx, resp.header['location'])
+			else
+				return resp, (t2 - t1)
+			end
 		end
+		status
 	end
 
 end
