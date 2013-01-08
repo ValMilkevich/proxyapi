@@ -1,127 +1,156 @@
 
-<% if Rails.env == 'production' %>
-<div class="span12">
-	<h3>HEROKU:</h3>
-	<div class="row">
-		<% heroku.get_apps.each do |app| %>
-			<% if app["name"] =~ /prx/ %>
-				<div class="span3">
-					<h4>
-						<small class="pull-left span2">
-							<%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if app["repo_migrate_status"] == "complete" %>
-						</small>
+<div class="row">
+	<div class="row-fluid">
+		<div class="span12 clearfix">
+			<!-- <h3>HEROKU:</h3> -->
+			<div class="row">
+				<% (Rails.env == 'production' ? heroku.get_apps : []).each do |app| %>
+					<% if app["name"] =~ /prx/ %>
+						<div class="span3">
+							<h4>
+								<small class="pull-left span2">
+									<%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if app["repo_migrate_status"] == "complete" %>
+								</small>
 
-						<%= app["name"] %>
+								<%= app["name"] %>
 
-						<small><%= "#{app["dynos"]} dyno" if app["dynos"].to_i > 0 %></small>
-						<small><%= "#{app["workers"]} worker" if app["workers"].to_i > 0 %></small>
+								<small><%= "#{app["dynos"]} dyno" if app["dynos"].to_i > 0 %></small>
+								<small><%= "#{app["workers"]} worker" if app["workers"].to_i > 0 %></small>
 
-						<small class="pull-right span1">
-							<%= app["repo_migrate_status"] if app["repo_migrate_status"] != "complete"  %>
-						</small>
-					</h4>
+								<small class="pull-right span1">
+									<%= app["repo_migrate_status"] if app["repo_migrate_status"] != "complete"  %>
+								</small>
+							</h4>
 
-					<% heroku.get_ps(app["name"]).each do |ps| %>
-						<h5><%= ps["process"] %> <small> <%= ps["pretty_state"] %>, <%= Time.parse(ps["transitioned_at"]).localtime.strftime('%a %dth, %H:%M') %></small></h5>
+							<% heroku.get_ps(app["name"]).each do |ps| %>
+								<h5><%= ps["process"] %> <small> <%= ps["pretty_state"] %>, <%= Time.parse(ps["transitioned_at"]).localtime.strftime('%a %dth, %H:%M') %></small></h5>
+							<% end %>
+						</div>
 					<% end %>
-					<hr>
-				</div>
-			<% end %>
-		<% end %>
-	</div>
-</div>
-<% end %>
-
-<div class="span12">
-	<h3>DJ: <small><%= Delayed::Job.count %></small></h3>
-</div>
-
-
-
-<div class="span12">
-	<h3>PRX: <small><%= Proxy.count %></small></h3>
-<% Proxy.all.distinct(:from).each do |from| %>
-	<div class="row">
-		<h3><%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small></h3>
-		<div class="row">
-			<h5 class="span3">
-			Last 1H stats
-				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
-					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
-				</small>
-			</h5>
-
-			<h5 class="span3">
-			Last 6H stats
-				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
-					<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
-				</small>
-			</h5>
-
-			<h5 class="span3">
-			Last day stats
-				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
-					<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
-				</small>
-			</h5>
-
-			<h5 class="span3">
-			Last week stats
-				<small>
-					<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
-					<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
-				</small>
-			</h5>
+				<% end %>
+			</div>
 		</div>
 	</div>
-
 	<hr/>
-	<div class="row">
-			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
-			<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
-	</div>
-
-	<div class="row">
-		<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 7 } %>
-	</div>
-
-	<hr/>
-<% end %>
 </div>
 
 
-<div class="span12">
-	<div class="row">
-		<div class="span6">
-			<% System::Activity.completed.limit(10).each do |sa| %>
-				<div>
-					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+<div class="row">
+	<div class="row-fluid">
+			<div class="span12 clearfix">
+			<h3 class="span6">PRX: <small><%= Proxy.count %></small></h3>
+			<h3 class="span6">DJ: <small><%= Delayed::Job.count %></small></h3>
+		</div>
+	</div>
+	<hr/>
+</div>
 
-					<b><%= sa.name %></b>
-					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+<div class="row">
+	<div class="row-fluid">
+		<div class="span12 clearfix">
+			<% Proxy.all.distinct(:from).each do |from| %>
+				<div class="row">
+					<h3 class="span4">
+						<%= link_to glyphicon('eye-close'), "javascript: toggle_google_chart('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
+						<%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small>
+					</h3>
+					<h5 class="span2">
+						1H
+							<small>
+								<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
+								<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
+							</small>
+						</h5>
 
+						<h5 class="span2">
+						6H
+							<small>
+								<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
+								<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
+							</small>
+						</h5>
+
+						<h5 class="span2">
+						24H
+							<small>
+								<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
+								<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+							</small>
+						</h5>
+
+						<h5 class="span2">
+						7 days
+							<small>
+								<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
+								<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+							</small>
+						</h5>
 				</div>
+
+				<div class="row hidden" id="<%= from.gsub(/[^A-Za-z0-9]/, '_') %>">
+						<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
+						<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
+				</div>
+
+				<div class="row">
+					<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 7 } %>
+				</div>
+
+				<hr/>
 			<% end %>
 		</div>
+	</div>
+</div>
 
-		<div class="span6">
+<div class="row">
+	<div class="row-fluid">
+		<div class="span12 clearfix">
 			<h3>SA:</h3>
-			<% System::Activity.started.each do |sa| %>
-				<div>
-					<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-			    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
-			    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+			<div class="span6">
+				<% System::Activity.completed.limit(10).each do |sa| %>
+					<div>
+						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+				    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
 
-					<b><%= sa.name %></b>
-					<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+						<b><%= sa.name %></b>
+						<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
 
-				</div>
-			<% end %>
+					</div>
+				<% end %>
+			</div>
+
+			<div class="span6">
+				<% System::Activity.started.each do |sa| %>
+					<div>
+						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
+				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+				    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+
+						<b><%= sa.name %></b>
+						<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
+
+					</div>
+				<% end %>
+			</div>
 		</div>
 	</div>
 </div>
+
+<%= content_for :scripts do %>
+
+<script>
+toggle_google_chart = function(id) {
+	$(id).toggle(function(){
+		$(id).removeClass('hidden')
+		if($(id + ':visible') && $(id+' span').html() == ""){
+			<% Proxy.all.distinct(:from).each do |from| %>
+				google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_proxy()"  %>)
+				google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_checks()"  %>)
+			<% end %>
+		}
+	})
+
+}
+</script>
+<% end %>

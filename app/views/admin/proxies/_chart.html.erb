@@ -12,8 +12,8 @@ proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created
 <%= content_for :scripts do %>
   <%= javascript_tag do %>
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+
+      drawChart_<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy = function() {
         var data = google.visualization.arrayToDataTable(
         <%= proxy_chart.to_s.html_safe %>
         );
@@ -29,12 +29,14 @@ proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created
         var chart = new google.visualization.LineChart(document.getElementById('<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'));
         chart.draw(data, options);
       }
+
+
   <% end %>
 
   <%= javascript_tag do %>
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+
+      drawChart_<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks = function() {
         var data = google.visualization.arrayToDataTable(
         <%= checks_chart.to_s.html_safe %>
         );
@@ -50,5 +52,6 @@ proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created
         var chart = new google.visualization.LineChart(document.getElementById('<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'));
         chart.draw(data, options);
       }
+
   <% end %>
 <% end %>
