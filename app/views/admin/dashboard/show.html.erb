@@ -96,12 +96,11 @@
 				</div>
 
 				<div class="row hidden" id="<%= from.gsub(/[^A-Za-z0-9]/, '_') %>">
-						<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'></span>
-						<span class="span6" style="height: 250px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'></span>
+						<span class="span12" style="height: 350px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>'></span>
 				</div>
 
 				<div class="row">
-					<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 7 } %>
+					<%= render :partial => "/admin/proxies/chart", locals: {from: from, n: 3 } %>
 				</div>
 
 				<hr/>
@@ -165,9 +164,7 @@
 		$(id).toggle(function(){
 			$(id).removeClass('hidden')
 			if($(id + ':visible') && $(id+' span').html() == ""){
-
-					google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_proxy()"  %>)
-					google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_checks()"  %>)
+					google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }()"  %>);
 			}
 		})
 	}

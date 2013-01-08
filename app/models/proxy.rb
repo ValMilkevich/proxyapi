@@ -96,8 +96,33 @@ class Proxy
 		self.country_name ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
 	end
 
+	def self.google_chart_timespan
+		7.days
+	end
+
+	def self.google_chart_timestep
+		3600 * 3
+	end
+
+	def self.google_chart_steps
+		((Time.now - google_chart_timespan.ago.at_beginning_of_day) / google_chart_timestep).ceil
+	end
+
+	def self.google_chart_start
+		::Proxy.google_chart_timespan.ago.at_beginning_of_day.utc.to_date.to_time.utc
+	end
+
+	def self.google_chart_range
+		(1..google_chart_steps).map{ |h| google_chart_start + h * google_chart_timestep
+			}.reject{ |t|
+				t > Time.now
+			}
+	end
+
 	def self.google_chartize(collection, method, range = nil)
-    sent_hash = collection.map{|sms| [sms.send(method).floor(3600 * 6).utc.to_s(:db), 1]}.group_by(&:first)
+		range ||= ::Proxy.google_chart_range
+
+    sent_hash = collection.map{|sms| [sms.send(method).floor(::Proxy.google_chart_timestep).utc.to_s(:db), 1]}.group_by(&:first)
 
     sent_arr = sent_hash.collect{|key, sms| [key, sms.size]}
 
@@ -105,9 +130,9 @@ class Proxy
       chart = []
       (range || sent_hash.map(&:first).uniq.sort).each do |date|
         if sent_hash[date.to_s(:db)]
-          chart << [date.to_time.strftime("%a %dth, %H:00"), sent_hash[date.to_s(:db)].size]
+          chart << [date.to_time.strftime("%H:00, %d %h"), sent_hash[date.to_s(:db)].size]
         else
-          chart << [date.to_time.strftime("%a %dth, %H:00"), 0]
+          chart << [date.to_time.strftime("%H:00, %d %h"), 0]
         end
       end
     else

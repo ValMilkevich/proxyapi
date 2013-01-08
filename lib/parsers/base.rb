@@ -12,7 +12,7 @@ module Parsers
     extend ActiveSupport::Concern
 
     PROXY_LATENCY = 1500
-    CONNECTION_TIMEOUT = 10
+    CONNECTION_TIMEOUT = 30
     MAX_RETRY = 3
 
     def raw_document
