@@ -54,37 +54,45 @@
 						<%= link_to glyphicon('eye-close'), "javascript: toggle_google_chart('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
 						<%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small>
 					</h3>
-					<h5 class="span2">
-						1H
-							<small>
-								<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
-								<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
-							</small>
-						</h5>
+					<div class="span6 proxy_from_timeline">
+						<div class="row">
+							<span class="span2">
+								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 30.minutes.ago).available.count %></span>
+								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 30.minutes.ago).last_week.unavailable.count %></span>
+								<br/>
+								<small class="span12">30min</small>
+							</span>
+							<span class="span2">
+								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
+								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
 
-						<h5 class="span2">
-						6H
-							<small>
-								<span class="badge badge-success"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
-								<span class="badge badge-important"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
-							</small>
-						</h5>
+								<small class="span12">1H</small>
 
-						<h5 class="span2">
-						24H
-							<small>
-								<span class="badge badge-success"><%= Proxy.where(from: from).yesterday.available.count %></span>
-								<span class="badge badge-important"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
-							</small>
-						</h5>
+							</span>
 
-						<h5 class="span2">
-						7 days
-							<small>
-								<span class="badge badge-success"><%= Proxy.where(from: from).last_week.available.count %></span>
-								<span class="badge badge-important"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
-							</small>
-						</h5>
+							<span class="span2">
+								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
+								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
+
+								<small class="span12">6H</small>
+							</span>
+
+							<span class="span2">
+								<span class="badge badge-info"><%= Proxy.where(from: from).yesterday.available.count %></span>
+								<span class="badge badge-warning"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+
+								<small class="span12">24H</small>
+							</span>
+
+							<span class="span2">
+								<span class="badge badge-info"><%= Proxy.where(from: from).last_week.available.count %></span>
+								<span class="badge badge-warning"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+
+								<small class="span12">7 days</small>
+							</span>
+							</div>
+
+						</div>
 				</div>
 
 				<div class="row hidden" id="<%= from.gsub(/[^A-Za-z0-9]/, '_') %>">
@@ -106,7 +114,7 @@
 	<div class="row-fluid">
 		<div class="span12 clearfix" id = "sa">
 			<div class="row">
-				<h3 class="span4">
+				<h3 class="span6">
 					<%= link_to glyphicon('eye-close'), "javascript: $('#sa div.span6').toggle();".html_safe %>
 					SA:
 					<small>
