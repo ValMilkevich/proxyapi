@@ -38,7 +38,9 @@
 <div class="row">
 	<div class="row-fluid">
 			<div class="span12 clearfix">
-			<h3 class="span6">PRX: <small><%= Proxy.count %></small></h3>
+			<h3 class="span6">PRX:
+				<span class="badge badge-info"><%= Proxy.available.count %></span>
+				<span class="badge badge"><%= Proxy.unavailable.count %></span>
 			<h3 class="span6">DJ: <small><%= Delayed::Job.count %></small></h3>
 		</div>
 	</div>
