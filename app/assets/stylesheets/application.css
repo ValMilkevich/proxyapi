@@ -38,3 +38,10 @@
 .omniauth-authorize i{
 	font-size: 24px;
 }
+
+.proxy_from_timeline small.span12{
+	display:block;
+	border-top: 1px solid #eee;
+	margin-top: 10px;
+	padding-left: 8px;
+}

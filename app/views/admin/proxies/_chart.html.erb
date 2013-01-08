@@ -1,0 +1,57 @@
+<% checks_week = Proxy.where(:from => from, :last_check.gte => 1.week.ago) %>
+<% proxy_week = Proxy.where(:from => from, :created_at.gte => 1.week.ago) %>
+
+<%
+checks_chart = [['Date', 'Checks']] + Proxy.google_chartize(checks_week, :last_check, (1..(n+5)*4).map{|h| n.days.ago.to_date.to_time.utc.at_beginning_of_day + (h*6).hours}.reject{|t| t > Time.now })
+%>
+
+<%
+proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created_at, (1..(n+5)*4).map{|h| n.days.ago.to_date.to_time.utc.at_beginning_of_day + (h*6).hours}.reject{|t| t > Time.now })
+%>
+
+<%= content_for :scripts do %>
+  <%= javascript_tag do %>
+      google.load("visualization", "1", {packages:["corechart"]});
+
+      drawChart_<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy = function() {
+        var data = google.visualization.arrayToDataTable(
+        <%= proxy_chart.to_s.html_safe %>
+        );
+
+        var options = {
+	        curveType: 'function',
+          colors: ['#05C', 'blue'],
+          <!-- title: 'PROXY', -->
+          bar: {groupWidth: "95%"},
+          vAxis: {maxValue: <%= (proxy_chart.map{|el| el.second.to_i}.max()/4 + 1)*4 %>, minValue: '0', gridlines:{ count: 5}}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_proxy'));
+        chart.draw(data, options);
+      }
+
+
+  <% end %>
+
+  <%= javascript_tag do %>
+      google.load("visualization", "1", {packages:["corechart"]});
+
+      drawChart_<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks = function() {
+        var data = google.visualization.arrayToDataTable(
+        <%= checks_chart.to_s.html_safe %>
+        );
+
+        var options = {
+	        curveType: 'function',
+          colors: ['#05C', 'red'],
+          <!-- title: 'CHECKS', -->
+          bar: {groupWidth: "95%"},
+          vAxis: {maxValue: <%= (checks_chart.map{|el| el.second.to_i}.max()/4 + 1)*4 %>, minValue: '0', gridlines:{ count: 5}}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('<%= from.gsub(/[^A-Za-z0-9]/, '_') %>_checks'));
+        chart.draw(data, options);
+      }
+
+  <% end %>
+<% end %>

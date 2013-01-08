@@ -11,7 +11,7 @@ module Parsers
   module Base
     extend ActiveSupport::Concern
 
-    PROXY_LATENCY = 1500
+    PROXY_LATENCY = 500
 
     def raw_document
       @raw_document ||= self.class.open(self.url)
