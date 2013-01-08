@@ -1,3 +1,5 @@
+require 'socket'
+
 class ::Proxy::Check
 	include Mongoid::Document
 	include Mongoid::Timestamps
@@ -43,14 +45,15 @@ class ::Proxy::Check
   	check.available = false
   	check.exception = e.to_s
   ensure
-  	check.latency ||= ::Parsers::Base::CONNECTION_TIMEOUT * 1000
+  	check.latency ||= ::Parsers::Base::PROXY_CONNECTION_TIMEOUT * 1000
   	check
   end
 
 	def self.test_request(prx, url = @@latency_check_url, retry_count = nil)
+
 		retry_count ||= 0
 		begin
-			status = Timeout.timeout(::Parsers::Base::CONNECTION_TIMEOUT) do
+			status = Timeout.timeout(::Parsers::Base::PROXY_CONNECTION_TIMEOUT) do
 				uri = URI(url)
 		    req = Net::HTTP::Get.new(uri.request_uri)
 		    t1 = Time.now
@@ -62,16 +65,28 @@ class ::Proxy::Check
 					return resp, (t2 - t1)
 				end
 			end
-		status
-	rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Timeout::Error => e
-		if retry_count < ::Parsers::Base::MAX_RETRY
-			retry_count += 1
-			test_request(prx, url)
-		else
-			raise e
+			status
+
+		rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Timeout::Error => e
+			puts retry_count
+			if retry_count < ::Parsers::Base::MAX_RETRY
+				retry_count += 1
+				test_request(prx, url, retry_count)
+			else
+				raise e
+			end
 		end
 	end
 
+	def self.test_port(prx)
+
+	  begin
+	    TCPSocket.new(prx.ip, prx.port)
+	  rescue Errno::ECONNREFUSED
+	    return false
+	  end
+
+	  return true
 	end
 
 end
