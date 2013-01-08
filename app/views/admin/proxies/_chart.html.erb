@@ -1,7 +1,7 @@
-<% checks_week = Proxy.where(:from => from, :last_check.gte => Proxy.google_chart_timespan.ago.at_beginning_of_day) %>
-<% proxy_week = Proxy.where(:from => from, :created_at.gte => Proxy.google_chart_timespan.ago.at_beginning_of_day) %>
+<% checks_week = Proxy.where(:from => from) %>
+<% proxy_week = Proxy.where(:from => from) %>
 
-<% unavailable_week = Proxy.where(from: from, available: false).gte("checks.created_at" => Proxy.google_chart_timespan.ago.at_beginning_of_day).and("checks.available" => false) %>
+<% unavailable_week = Proxy.where(from: from, available: false).and("checks.available" => false) %>
 
 
 <% checks_chart = [['Date', 'Proxies checked']] + Proxy.google_chartize(checks_week, :last_check) %>

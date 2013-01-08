@@ -121,25 +121,26 @@ class Proxy
 
 	def self.google_chartize(collection, method, range = nil)
 		range ||= ::Proxy.google_chart_range
+    sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
 
-    sent_hash = collection.map{|sms| [sms.send(method).floor(::Proxy.google_chart_timestep).utc.to_s(:db), 1]}.group_by(&:first)
+		# sent_hash = collection.map{|sms| [sms.send(method).floor(::Proxy.google_chart_timestep).utc.to_s(:db), 1]}.group_by(&:first)
 
-    sent_arr = sent_hash.collect{|key, sms| [key, sms.size]}
+    # sent_arr = sent_hash.collect{|key, sms| [key, sms.size]}
 
-    if !sent_arr.map(&:first).blank?
-      chart = []
-      (range || sent_hash.map(&:first).uniq.sort).each do |date|
-        if sent_hash[date.to_s(:db)]
-          chart << [date.to_time.strftime("%H:00, %d %h"), sent_hash[date.to_s(:db)].size]
-        else
-          chart << [date.to_time.strftime("%H:00, %d %h"), 0]
-        end
-      end
-    else
-      chart = [['',0]]
-    end
+    # if !sent_arr.map(&:first).blank?
+    #   chart = []
+    #   (range || sent_hash.map(&:first).uniq.sort).each do |date|
+    #     if sent_hash[date.to_s(:db)]
+    #       chart << [date.to_time.strftime("%H:00, %d %h"), sent_arr[date.to_s(:db)]]
+    #     else
+    #       chart << [date.to_time.strftime("%H:00, %d %h"), 0]
+    #     end
+    #   end
+    # else
+    #   chart = [['',0]]
+    # end
 
-    return chart
+    # return chart
   end
 
 	protected
