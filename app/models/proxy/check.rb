@@ -47,8 +47,8 @@ class ::Proxy::Check
   	check
   end
 
-	def self.test_request(prx, url = @@latency_check_url)
-		@retry_count = 0
+	def self.test_request(prx, url = @@latency_check_url, retry_count = nil)
+		retry_count ||= 0
 		begin
 			status = Timeout.timeout(::Parsers::Base::CONNECTION_TIMEOUT) do
 				uri = URI(url)
@@ -64,8 +64,8 @@ class ::Proxy::Check
 			end
 		status
 	rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Timeout::Error => e
-		if @retry_count < ::Parsers::Base::MAX_RETRY
-			@retry_count += 1
+		if retry_count < ::Parsers::Base::MAX_RETRY
+			retry_count += 1
 			test_request(prx, url)
 		else
 			raise e
