@@ -51,7 +51,7 @@
 			<% Proxy.all.distinct(:from).each do |from| %>
 				<div class="row">
 					<h3 class="span4">
-						<%= link_to glyphicon('eye-close'), "javascript: toggle_google_chart('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
+						<%= link_to glyphicon('eye-close'), "javascript: #{"drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle" }('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
 						<%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small>
 					</h3>
 					<div class="span8 proxy_from_timeline">
@@ -160,17 +160,17 @@
 <%= content_for :scripts do %>
 
 <script>
-toggle_google_chart = function(id) {
-	$(id).toggle(function(){
-		$(id).removeClass('hidden')
-		if($(id + ':visible') && $(id+' span').html() == ""){
-			<% Proxy.all.distinct(:from).each do |from| %>
-				google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_proxy()"  %>)
-				google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_checks()"  %>)
-			<% end %>
-		}
-	})
+<% Proxy.all.distinct(:from).each do |from| %>
+	<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle"  %> = function(id) {
+		$(id).toggle(function(){
+			$(id).removeClass('hidden')
+			if($(id + ':visible') && $(id+' span').html() == ""){
 
-}
+					google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_proxy()"  %>)
+					google.setOnLoadCallback(<%= "drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_checks()"  %>)
+			}
+		})
+	}
+<% end %>
 </script>
 <% end %>
