@@ -2,16 +2,16 @@
 <% proxy_week = Proxy.where(:from => from, :created_at.gte => Proxy.google_chart_timespan.ago.at_beginning_of_day) %>
 
 
-<%= checks_chart = [['Date', 'Checks']] + Proxy.google_chartize(checks_week, :last_check) %>
-<hr/>
-<%= proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created_at) %>
-<hr/>
+<% checks_chart = [['Date', 'Checks']] + Proxy.google_chartize(checks_week, :last_check) %>
+
+<% proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created_at) %>
+
 <% combined_chart = [] %>
 <% proxy_chart.each do |a| %>
 <% combined_chart << [a.first, proxy_chart.select{|a1| a1.first == a.first}.flatten.last || 0, checks_chart.select{|a2| a2.first == a.first}.flatten.last || 0 ] %>
 <% end %>
 
-<%= combined_chart %>
+<% combined_chart %>
 
 <%= content_for :scripts do %>
   <%= javascript_tag do %>
