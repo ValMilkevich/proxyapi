@@ -145,12 +145,13 @@
 				<% System::Activity.started.each do |sa| %>
 					<div>
 						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? && sa.exceptions.blank? %>
 				    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+				    <%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if sa.exceptions.present? %>
 
 						<b><%= sa.name %></b>
 						<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
-
+						<%= sa.exceptions if sa.exceptions %>
 					</div>
 				<% end %>
 			</div>

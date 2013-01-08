@@ -87,6 +87,7 @@ def system_activity(name)
     yield
   rescue => e
     @activity.exceptions = [e.to_s]
+    @activity.complete!
   ensure
     @activity.complete!
   end
