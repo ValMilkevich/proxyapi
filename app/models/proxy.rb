@@ -97,19 +97,19 @@ class Proxy
 	end
 
 	def self.google_chart_timespan
-		2.days
+		3.days
 	end
 
 	def self.google_chart_timestep
-		3600 * 1
+		3600 * 2
 	end
 
 	def self.google_chart_steps
-		((Time.now - google_chart_timespan.ago.at_beginning_of_day) / google_chart_timestep).ceil
+		((Time.now - google_chart_start) / google_chart_timestep).ceil
 	end
 
 	def self.google_chart_start
-		::Proxy.google_chart_timespan.ago.at_beginning_of_day.utc.to_date.to_time.utc
+		::Proxy.google_chart_timespan.ago.at_beginning_of_day.to_date.to_time(:utc)
 	end
 
 	def self.google_chart_range
