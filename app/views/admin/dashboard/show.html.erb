@@ -54,7 +54,7 @@
 						<%= link_to glyphicon('eye-close'), "javascript: toggle_google_chart('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
 						<%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small>
 					</h3>
-					<div class="span6 proxy_from_timeline">
+					<div class="span8 proxy_from_timeline">
 						<div class="row">
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 30.minutes.ago).available.count %></span>
