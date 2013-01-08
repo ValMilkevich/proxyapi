@@ -1,14 +1,18 @@
-<% checks_week = Proxy.where(:from => from, :last_check.gte => Proxy.google_chart_timespan.ago.at_beginning_of_day) %>
-<% proxy_week = Proxy.where(:from => from, :created_at.gte => Proxy.google_chart_timespan.ago.at_beginning_of_day) %>
+<% checks_week = Proxy.where(:from => from) %>
+<% proxy_week = Proxy.where(:from => from) %>
+
+<% unavailable_week = Proxy.where(from: from, available: false).and("checks.available" => false) %>
 
 
-<% checks_chart = [['Date', 'Checks']] + Proxy.google_chartize(checks_week, :last_check) %>
+<% checks_chart = [['Date', 'Proxies checked']] + Proxy.google_chartize(checks_week, :last_check) %>
 
 <% proxy_chart = [['Date', 'Proxies']] + Proxy.google_chartize(proxy_week, :created_at) %>
 
+<% unavailable_chart = [['Date', 'Unavailable']] + Proxy.google_chartize(unavailable_week, :last_check) %>
+
 <% combined_chart = [] %>
 <% proxy_chart.each do |a| %>
-<% combined_chart << [a.first, proxy_chart.select{|a1| a1.first == a.first}.flatten.last || 0, checks_chart.select{|a2| a2.first == a.first}.flatten.last || 0 ] %>
+<% combined_chart << [a.first, proxy_chart.select{|a1| a1.first == a.first}.flatten.last || 0, checks_chart.select{|a2| a2.first == a.first}.flatten.last || 0, unavailable_chart.select{|a3| a3.first == a.first}.flatten.last ] %>
 <% end %>
 
 <% combined_chart %>
@@ -24,7 +28,7 @@
 
         var options = {
 	        curveType: 'function',
-          colors: [ 'blue', 'red'],
+          colors: [ 'blue', 'red', 'grey'],
           <!-- title: 'PROXY', -->
           bar: {groupWidth: "95%"},
           vAxis: {maxValue: <%= (combined_chart.map{|el| el.second.to_i}.max()/4 + 1)*4 %>, minValue: '0', gridlines:{ count: 7, color: "#eee" }}

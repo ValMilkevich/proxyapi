@@ -38,7 +38,9 @@
 <div class="row">
 	<div class="row-fluid">
 			<div class="span12 clearfix">
-			<h3 class="span6">PRX: <small><%= Proxy.count %></small></h3>
+			<h3 class="span6">PRX:
+				<span class="badge badge-info"><%= Proxy.available.count %></span>
+				<span class="badge badge"><%= Proxy.unavailable.count %></span>
 			<h3 class="span6">DJ: <small><%= Delayed::Job.count %></small></h3>
 		</div>
 	</div>
@@ -58,13 +60,13 @@
 						<div class="row">
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 30.minutes.ago).available.count %></span>
-								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 30.minutes.ago).last_week.unavailable.count %></span>
+								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 30.minutes.ago).last_week.unavailable.count %></span>
 								<br/>
 								<small class="span12">30min</small>
 							</span>
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
-								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
+								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
 
 								<small class="span12">1H</small>
 
@@ -72,21 +74,21 @@
 
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
-								<span class="badge badge-warning"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
+								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
 
 								<small class="span12">6H</small>
 							</span>
 
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).yesterday.available.count %></span>
-								<span class="badge badge-warning"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
+								<span class="badge"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
 
 								<small class="span12">24H</small>
 							</span>
 
 							<span class="span2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).last_week.available.count %></span>
-								<span class="badge badge-warning"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
+								<span class="badge"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
 
 								<small class="span12">7 days</small>
 							</span>
@@ -143,12 +145,13 @@
 				<% System::Activity.started.each do |sa| %>
 					<div>
 						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
-				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? %>
+				    <%= glyphicon('ok', nil, :style => "color:green;font-size:20px;") if sa.completed? && sa.exceptions.blank? %>
 				    <%= glyphicon('ok', nil, :style => "color:orange;font-size:20px;") if sa.started? %>
+				    <%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if sa.exceptions.present? %>
 
 						<b><%= sa.name %></b>
 						<%= sa.human_duration %>, <small><%= time_ago_in_words sa.created_at %> ago</small>
-
+						<%= sa.exceptions if sa.exceptions %>
 					</div>
 				<% end %>
 			</div>
