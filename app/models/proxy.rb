@@ -97,11 +97,11 @@ class Proxy
 	end
 
 	def self.google_chart_timespan
-		7.days
+		2.days
 	end
 
 	def self.google_chart_timestep
-		3600 * 3
+		3600 * 1
 	end
 
 	def self.google_chart_steps
