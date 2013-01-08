@@ -104,9 +104,21 @@
 
 <div class="row">
 	<div class="row-fluid">
-		<div class="span12 clearfix">
-			<h3>SA:</h3>
-			<div class="span6">
+		<div class="span12 clearfix" id = "sa">
+			<div class="row">
+				<h3 class="span4">
+					<%= link_to glyphicon('eye-close'), "javascript: $('#sa div.span6').toggle();".html_safe %>
+					SA:
+					<small>
+						<% if System::Activity.started.blank? %>
+							last job: <%= System::Activity.completed.first.name %>, <%= System::Activity.completed.first.human_duration %>
+						<% else %>
+							<%= System::Activity.started.count %> in progress
+						<% end %>
+					</small>
+				</h3>
+			</div>
+			<div class="span6" style="display:none">
 				<% System::Activity.completed.limit(10).each do |sa| %>
 					<div>
 						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
