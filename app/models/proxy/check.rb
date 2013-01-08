@@ -48,19 +48,30 @@ class ::Proxy::Check
   end
 
 	def self.test_request(prx, url = @@latency_check_url)
-		status = Timeout.timeout(::Parsers::Base::CONNECTION_TIMEOUT) do
-			uri = URI(url)
-	    req = Net::HTTP::Get.new(uri.request_uri)
-	    t1 = Time.now
-	    resp = Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
-	    t2 = Time.now
-			if resp.code =~ /3[\d]{2,}/
-				test_request(prx, resp.header['location'])
-			else
-				return resp, (t2 - t1)
+		@retry_count = 0
+		begin
+			status = Timeout.timeout(::Parsers::Base::CONNECTION_TIMEOUT) do
+				uri = URI(url)
+		    req = Net::HTTP::Get.new(uri.request_uri)
+		    t1 = Time.now
+		    resp = Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
+		    t2 = Time.now
+				if resp.code =~ /3[\d]{2,}/
+					test_request(prx, resp.header['location'])
+				else
+					return resp, (t2 - t1)
+				end
 			end
-		end
 		status
+	rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Timeout::Error => e
+		if @retry_count < ::Parsers::Base::MAX_RETRY
+			@retry_count += 1
+			test_request(prx, url)
+		else
+			raise e
+		end
+	end
+
 	end
 
 end
