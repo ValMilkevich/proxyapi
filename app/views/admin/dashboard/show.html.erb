@@ -54,7 +54,12 @@
 				<div class="row">
 					<h3 class="span4">
 						<%= link_to glyphicon('eye-close'), "javascript: #{"drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle" }('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
-						<%= from %> <small>proxies: <%= Proxy.where(from: from).count %></small>
+						<%= from %>
+
+						<small>
+							<span class="badge badge-info"> <%= Proxy.where(from: from).available.count %></span>
+							<span class="badge badge"> <%= Proxy.where(from: from).unavailable.count %></span>
+						</small>
 					</h3>
 					<div class="span8 proxy_from_timeline">
 						<div class="row">
