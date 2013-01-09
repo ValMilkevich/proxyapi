@@ -11,6 +11,20 @@ namespace :proxies do
         end
       end
     end
+
+    task :bulk_invoke => :environment do |task|
+      system_activity task.name do
+        0.step(Delayed::Job.limit(1000).count, per_batch) do |offset|
+          begin
+            ts = Delayed::Job.skip(offset).limit(per_batch).map{ |dj |Thread.new{ dj.invoke_job; dj.destroy } rescue 'error' }
+            ts.map(&:join)
+          rescue => e
+            puts e
+          end
+        end
+      end
+    end
+
   end
 
   namespace :all do
@@ -18,6 +32,8 @@ namespace :proxies do
       "proxies:incloack:get"
     ]
   end
+
+
 
   desc "incloack.com list"
   namespace :incloack do

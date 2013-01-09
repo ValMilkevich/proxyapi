@@ -50,6 +50,7 @@ class ::Proxy::Check
   end
 
 	def self.test_request(prx, url = @@latency_check_url, retry_count = nil)
+		raise Errno::ECONNREFUSED if !test_port(prx)
 
 		retry_count ||= 0
 		begin
