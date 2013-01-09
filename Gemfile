@@ -19,6 +19,7 @@ end
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem 'daemons'
 gem 'rails-api', :git => "git://github.com/rails-api/rails-api.git"
 gem 'mongoid'
 gem 'bson_ext'

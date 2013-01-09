@@ -13,8 +13,10 @@ module Parsers
 
     PROXY_LATENCY = 1500
     CONNECTION_TIMEOUT = 15
-    PROXY_CONNECTION_TIMEOUT = 10
     MAX_RETRY = 3
+
+    PROXY_CONNECTION_TIMEOUT = 5
+    PROXY_MAX_RETRY = 1
 
     def raw_document
       @raw_document ||= self.class.open(self.url)
