@@ -70,7 +70,7 @@ class ::Proxy::Check
 
 		rescue Errno::ECONNRESET, Errno::ETIMEDOUT, Errno::ECONNREFUSED, Timeout::Error => e
 			puts retry_count
-			if retry_count < ::Parsers::Base::MAX_RETRY
+			if retry_count < ::Parsers::Base::PROXY_MAX_RETRY
 				retry_count += 1
 				test_request(prx, url, retry_count)
 			else
