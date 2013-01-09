@@ -14,10 +14,11 @@ namespace :proxies do
 
     task :bulk_invoke => :environment do |task|
       system_activity task.name do
+        per_batch = 10
         0.step(Delayed::Job.limit(1000).count, per_batch) do |offset|
           begin
             ts = Delayed::Job.skip(offset).limit(per_batch).map{ |dj |Thread.new{ dj.invoke_job; dj.destroy } rescue 'error' }
-            ts.map(&:join)
+            puts ts.map(&:join)
           rescue => e
             puts e
           end
