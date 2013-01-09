@@ -55,6 +55,20 @@
 
 <br/>
 
+        <div class="span2 visible-phone ">
+          <ul class="nav nav-list">
+            <% if user_signed_in? %>
+              <li>
+                <%= link_to(t('helpers.link.logout'), destroy_user_session_path, :method => :delete) %>
+                <%= link_to("Admin", admin_root_url) if current_user.admin? %>
+              </li>
+            <% else %>
+              <%= link_to glyphicon("facebook-sign"), omniauth_authorize_path(:user, :facebook), :class => "omniauth-authorize"  %>
+              <%= link_to glyphicon("twitter-sign"), omniauth_authorize_path(:user, :twitter), :class => "omniauth-authorize"  %>
+            <% end %>
+          </ul>
+        </div>
+
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span2 hidden-phone">

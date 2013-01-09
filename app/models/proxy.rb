@@ -68,7 +68,7 @@ class Proxy
 	end
 
 	def delayed_check(hash = {priority: 1})
-		self.class.delay(hash).check(self.id)
+		self.class.delay(hash).check(self._id)
 	end
 
 	def check!
@@ -77,7 +77,7 @@ class Proxy
 	end
 
 	def check
-		self.class.check(self.id)
+		self.class.check(self._id)
 	end
 
 	def self.check(id)
