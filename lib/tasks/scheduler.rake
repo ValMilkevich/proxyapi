@@ -82,9 +82,7 @@ namespace :proxies do
       system_activity task.name do
         Parsers::Spys::Collection.each_page do |hash|
           begin
-            p = ::Proxy.find_or_initialize_by(hash)
-            p.save
-            puts "ERROR: #{p.errors.full_messages}" if p.errors.present?
+            ::Proxy.create_or_update(hash)
           rescue => e
             puts "ERROR: #{e.to_s}"
             puts hash
