@@ -93,6 +93,26 @@ namespace :proxies do
       end
     end
   end
+
+desc "freedailyproxy.com list"
+  namespace :freedailyproxy do
+    task :get => :environment do |task|
+      system_activity task.name do
+        Parsers::Freedailyproxy::Collection.each_page do |hash|
+          begin
+            ::Proxy.create_or_update(hash)
+          rescue => e
+            puts "ERROR: #{e.to_s}"
+            puts hash
+            puts e.backtrace
+            []
+          end
+        end
+      end
+    end
+  end
+
+
 end
 
 
