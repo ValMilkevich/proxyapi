@@ -35,12 +35,16 @@ gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootst
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
-gem "heroku-api", "~> 0.3.7"
+gem 'whenever', :require => false
 
 group :production do
 	gem 'uglifier'
 end
 
+group :development do
+  gem 'capistrano'
+  gem 'rvm-capistrano'
+end
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
