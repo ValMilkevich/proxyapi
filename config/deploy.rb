@@ -47,8 +47,25 @@ namespace :deploy do
   end
 end
 
+namespace :dj do
+
+  task :start, :roles => [:app] do
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec ruby script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'"
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec ruby script/delayed_job stop"
+  end
+
+  task :stop, :roles => [:app] do
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec ruby script/delayed_job stop"
+  end
+
+  task :restart, :roles => [:app] do
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec ruby script/delayed_job restart"
+  end
+end
+
 after 'deploy:update_code', 'deploy:symlink_shared'
 
+<<<<<<< HEAD
 # Delayed jobs
 #
 set :delayed_job_args, "-n 2"
@@ -56,3 +73,8 @@ set :delayed_job_args, "-n 2"
 after "deploy:stop",    "delayed_job:stop"
 after "deploy:start",   "delayed_job:start"
 after "deploy:restart", "delayed_job:restart"
+=======
+after "deploy:stop",    "dj:stop"
+after "deploy:start",   "dj:start"
+after "deploy:restart", "dj:restart"
+>>>>>>> created dj deploy.rb
