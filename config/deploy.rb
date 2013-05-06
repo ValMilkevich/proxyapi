@@ -66,7 +66,7 @@ end
 
 namespace :whenever do
   task :restart, :roles => [:app] do
-    "bundle exec whenever --update-crontab"
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec whenever --update-crontab"
   end
 end
 
