@@ -13,6 +13,7 @@ set :rvm_type,        :user
 set :stages, %w{staging production}
 set :default_stage, "production"
 
+set :whenever_command, "bundle exec whenever"
 set :whenever_environment, defer { stage }
 set :whenever_identifier,  defer { "#{application}_#{stage}" }
 
@@ -63,9 +64,14 @@ namespace :dj do
   end
 end
 
+namespace :whenever do
+  task :restart, :roles => [:app] do
+    "bundle exec whenever --update-crontab"
+  end
+end
+
 after 'deploy:update_code', 'deploy:symlink_shared'
 
-<<<<<<< HEAD
 # Delayed jobs
 #
 set :delayed_job_args, "-n 2"
@@ -73,8 +79,3 @@ set :delayed_job_args, "-n 2"
 after "deploy:stop",    "delayed_job:stop"
 after "deploy:start",   "delayed_job:start"
 after "deploy:restart", "delayed_job:restart"
-=======
-after "deploy:stop",    "dj:stop"
-after "deploy:start",   "dj:start"
-after "deploy:restart", "dj:restart"
->>>>>>> created dj deploy.rb
