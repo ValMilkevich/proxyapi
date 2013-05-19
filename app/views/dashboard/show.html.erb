@@ -118,7 +118,7 @@
 		<div class="row-fluid">
 			<%= doc_row  "Country Proxies", true %>
 					<%= doc_row "API proxies for the selected country index" do %>
-				GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || country_id) %>
+				GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || 0) %>
 			<% end %>
 		</div>
 	</section>
