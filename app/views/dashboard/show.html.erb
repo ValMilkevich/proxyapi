@@ -109,7 +109,7 @@
 				GET: <%= link_to "/api/countries(.:format)", api_countries_path %>
 			<% end %>
 						<%= doc_row "API country show action" do %>
-				GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 'country_id') %>
+				GET: <%= link_to "/api/countries/:id(.:format)", api_country_path(Country.first || 0) %>
 			<% end %>
 		</div>
 	</section>
