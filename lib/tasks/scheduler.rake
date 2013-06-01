@@ -1,3 +1,4 @@
+require 'timeout'
 
 desc "Proxies"
 namespace :proxies do
