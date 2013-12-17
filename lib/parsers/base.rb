@@ -10,6 +10,8 @@ module Parsers
   module Base
     extend ActiveSupport::Concern
 
+    attr_accessor :proxy
+
     PROXY_LATENCY = 1500
     CONNECTION_TIMEOUT = 15
     MAX_RETRY = 3
@@ -18,7 +20,7 @@ module Parsers
     PROXY_MAX_RETRY = 1
 
     def raw_document
-      @raw_document ||= self.class.open(self.url)
+      @raw_document ||= self.class.open(self.url, proxy)
     end
 
     def doc
@@ -84,8 +86,8 @@ module Parsers
 
       # Returns opened page with encoding ( should be stored within individual Parser configuration)
       #
-      def open(url)
-        res = raw_open(url, proxy)
+      def open(url, prx)
+        res = raw_open(url, prx || proxy)
       end
 
       def binary(url)

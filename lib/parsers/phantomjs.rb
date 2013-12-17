@@ -11,6 +11,7 @@ class Parsers::Phantomjs
 		test_headers: File.expand_path('../phantomjs/test_headers.js.coffee', __FILE__),
 		download:  File.expand_path('../phantomjs/download.js', __FILE__),
 		binary:  File.expand_path('../phantomjs/binary.js', __FILE__),
+		gmail:  File.expand_path('../phantomjs/gmail.js', __FILE__),
 	}
 
 	cattr_accessor :debug
@@ -18,6 +19,15 @@ class Parsers::Phantomjs
 
 	def initialize(opts = {})
 		self.opts!(opts)
+	end
+
+	def gmail(opts = {})		
+		self.opts!(opts)
+		self.url ||= "https://accounts.google.com/SignUp?service=mail&continue=http%3A%2F%2Fmail.google.com%2Fmail%2F&ltmpl=default"
+		raise "url should be defined" if self.url.blank?
+		cmd = "#{[PHANTOMJS, options, SCRIPTS[:gmail], self.url.to_json, "'#{self.headers.to_json}'"].join(' ')}"
+		puts cmd if self.class.debug
+		`#{cmd}`.strip
 	end
 
 	def open(opts = {})
