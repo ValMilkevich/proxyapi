@@ -21,4 +21,6 @@ end
 
 every 1.day do
   rake "proxies:dj:check"
+  rake "proxies:clean"
 end
+

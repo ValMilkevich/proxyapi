@@ -3,6 +3,12 @@ require 'timeout'
 desc "Proxies"
 namespace :proxies do
 
+  task :clean => :environment do |task|
+    system_activity task.name do
+      Proxy.where(:last_check.gte => 12.hours.ago).and(:availability.lte => Proxy::THRESHOLD_AVAILABILITY_CLEAN).and(:available => false).and(:checks_count.gte => Proxy::THRESHOLD_CHECKS_COUNT_CLEAN )
+    end
+  end
+
   namespace :dj do
     task :check => :environment  do |task|
       system_activity task.name do

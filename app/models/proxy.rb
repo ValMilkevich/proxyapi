@@ -7,6 +7,9 @@ class Proxy
 	include ::Proxy::Formatter
 	include Mongoid::CommonScopes
 
+	THRESHOLD_AVAILABILITY_CLEAN = 0.1
+	THRESHOLD_CHECKS_COUNT_CLEAN = 5
+
 	field :ip
 	field :port
 	field :country_name
