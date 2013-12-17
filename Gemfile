@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
 if RUBY_VERSION =~ /1.9/
     Encoding.default_external = Encoding::UTF_8
