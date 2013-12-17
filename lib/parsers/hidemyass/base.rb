@@ -13,8 +13,8 @@ module Parsers::Hidemyass
       @url || "http://www.hidemyass.com/proxy-list/#{@page}"
     end
 
-    def initialize(url = nil)
-      @url = url
+    def initialize(page = nil)
+      @page = page
     end
 
     def self.headers

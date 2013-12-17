@@ -20,5 +20,5 @@ every 60.minutes do
 end
 
 every 1.day do
-  # rake "proxies:dj:check"
+  rake "proxies:dj:check"
 end

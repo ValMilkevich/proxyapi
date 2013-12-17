@@ -13,8 +13,8 @@ module Parsers::Freedailyproxy
       @url || "http://www.freedailyproxy.com/?p=#{@page}"
     end
 
-    def initialize(url = nil)
-      @url = url
+    def initialize(page = nil)
+      @page = page
     end
 
     def self.headers

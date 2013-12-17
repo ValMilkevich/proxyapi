@@ -11,8 +11,8 @@ module Parsers::Spys
       @url || "http://spys.ru/proxies#{@page}/"
     end
 
-    def initialize(url = nil)
-      @url = url
+    def initialize(page = nil)
+      @page = page
     end
 
 		def self.headers

@@ -1,6 +1,5 @@
 require 'net/https'
 require 'open-uri'
-require 'iconv'
 
 # encoding: utf-8
 
