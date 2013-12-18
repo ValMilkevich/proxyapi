@@ -84,7 +84,9 @@ class Proxy
 	end
 
 	def self.check(id)
-		find_by(id: id).checks.create
+		return nil if where(id: id).first.blank?
+		
+		where(id: id).first.checks.create
 	end
 
 	def check_time=(val)
