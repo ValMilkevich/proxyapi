@@ -27,6 +27,21 @@ class Proxy
 	field :last_check, type: Time
 	field :checks_count, type: Integer, default: 0
 
+	field :geoplugin_status
+	field :geoplugin_city
+	field :geoplugin_region
+	field :geoplugin_countryCode
+	field :geoplugin_countryName
+	field :geoplugin_continentCode
+	field :geoplugin_latitude
+	field :geoplugin_longitude
+	field :geoplugin_regionCode
+	field :geoplugin_regionName
+	field :geoplugin_currencyCode
+	field :geoplugin_currencySymbol
+	field :geoplugin_currencySymbol_UTF8
+	field :geoplugin_currencyConverter
+
 	belongs_to :country
 	embeds_many :checks, class_name: "::Proxy::Check"
 
@@ -35,7 +50,7 @@ class Proxy
 	validates_numericality_of :latency, greater_than: 0
 	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
 
-	before_save		:assign_country
+	after_save :delayed_assign_country
 
 	scope :available, where(available: true)
 	scope :unavailable, where(available: false)
@@ -44,9 +59,9 @@ class Proxy
 	scope :http, where(type: "HTTP")
 
 	def as_json(options={})
-    options.merge!(:only => [:_id, :ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count] )
-    super(options)
-  end
+		options.merge!(:only => [:_id, :ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count, :geoplugin_countryName] )
+		super(options)
+	end
 
 	def self.create_or_update(hash)
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
@@ -85,7 +100,7 @@ class Proxy
 
 	def self.check(id)
 		return nil if where(id: id).first.blank?
-		
+
 		where(id: id).first.checks.create
 	end
 
@@ -131,9 +146,28 @@ class Proxy
 
 	protected
 
-	def assign_country
-		if self.country_name
-			self.country = Country.where(name: /#{self.country_name}/i).first || Country.create(name: self.country_name)
+	def delayed_assign_country(hash = {:priority => 1})
+		self.class.delay(hash).assign_country(self.id)
+	end
+
+	def assign_country(force = false)
+		self.class.assign_country(self.id, force)
+	end
+
+	def self.assign_country(proxy_id, force = false)
+		proxy = ::Proxy.where(id: proxy_id).first
+
+		return false if proxy.blank?
+
+		if force || !(proxy.geoplugin_status.to_s =~ /2[\d]{2,}/)
+			resp = open("http://www.geoplugin.net/json.gp?ip=200.110.243.150").read
+			if !resp.blank?
+				proxy.attributes = JSON.load()
+				proxy.save
+				self.country = Country.where(name: /#{self.geoplugin_countryName}/i).first || Country.create(name: self.geoplugin_countryName)
+			end
+		else
+			true
 		end
 	end
 

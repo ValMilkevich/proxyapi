@@ -36,18 +36,18 @@ class ::Proxy::Check
 		puts "Proxy::Check for #{proxy.ip}:#{proxy.port} #{proxy.country_name}"
 		response, time = self.test_request(proxy)
 
-    check.available = !!(response.code =~ /2\d\d/)
-    check.latency = time * 1000 # in milliseconds
-  rescue Errno::ECONNREFUSED => e
-  	check.available = false
-  	check.exception = e.to_s
-  rescue => e
-  	check.available = false
-  	check.exception = e.to_s
-  ensure
-  	check.latency ||= ::Parsers::Base::PROXY_CONNECTION_TIMEOUT * 1000
-  	check
-  end
+	    check.available = !!(response.code =~ /2\d\d/)
+	    check.latency = time * 1000 # in milliseconds
+	  rescue Errno::ECONNREFUSED => e
+	  	check.available = false
+	  	check.exception = e.to_s
+	  rescue => e
+	  	check.available = false
+	  	check.exception = e.to_s
+	  ensure
+	  	check.latency ||= ::Parsers::Base::PROXY_CONNECTION_TIMEOUT * 1000
+	  	check
+	end
 
 	def self.test_request(prx, url = @@latency_check_url, retry_count = nil)
 		raise Errno::ECONNREFUSED if !test_port(prx)
