@@ -5,7 +5,7 @@ require "delayed/recipes"
 
 #  RVM settings
 #
-set :rvm_ruby_string, '1.9.3'
+set :rvm_ruby_string, '2.0.0'
 set :rvm_type,        :user
 
 #  Multistage settings
