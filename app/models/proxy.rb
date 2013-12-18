@@ -158,16 +158,16 @@ class Proxy
 		return false if proxy.blank?
 
 		if force || !(proxy.geoplugin_status.to_s =~ /2[\d]{2,}/)
-			prx = ::Proxy.available.sample
-			resp = self.open(prx, "http://www.geoplugin.net/json.gp?ip=200.110.243.150")
+			proxy = ::Proxy.available.sample
+			resp = self.open(proxy, "http://www.geoplugin.net/json.gp?ip=200.110.243.150")
 			
-			prx.attributes = JSON.load(resp.body) if !resp.blank?
+			proxy.attributes = JSON.load(resp.body) if !resp.blank?
 		end
 
-		if prx.geoplugin_countryName.present?
-			prx.country ||= Country.where(name: /#{prx.geoplugin_countryName}/i).first || Country.create(name: prx.geoplugin_countryName)
+		if proxy.geoplugin_countryName.present?
+			proxy.country ||= Country.where(name: /#{prx.geoplugin_countryName}/i).first || Country.create(name: prx.geoplugin_countryName)
 		end
-		prx.save
+		proxy.save
 	end
 
 	def self.open(prx, url)
