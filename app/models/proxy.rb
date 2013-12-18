@@ -164,7 +164,9 @@ class Proxy
 			prx.attributes = JSON.load(resp.body) if !resp.blank?
 		end
 
-		prx.country ||= Country.where(name: /#{prx.geoplugin_countryName}/i).first || Country.create(name: prx.geoplugin_countryName)
+		if prx.geoplugin_countryName.present?
+			prx.country ||= Country.where(name: /#{prx.geoplugin_countryName}/i).first || Country.create(name: prx.geoplugin_countryName)
+		end
 		prx.save
 	end
 
