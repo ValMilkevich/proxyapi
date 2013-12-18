@@ -159,7 +159,7 @@ class Proxy
 
 		if force || !(proxy.geoplugin_status.to_s =~ /2[\d]{2,}/)
 			proxy = ::Proxy.available.sample
-			resp = self.open(proxy, "http://www.geoplugin.net/json.gp?ip=200.110.243.150")
+			resp = self.open(proxy, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
 			
 			proxy.attributes = JSON.load(resp.body) if !resp.blank?
 		end
