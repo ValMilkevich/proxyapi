@@ -165,7 +165,7 @@ class Proxy
 		end
 
 		if proxy.geoplugin_countryName.present?
-			proxy.country ||= Country.where(name: /#{prx.geoplugin_countryName}/i).first || Country.create(name: prx.geoplugin_countryName)
+			proxy.country ||= Country.where(name: /#{proxy.geoplugin_countryName}/i).first || Country.create(name: proxy.geoplugin_countryName)
 		end
 		proxy.save
 	end
