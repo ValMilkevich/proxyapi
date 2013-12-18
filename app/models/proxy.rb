@@ -145,11 +145,11 @@ class Proxy
   	end
 
 	def delayed_assign_country(hash = {:priority => 1})
-		self.class.delay(hash).assign_country(self.id)
+		self.class.delay(hash).assign_country(self.id) if self.country.blank? || self.geoplugin_countryName.blank?
 	end
 
 	def assign_country(force = false)
-		self.class.assign_country(self.id, force)
+		self.class.assign_country(self.id, force) if force || self.country.blank? || self.geoplugin_countryName.blank?
 	end
 
 	def self.assign_country(proxy_id, force = false)
