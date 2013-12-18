@@ -66,7 +66,7 @@ end
 
 namespace :whenever do
   task :restart, :roles => [:app] do
-    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec whenever --update-crontab"
+    run "cd #{release_path} && RAILS_ENV=#{stage} bundle exec whenever --update-crontab #{application}_#{stage}"
   end
 end
 
@@ -74,7 +74,7 @@ after 'deploy:update_code', 'deploy:symlink_shared'
 
 # Delayed jobs
 #
-set :delayed_job_args, "-n 2"
+set :delayed_job_args, "-n 8"
 
 after "deploy:stop",    "delayed_job:stop"
 after "deploy:start",   "delayed_job:start"
