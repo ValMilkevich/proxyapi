@@ -141,10 +141,8 @@ class Proxy
 
 	def self.google_chartize(collection, method, range = nil)
 		range ||= ::Proxy.google_chart_range
-    sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
-  end
-
-	protected
+    	sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
+  	end
 
 	def delayed_assign_country(hash = {:priority => 1})
 		self.class.delay(hash).assign_country(self.id)
