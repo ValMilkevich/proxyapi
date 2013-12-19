@@ -41,6 +41,7 @@ class Proxy
 	field :geoplugin_currencySymbol
 	field :geoplugin_currencySymbol_UTF8
 	field :geoplugin_currencyConverter
+  feidl :geoplugin_check_at, type: Time
 
 	belongs_to :country
 	embeds_many :checks, class_name: "::Proxy::Check"
@@ -141,15 +142,19 @@ class Proxy
 
 	def self.google_chartize(collection, method, range = nil)
 		range ||= ::Proxy.google_chart_range
-    	sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
-  	end
+  	sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
+	end
+
+  def if_assign_country?
+    (self.geoplugin_check_at > 1.day.ago || !self.geoplugin_check_at) && self.country.blank? || self.geoplugin_countryName.blank?
+  end
 
 	def delayed_assign_country(hash = {:priority => 1})
-		self.class.delay(hash).assign_country(self.id) if self.country.blank? || self.geoplugin_countryName.blank?
+		self.class.delay(hash).assign_country(self.id) if self.if_assign_country?
 	end
 
 	def assign_country(force = false)
-		self.class.assign_country(self.id, force) if force || self.country.blank? || self.geoplugin_countryName.blank?
+		self.class.assign_country(self.id, force) if self.if_assign_country?
 	end
 
 	def self.assign_country(proxy_id, force = false)
@@ -167,6 +172,8 @@ class Proxy
 		if proxy.geoplugin_countryName.present?
 			proxy.country ||= Country.where(name: /#{proxy.geoplugin_countryName}/i).first || Country.create(name: proxy.geoplugin_countryName)
 		end
+    
+    proxy.geoplugin_check_at = Time.now
 		proxy.save
 	end
 
