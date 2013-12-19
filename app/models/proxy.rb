@@ -41,7 +41,7 @@ class Proxy
 	field :geoplugin_currencySymbol
 	field :geoplugin_currencySymbol_UTF8
 	field :geoplugin_currencyConverter
-  feidl :geoplugin_check_at, type: Time
+  field :geoplugin_check_at, type: Time
 
 	belongs_to :country
 	embeds_many :checks, class_name: "::Proxy::Check"
