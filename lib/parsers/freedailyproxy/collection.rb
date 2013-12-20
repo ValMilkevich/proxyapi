@@ -20,7 +20,7 @@ module Parsers::Freedailyproxy
     end
 
     def pages
-      page_numbers.map{|pn| self.class.host + "?p=#{pn}"}
+      page_numbers
     end
 
     def index

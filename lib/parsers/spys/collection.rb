@@ -8,6 +8,7 @@ module Parsers::Spys
           new(page).index.map{|hash| yield hash}
         rescue => e
           puts "ERROR: #{e.to_s}"
+          puts e.backtrace
           []
         end
       end
@@ -18,7 +19,7 @@ module Parsers::Spys
     end
 
     def pages
-      page_numbers.map{|pn| self.class.host + "/proxies#{pn}/"}
+      page_numbers
     end
 
     def index

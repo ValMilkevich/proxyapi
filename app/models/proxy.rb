@@ -51,7 +51,7 @@ class Proxy
 	validates_numericality_of :latency, greater_than: 0
 	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
 
-	after_save :delayed_assign_country
+	after_save :delayed_assign_country, :if => :if_assign_country?
 
 	scope :available, where(available: true)
 	scope :unavailable, where(available: false)
@@ -146,11 +146,11 @@ class Proxy
 	end
 
   def if_assign_country?
-    (self.geoplugin_check_at > 1.day.ago || !self.geoplugin_check_at) && self.country.blank? || self.geoplugin_countryName.blank?
+    (!self.geoplugin_check_at || self.geoplugin_check_at > 1.day.ago) && self.country.blank? || self.geoplugin_countryName.blank?
   end
 
 	def delayed_assign_country(hash = {:priority => 1})
-		self.class.delay(hash).assign_country(self.id) if self.if_assign_country?
+		self.class.delay(hash).assign_country(self.id)
 	end
 
 	def assign_country(force = false)

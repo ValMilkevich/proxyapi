@@ -15,6 +15,7 @@ class Parsers::Phantomjs
 	}
 
 	cattr_accessor :debug
+  self.debug = true
 	attr_accessor :proxy, :url, :headers
 
 	def initialize(opts = {})

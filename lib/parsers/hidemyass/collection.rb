@@ -20,7 +20,7 @@ module Parsers::Hidemyass
     end
 
     def pages
-      page_numbers.map{|pn| self.class.host + "/proxy-list/#{pn}"}
+      page_numbers
     end
 
     def all_children(el, options, lmbd = lambda{} )
