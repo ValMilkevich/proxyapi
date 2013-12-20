@@ -19,6 +19,10 @@ module Parsers::Spys
       end
     end
 
+    def check_string
+      '.spy1xx a'
+    end
+
     def page_numbers
       @pages ||= (1..doc.css('.spy1xx a').map{|a| a['href'].scan(/[\d]+/) }.flatten.compact.map(&:to_i).max) rescue [1]
     end
