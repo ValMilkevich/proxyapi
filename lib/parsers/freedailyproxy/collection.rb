@@ -3,16 +3,25 @@ module Parsers::Freedailyproxy
     attr_accessor :attributes
 
     def self.each_page
-      new.pages.each do |page|
-        new(page).index.map do |hash|
-          begin
-            yield hash
-          rescue => e
-            puts "ERROR: #{e.to_s}"
-            []
+      _self = new
+      _self.doc
+      
+      if _self.check!
+        _self.pages.each do |page|
+          new(page).index.map do |hash|
+            begin
+              yield hash
+            rescue => e
+              puts "ERROR: #{e.to_s}"
+              []
+            end
           end
         end
       end
+    end
+
+    def check_string
+      '.pagination .middle a'
     end
 
     def page_numbers

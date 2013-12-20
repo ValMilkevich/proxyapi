@@ -3,13 +3,18 @@ module Parsers::Spys
     attr_accessor :attributes
 
     def self.each_page
-      new.pages.each do |page|
-        begin
-          new(page).index.map{|hash| yield hash}
-        rescue => e
-          puts "ERROR: #{e.to_s}"
-          puts e.backtrace
-          []
+      _self = new
+      _self.doc
+      _self.check!
+      if _self.check!
+        _self.pages.each do |page|
+          begin
+            new(page).index.map{|hash| yield hash}
+          rescue => e
+            puts "ERROR: #{e.to_s}"
+            puts e.backtrace
+            []
+          end
         end
       end
     end
