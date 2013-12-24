@@ -13,6 +13,10 @@ namespace :admin do
 end
 
 namespace :api do
+  namespace :cmd do
+    root :to => "procs#cmd"
+    resources :procs
+  end
   resources :proxies, only: [:index, :show] do
     collection do
       get :fast
