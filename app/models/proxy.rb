@@ -65,7 +65,7 @@ class Proxy
 	end
 
   def to_s
-    "#{type.flatten.first}://#{ip}:#{port}"
+    "#{[type].flatten.first}://#{ip}:#{port}"
   end
 
 	def self.create_or_update(hash)
