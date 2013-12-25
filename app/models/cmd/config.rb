@@ -15,7 +15,7 @@ class Cmd::Config
   # 
   
   def proxy 
-    ::Proxy.first
+    ::Proxy.where(:last_check.gte => 6.hours.ago, :availability.gte => 0.99, :available => true, :checks_count.gte => 20).sample
   end
   
   def cmd    
