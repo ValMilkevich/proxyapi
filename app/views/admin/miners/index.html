@@ -23,12 +23,12 @@
 						<%= miner_name %>
 						<small>
               <% last_message = Cmd::Message.where(name: miner_name).last %>
-              <% if last_message.proc.present? %>
+              <% if last_message.proc_status.present? %>
   							<span class="badge badge-success">&nbsp;</span>
                 <% if last_message.created_at < 1.minute.ago %>
                   <span class="badge badge-warning">&nbsp;</span>
                 <% end %>
-                <tt><%= last_message.proc %><tt>
+                <tt><%= last_message.proc_status %><tt>
               <% else %>
                 <span class="badge badge-important">&nbsp;</span>
               <% end %>							
