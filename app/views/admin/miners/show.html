@@ -1,6 +1,6 @@
 <div class="span4">						
     <% @miners.each do |message| %>
-      <%= message.body %><br>
+      <%= "#{message.body} <br>" if message.body.present? %>
     <% end %>
   </div>
 </div>
