@@ -3,7 +3,11 @@ class Api::Cmd::MessagesController < ApiController
   
   def cmd
     proxy = ::Proxy.where(:last_check.gte => 6.hours.ago, :availability.gte => 0.99, :available => true, :checks_count.gte => 20).sample
-    render :json => {:cmd => "-q -L 3342 #{proxy ? "-x #{proxy.to_s}" : '' }"} #
+    render :json => {
+      :cmd => "-q -L 3342 #{proxy ? "-x #{proxy.to_s}" : '' }"
+      :re => 60,
+      :throttle => 10
+    } #
   end
   
 	def create
