@@ -2,7 +2,7 @@
 <span class="badge badge-info"><% @miners.first.proc_status %></span>
 
 <pre>
-  <% @miners.each do |message| %>
-  <%= "#{message.body}" if message.body.present? %>
+  <% @miners.select{|m| m.body.present? }.each do |message| %>
+  <%= message.body %>
   <% end %>
 </pre>
