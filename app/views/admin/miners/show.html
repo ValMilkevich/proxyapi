@@ -1,10 +1,8 @@
-<% @miners.each do |message| %>
-<pre class="span10">
-  <span class="span6">			
-      <%= message.body%>
-  </span>
-  <span class="span4">						
-      <%= message.proc_status %>  
-  </span>
+<h1><% params[:id] %></h1>
+<span class="badge badge-info"><% @miners.first.proc_status %><span>
+
+<pre>
+  <% @miners.each do |message| %>
+  <%= "#{message.body}" if message.body.present? %>
+  <% end %>
 </pre>
-<% end %>  
