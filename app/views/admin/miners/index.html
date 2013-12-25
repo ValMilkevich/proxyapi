@@ -1,0 +1,49 @@
+<div class="row">
+	<div class="row-fluid">
+			<div class="span12 clearfix">
+			<h3 class="span6">Miners:
+        <% miners_count = Cmd::Message.all.map(&:name).uniq.size%>
+				<span class="badge badge-info"><%= miners_count %></span>
+			<h3 class="span6">Messages:
+        <span class="badge badge-info"><%= Cmd::Message.count  %></span>
+      </h3>
+		</div>
+	</div>
+	<hr/>
+</div>
+
+
+
+<div class="row">
+	<div class="row-fluid">
+		<div class="span12 clearfix">
+			<% Cmd::Message.all.map(&:name).uniq.each do |miner_name| %>
+				<div class="span4">
+					<h3 class="span12">
+						<%= miner_name %>
+						<small>
+              <% last_message = Cmd::Message.where(name: miner_name).last %>
+              <% if last_message.proc.present? %>
+  							<span class="badge badge-success">&nbsp;</span>
+                <% if last_message.created_at < 1.minute.ago %>
+                  <span class="badge badge-warning">&nbsp;</span>
+                <% end %>
+                <tt><%= last_message.proc %><tt>
+              <% else %>
+                <span class="badge badge-important">&nbsp;</span>
+              <% end %>							
+						</small>
+					</h3>
+					<div class="span4">						
+            <%= link_to Cmd::Message.where(name: miner_name).sort('created_at desc').first.body, "javascript: $('##{ miner_name }_logs').toggle()" %>
+            <div id="<%= miner_name %>_logs" style="display:none">
+              <% Cmd::Message.where(name: miner_name).sort('created_at desc').skip(1).each do |message| %>
+                <%= message.body %><br>
+              <% end %>
+            </div>
+				  </div>
+        </div>
+			<% end %>
+		</div>
+	</div>
+</div>

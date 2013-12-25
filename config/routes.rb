@@ -10,6 +10,7 @@ resource :dashboard, only: [:show]
 
 namespace :admin do
   root :to => "dashboard#show"
+  resources :miners
 end
 
 namespace :api do
