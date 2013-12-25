@@ -19,6 +19,6 @@ class Cmd::Config
   end
   
   def cmd    
-    "-q -L 3342 #{proxy ? "-x #{proxy.to_s}" : '' }"
+    self[:cmd].to_s.gsub(":proxy", proxy ? "-x #{proxy.to_s}" : '')
   end
 end
