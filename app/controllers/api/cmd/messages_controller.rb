@@ -2,8 +2,7 @@ class Api::Cmd::MessagesController < ApiController
   expose(:messages){Cmd::Message}
   before_filter :authenticate_user!, :only => :index
   
-  def cmd
-    proxy = ::Proxy.where(:last_check.gte => 6.hours.ago, :availability.gte => 0.99, :available => true, :checks_count.gte => 20).sample
+  def cmd    
     render :json => Cmd::Config.last    
   end
   
