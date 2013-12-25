@@ -4,5 +4,5 @@ class Cmd::Message
   
   field :body, type: String
   field :name, type: String
-  field :create
+  field :proc_status, type: String
 end
