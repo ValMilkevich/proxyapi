@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="row-fluid">
 		<div class="span12 clearfix">
-      <%=Cmd::Config.last.attributes.reject{|a,v| a == "_id"} %>
+      <%= Cmd::Config.last.attributes.reject{|a,v| a == "_id"} %>
 		</div>
 	</div>
 	<hr/>
@@ -34,7 +34,7 @@
               <% last_message = Cmd::Message.where(name: miner_name).last %>
               <% if last_message.proc_status.present? %>
   							<span class="badge badge-success">&nbsp;</span>
-                <% if last_message.created_at < 1.minute.ago %>
+                <% if last_message.created_at < Cmd::Config.last.throttle.to_i.seconds.ago %>
                   <span class="badge badge-warning">&nbsp;</span>
                 <% end %>                
               <% else %>
