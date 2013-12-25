@@ -1,4 +1,5 @@
 class Api::Cmd::MessagesController < ApiController
+  expose(:messages){Cmd::Message}
   before_filter :authenticate_user!, :only => :index
   
   def cmd
@@ -15,7 +16,11 @@ class Api::Cmd::MessagesController < ApiController
 	end
   
   def index
-    render :json => Cmd::Message.all
+    if params[:name]
+      render :json => messages.where(name: params[:name])
+    else
+      render :json => messages
+    end
   end  
 
 	protected
