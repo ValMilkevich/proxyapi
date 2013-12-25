@@ -19,7 +19,7 @@ every 60.minutes do
   rake "proxies:dj:bulk_invoke"
 end
 
-every 1.day do
+every 8.hours do
   rake "proxies:dj:check"
   # rake "proxies:clean"
 end
