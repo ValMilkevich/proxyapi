@@ -64,6 +64,10 @@ class Proxy
 		super(options)
 	end
 
+  def to_s
+    "#{type.flatten.first}://#{ip}:#{port}"
+  end
+
 	def self.create_or_update(hash)
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
 		el.attributes = hash
