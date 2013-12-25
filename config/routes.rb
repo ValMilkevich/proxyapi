@@ -15,7 +15,7 @@ end
 namespace :api do
   namespace :cmd do
     root :to => "procs#cmd"
-    resources :procs
+    resources :messages
   end
   resources :proxies, only: [:index, :show] do
     collection do
