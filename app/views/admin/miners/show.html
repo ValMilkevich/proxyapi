@@ -1,11 +1,10 @@
 <% @miners.each do |message| %>
-<pre>
-  <div class="span6">			
+<pre class="span10">
+  <span class="span6">			
       <%= message.body%>
-  </div>
-  <div class="span4">						
+  </span>
+  <span class="span4">						
       <%= message.proc_status %>  
-  </div>
-  <div class="span10"></div>
+  </span>
 </pre>
 <% end %>  
