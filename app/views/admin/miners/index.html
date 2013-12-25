@@ -22,6 +22,7 @@
 					<h3 class="span12">
 						<%= miner_name %>
 						<small>
+              
               <% last_message = Cmd::Message.where(name: miner_name).last %>
               <% if last_message.proc_status.present? %>
   							<span class="badge badge-success">&nbsp;</span>
