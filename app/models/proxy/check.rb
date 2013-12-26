@@ -56,7 +56,7 @@ class ::Proxy::Check
 		begin
 			status = Timeout.timeout(::Parsers::Base::PROXY_CONNECTION_TIMEOUT) do
 		    t1 = Time.now
-		    resp = prx.open(url)
+		    resp = ::Proxy.open(prx, url)
 		    t2 = Time.now
 				if resp.code =~ /3[\d]{2,}/
 					test_request(prx, resp.header['location'])
