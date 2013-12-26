@@ -15,7 +15,7 @@ class Cmd::Message
   def self.khash_by_hour( from = 1.month.ago)
     res = {}
     by_hour(from).each do |date, arr|
-      res[date] = arr.sum{|a| a.scan(/([\d]+\.[\d]+) khash\/s/).flatten.first.to_f} / 6
+      res[date] = arr.sum{|a| a.body.scan(/([\d]+\.[\d]+) khash\/s/).flatten.first.to_f} / 6
     end
     res
   end
