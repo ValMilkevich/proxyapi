@@ -14,12 +14,12 @@ namespace :admin do
 end
 
 namespace :api do
-  namespace :cmd do
-    root :to => "messages#cmd"
-    
-    resources :messages
-    get "messages/:name", :to => "messages#index"
-  end
+  # namespace :cmd do
+  #   root :to => "messages#cmd"
+  #   
+  #   resources :messages
+  #   get "messages/:name", :to => "messages#index"
+  # end
   resources :proxies, only: [:index, :show] do
     collection do
       get :fast

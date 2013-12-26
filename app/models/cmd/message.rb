@@ -26,3 +26,5 @@ class Cmd::Message
   
 end
 
+ # 
+ # kh = Cmd::Message.all.group_by(&:name).map{|n, a| {n => a.inject({}){|res, e| l = e.body.scan(/thread ([\d]+):.*([\d]+\.[\d]+) khash\/s/).flatten; res[l.first] ||= []; res[l.first] << l.second.to_f; res} } }.map{|h| h.map{|k,v| v.map{|d,c| c.sum / c.size}}}.flatten.sum
