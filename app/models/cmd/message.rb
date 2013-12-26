@@ -6,6 +6,8 @@ class Cmd::Message
   field :name, type: String
   field :proc_status, type: String
 
+  before_save :format_body
+
   def self.by_hour( from = 1.month.ago)
     Cmd::Message.where(:created_at.gte => from ).group_by{|m| m.created_at.strftime('%Y-%m-%d %H:00') }
   end
@@ -17,5 +19,10 @@ class Cmd::Message
     end
     res
   end
+  
+  def format_body
+    self.body = self.body.gsub(/\u0000/, '')
+  end
+  
 end
 
