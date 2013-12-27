@@ -14,6 +14,7 @@ namespace :admin do
 end
 
 namespace :api do
+  
   namespace :cmd do
     root :to => "messages#cmd"
     
