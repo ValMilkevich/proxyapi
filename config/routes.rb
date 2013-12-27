@@ -17,8 +17,8 @@ namespace :api do
   namespace :cmd do
     # root :to => "messages#cmd"
     
-    # resources :messages
-    # get "messages/:name", :to => "messages#index"
+    resources :messages
+    get "messages/:name", :to => "messages#index"
   end
   resources :proxies, only: [:index, :show] do
     collection do
