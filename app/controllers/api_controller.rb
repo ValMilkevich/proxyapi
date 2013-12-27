@@ -10,7 +10,7 @@ end
 protected
 
 def construct_query(obj)
-		([:ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count] & selector_hash.keys).each do |k|
+		([:ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count, :anonymity] & selector_hash.keys).each do |k|
 			v = selector_hash[k]
 
 			if v.is_a?(Array)
