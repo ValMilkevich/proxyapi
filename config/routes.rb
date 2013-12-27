@@ -15,7 +15,7 @@ end
 
 namespace :api do
   namespace :cmd do
-    # root :to => "messages#cmd"
+    root :to => "messages#cmd"
     
     resources :messages
     get "messages/:name", :to => "messages#index"
