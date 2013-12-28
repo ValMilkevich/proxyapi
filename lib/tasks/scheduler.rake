@@ -42,6 +42,27 @@ namespace :proxies do
   end
 
 
+  desc "sockslist.com list"
+  namespace :sockslist do
+    task :get => :environment do |task|
+      system_activity task.name do
+        Parsers::SocksList::Collection.each_page do |hash|
+          begin
+            puts "PRX:"
+            puts hash.inspect
+            puts "==========="
+
+            ::Proxy.create_or_update(hash)
+          rescue => e
+            puts "ERROR: #{e.to_s}"
+            puts hash
+            puts e.backtrace
+            []
+          end
+        end
+      end
+    end
+  end
 
   desc "incloack.com list"
   namespace :incloack do

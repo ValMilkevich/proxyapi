@@ -13,6 +13,7 @@ every 60.minutes do
   rake "proxies:incloack:get"
   rake "proxies:spys:get"
   rake "proxies:freedailyproxy:get"
+  rake "proxies:sockslist:get"
 end
 
 every 60.minutes do
