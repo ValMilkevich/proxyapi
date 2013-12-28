@@ -16,7 +16,7 @@
 			<% Proxy.all.distinct(:from).each do |from| %>
 				<div class="row">
 					<h3 class="span4">
-						<%= link_to glyphicon('eye-close'), "javascript: #{"drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle" }('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
+						<%= link_to '<o>', "javascript: #{"drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle" }('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
 						<%= from %>
 
 						<small>
