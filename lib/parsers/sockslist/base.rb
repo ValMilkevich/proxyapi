@@ -7,7 +7,7 @@ module Parsers::Sockslist
     @@table_headers = [:proxy_ip, :proxy_port, :country, :type, :last_check]
 
     @@host = "http://sockslist.net/"
-    @@from = "sockslist.net/"
+    @@from = "sockslist.net"
 
     def url
       @url || "http://sockslist.net/proxy/server-socks-hide-ip-address/#{@page}"
