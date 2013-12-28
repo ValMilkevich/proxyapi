@@ -46,7 +46,7 @@ namespace :proxies do
   namespace :sockslist do
     task :get => :environment do |task|
       system_activity task.name do
-        Parsers::SocksList::Collection.each_page do |hash|
+        Parsers::Sockslist::Collection.each_page do |hash|
           begin
             puts "PRX:"
             puts hash.inspect
