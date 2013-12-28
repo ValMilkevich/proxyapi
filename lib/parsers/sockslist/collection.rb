@@ -43,6 +43,7 @@ module Parsers::Sockslist
           :ip => tr.css('td.t_ip').text.gsub(/[\s\t\n]/, '').strip,
           :port => tr.css('td.t_port').text.strip.scan(/[\d]{3,7}$/).first,
           :anonymity => "SOCKS",
+          :initial_latency => 1,
           :country_name => tr.css("td.t_country").text.gsub(/[\s\t\n]/, '').strip,
           :type => "SOCKS#{tr.css("td.t_type").text.gsub(/[\s\t\n]/, '').strip}",
           :url => url,

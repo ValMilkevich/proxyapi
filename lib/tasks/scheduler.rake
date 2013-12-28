@@ -52,7 +52,9 @@ namespace :proxies do
             puts hash.inspect
             puts "==========="
 
-            ::Proxy.create_or_update(hash)
+            proxy = ::Proxy.create_or_update(hash)
+            
+            puts proxy.errors.full_messages if proxy.errors.present?
           rescue => e
             puts "ERROR: #{e.to_s}"
             puts hash
