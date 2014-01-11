@@ -36,6 +36,8 @@ gem 'devise'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'whenever', :require => false
+gem 'socksify'
+
 
 group :production do
 	gem 'uglifier'

@@ -177,6 +177,7 @@ GEM
     ref (1.0.5)
     rvm-capistrano (1.5.1)
       capistrano (~> 2.15.4)
+    socksify (1.5.0)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -223,6 +224,7 @@ DEPENDENCIES
   rails (>= 3.2.10)
   rails-api!
   rvm-capistrano
+  socksify
   therubyracer
   twitter-bootstrap-rails!
   uglifier

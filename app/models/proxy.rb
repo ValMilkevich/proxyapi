@@ -1,5 +1,6 @@
 require 'net/https'
 require 'open-uri'
+require 'socksify/http'
 
 class Proxy
 	include Mongoid::Document
@@ -79,6 +80,10 @@ class Proxy
 	def self.random
 		ne(:check_time => nil, :latency => nil).where({:latency.lt => 1500}).order_by(:check_time.asc).limit(100).sample
 	end
+
+  def socks?
+    type.grep(/sock/i).present?
+  end
 
 	def from_last_check!
 		update_attributes(
@@ -185,7 +190,12 @@ class Proxy
 		return nil if !prx
 		uri = URI(url)
 		req = Net::HTTP::Get.new(uri.request_uri)
-		resp = Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}			
+        
+    resp = if prx.socks?
+      Net::HTTP.SOCKSProxy('127.0.0.1', 9050).start(uri.host, uri.port){ |http| http.get(uri.path) }
+    else
+      Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
+    end
 	end
 
 end
