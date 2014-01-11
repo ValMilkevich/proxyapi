@@ -192,7 +192,7 @@ class Proxy
 		req = Net::HTTP::Get.new(uri.request_uri)
         
     resp = if prx.socks?
-      Net::HTTP.SOCKSProxy('127.0.0.1', 9050).start(uri.host, uri.port){ |http| http.get(uri.path) }
+      Net::HTTP.SOCKSProxy(prx.ip, prx.port).start(uri.hostname, uri.port){ |http| http.request(req) }
     else
       Net::HTTP::Proxy(prx.ip, prx.port).start(uri.hostname, uri.port) {|http| http.request(req)}
     end
