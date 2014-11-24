@@ -1,0 +1,10 @@
+development:
+  api_key: nil
+  username: <%= ENV['API_HEROKU_EMAIL'] %>
+  password:	<%= ENV['API_HEROKU_PASSWORD'] %>
+  headers: nil
+production:
+  api_key: nil
+  username: milkevich@gmail.com
+  password: Qdf1lN
+  headers: nil
