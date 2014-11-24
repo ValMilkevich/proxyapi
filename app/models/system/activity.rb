@@ -8,8 +8,8 @@ class System::Activity
   field :status, type: String, default: STATUSES.first
   field :exceptions, type: Array, default: nil
 
-  scope :started, where(:status => "started").desc(:created_at)
-  scope :completed, where(:status => "completed").desc(:updated_at)
+  scope :started, -> { where(:status => "started").desc(:created_at) }
+  scope :completed, -> { where(:status => "completed").desc(:updated_at) }
 
   def complete!
     update_attributes status: STATUSES.last

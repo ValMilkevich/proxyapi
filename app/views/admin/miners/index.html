@@ -1,6 +1,6 @@
 <div class="row">
-	<div class="row-fluid">
-		<div class="span12 clearfix">
+	<div class="row">
+		<div class="col-md-12 clearfix">
       <%= Cmd::Config.last.attributes.reject{|a,v| a == "_id"} %>
 		</div>
 	</div>
@@ -8,12 +8,12 @@
 </div>
 
 <div class="row">
-	<div class="row-fluid">
-			<div class="span12 clearfix">
-			<h3 class="span6">Miners:
+	<div class="row">
+			<div class="col-md-12 clearfix">
+			<h3 class="col-md-6">Miners:
         <% miners_count = Cmd::Message.all.map(&:name).uniq.size%>
 				<span class="badge badge-info"><%= miners_count %></span>
-			<h3 class="span6">Messages:
+			<h3 class="col-md-6">Messages:
         <span class="badge badge-info"><%= Cmd::Message.count  %></span>
       </h3>
 		</div>
@@ -24,11 +24,11 @@
 
 
 <div class="row">
-	<div class="row-fluid">
-		<div class="span12 clearfix">
+	<div class="row">
+		<div class="col-md-12 clearfix">
 			<% Cmd::Message.all.map(&:name).uniq.each do |miner_name| %>
-				<div class="span4">
-					<h3 class="span12">
+				<div class="col-md-4">
+					<h3 class="col-md-12">
 						<%= link_to miner_name, admin_miner_path(miner_name) %>
 						<small>              
               <% last_message = Cmd::Message.where(name: miner_name).last %>
@@ -42,7 +42,7 @@
               <% end %>							
 						</small>
 					</h3>
-          <small class="span12"><tt><%= last_message.proc_status %><tt></small>
+          <small class="col-md-12"><tt><%= last_message.proc_status %><tt></small>
           
         </div>
 			<% end %>

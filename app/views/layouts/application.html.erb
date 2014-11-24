@@ -39,14 +39,14 @@
     <!--
     <div class="navbar navbar-fluid-top">
       <div class="navbar-inner">
-        <div class="container-fluid">
+        <div class="container">
           <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">Proxy API</a>
-          <div class="container-fluid nav-collapse">
+          <div class="container nav-collapse">
           </div>
         </div>
       </div>
@@ -54,24 +54,9 @@
 -->
 
 <br/>
-
-        <div class="span2 visible-phone ">
-          <ul class="nav nav-list">
-            <% if user_signed_in? %>
-              <li>
-                <%= link_to(t('helpers.link.logout'), destroy_user_session_path, :method => :delete) %>
-                <%= link_to("Admin", admin_root_url) if current_user.admin? %>
-              </li>
-            <% else %>
-              <%= link_to 'fb', omniauth_authorize_path(:user, :facebook), :class => "omniauth-authorize"  %>
-              <%= link_to 'tw', omniauth_authorize_path(:user, :twitter), :class => "omniauth-authorize"  %>
-            <% end %>
-          </ul>
-        </div>
-
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2 hidden-phone">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 hidden-xs">
           <div class="sidebar-nav"  id="nav-list"  data-spy="affix" data-offset-top="0" >
             <ul class="nav nav-list">
               <li class="nav-header">Proxy API</li>
@@ -125,7 +110,20 @@
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-        <div class="span10">
+        <div class="col-md-2 visible-xs hidden-sm ">
+          <ul class="nav nav-list">
+            <% if user_signed_in? %>
+              <li>
+                <%= link_to(t('helpers.link.logout'), destroy_user_session_path, :method => :delete) %>
+                <%= link_to("Admin", admin_root_url) if current_user.admin? %>
+              </li>
+            <% else %>
+              <%= link_to 'fb', omniauth_authorize_path(:user, :facebook), :class => "omniauth-authorize"  %>
+              <%= link_to 'tw', omniauth_authorize_path(:user, :twitter), :class => "omniauth-authorize"  %>
+            <% end %>
+          </ul>
+        </div>
+        <div class="col-md-offset-2 col-md-10 ">
           <%= yield %>
         </div>
 

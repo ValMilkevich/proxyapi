@@ -46,7 +46,6 @@ class User
   field :uid
   field :username
 
-  attr_accessible :email, :password, :password_confirmation, :name, :provider, :uid
 
 def self.from_omniauth(auth)
   find_or_create_by(auth.slice(:provider, :uid)) do |user|

@@ -5,7 +5,7 @@
 	</section>
 
 	<section id="documentation">
-		<div class="row-fluid">
+		<div class="row">
 			<%= row do %>
 				<%= desc(true) do %>
 					<h1>Documentation<h1>
@@ -21,7 +21,7 @@
 	</section>
 
 	<section id="formats">
-		<div class="row-fluid">
+		<div class="row">
 			<%= doc_row  "JSON", "The only format currently" %>
 		</div>
 	</section>
@@ -32,7 +32,7 @@
 	</section>
 
 		<section id="proxies_fields">
-			<div class="row-fluid" id="proxies_fields">
+			<div class="row" id="proxies_fields">
 				<%= doc_row  "Fields", true %>
 				<%= doc_row  "_id", "Proxy permanent id, type: Integer" %>
 				<%= doc_row  "ip", "Proxy IP, type: String" %>
@@ -46,7 +46,7 @@
 			</div>
 		</section>
 		<section id="proxies_urls">
-		  <div class="row-fluid">
+		  <div class="row">
 		  	<%= doc_row  "URLs", true %>
 
 				<%= doc_row "Starting from most recent proxies" do %>
@@ -68,7 +68,7 @@
 		</section>
 
 		<section id="proxies_selectors">
-		  <div class="row-fluid">
+		  <div class="row">
 
 				<%= doc_row  "Selectors", true %>
 
@@ -103,7 +103,7 @@
 
 
 	<section id="countries">
-		<div class="row-fluid">
+		<div class="row">
 			<%= doc_row  "Countries", true %>
 					<%= doc_row "API countries index" do %>
 				GET: <%= link_to "/api/countries(.:format)", api_countries_path %>
@@ -115,7 +115,7 @@
 	</section>
 
 	<section id="country_proxies">
-		<div class="row-fluid">
+		<div class="row">
 			<%= doc_row  "Country Proxies", true %>
 					<%= doc_row "API proxies for the selected country index" do %>
 				GET: <%= link_to "/api/countries/:counry_id/proxies(.:format)", api_country_proxies_path(Country.first || 0) %>

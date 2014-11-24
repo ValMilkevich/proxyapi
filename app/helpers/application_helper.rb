@@ -8,17 +8,17 @@ module ApplicationHelper
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
 
-		content_tag(:div, nav ? content_tag(:h3, content) : content_tag(:dd, content), :class => "span6 docs")
+		content_tag(:div, nav ? content_tag(:h3, content) : content_tag(:dd, content), :class => "col-md-6 docs")
 	end
 
 	def desc nav = false, &block
 		content = capture(&block)
 		# content += content_tag(:hr) if !capture(&block).blank?
-		content_tag(:div, nav ? content_tag(:h3, content) : content_tag(:dd, content) , :class => "span5 defs")
+		content_tag(:div, nav ? content_tag(:h3, content) : content_tag(:dd, content) , :class => "col-md-5 defs")
 	end
 
 	def row &block
-		content_tag :div, capture(&block), :class => "row-fluid docs-def"
+		content_tag :div, capture(&block), :class => "row docs-def"
 	end
 
 	def doc_row *args, &block

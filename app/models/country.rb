@@ -1,8 +1,5 @@
 class Country
 	include Mongoid::Document
-	include Mongoid::Versioning
-
-	max_versions 100
 
 	field :name
 	field :code

@@ -1,21 +1,21 @@
 <div class="row">
-	<div class="row-fluid">
-			<div class="span12 clearfix">
-			<h3 class="span6">PRX:
+	<div class="row">
+			<div class="col-md-12 clearfix">
+			<h3 class="col-md-6">PRX:
 				<span class="badge badge-info"><%= Proxy.available.count %></span>
 				<span class="badge badge"><%= Proxy.unavailable.count %></span>
-			<h3 class="span6">DJ: <small><%= Delayed::Job.count %></small></h3>
+			<h3 class="col-md-6">DJ: <small><%= Delayed::Job.count %></small></h3>
 		</div>
 	</div>
 	<hr/>
 </div>
 
 <div class="row">
-	<div class="row-fluid">
-		<div class="span12 clearfix">
+	<div class="row">
+		<div class="col-md-12 clearfix">
 			<% Proxy.all.distinct(:from).each do |from| %>
 				<div class="row">
-					<h3 class="span4">
+					<h3 class="col-md-4">
 						<%= link_to '<o>', "javascript: #{"drawChart_#{ from.gsub(/[^A-Za-z0-9]/, '_') }_toggle" }('##{from.gsub(/[^A-Za-z0-9]/, '_')}')".html_safe %>
 						<%= from %>
 
@@ -24,41 +24,41 @@
 							<span class="badge badge"> <%= Proxy.where(from: from).unavailable.count %></span>
 						</small>
 					</h3>
-					<div class="span8 proxy_from_timeline">
+					<div class="col-md-8 proxy_from_timeline">
 						<div class="row">
-							<span class="span2">
+							<span class="col-md-2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 30.minutes.ago).available.count %></span>
 								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 30.minutes.ago).last_week.unavailable.count %></span>
 								<br/>
-								<small class="span12">30min</small>
+								<small class="col-md-12">30min</small>
 							</span>
-							<span class="span2">
+							<span class="col-md-2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 1.hours.ago).available.count %></span>
 								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 1.hours.ago).last_week.unavailable.count %></span>
 
-								<small class="span12">1H</small>
+								<small class="col-md-12">1H</small>
 
 							</span>
 
-							<span class="span2">
+							<span class="col-md-2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).gte("created_at" => 6.hours.ago).available.count %></span>
 								<span class="badge"><%= Proxy.where(from: from).gte("checks.created_at" => 6.hours.ago).last_week.unavailable.count %></span>
 
-								<small class="span12">6H</small>
+								<small class="col-md-12">6H</small>
 							</span>
 
-							<span class="span2">
+							<span class="col-md-2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).yesterday.available.count %></span>
 								<span class="badge"><%= Proxy.where(from: from).yesterday.unavailable.count %></span>
 
-								<small class="span12">24H</small>
+								<small class="col-md-12">24H</small>
 							</span>
 
-							<span class="span2">
+							<span class="col-md-2">
 								<span class="badge badge-info"><%= Proxy.where(from: from).last_week.available.count %></span>
 								<span class="badge"><%= Proxy.where(from: from).last_week.unavailable.count %></span>
 
-								<small class="span12">7 days</small>
+								<small class="col-md-12">7 days</small>
 							</span>
 							</div>
 
@@ -66,7 +66,7 @@
 				</div>
 
 				<div class="row hidden" id="<%= from.gsub(/[^A-Za-z0-9]/, '_') %>">
-						<span class="span12" style="height: 350px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>'></span>
+						<span class="col-md-12" style="height: 350px;" id='<%= from.gsub(/[^A-Za-z0-9]/, '_') %>'></span>
 				</div>
 
 				<div class="row">
@@ -80,11 +80,11 @@
 </div>
 
 <div class="row">
-	<div class="row-fluid">
-		<div class="span12 clearfix" id = "sa">
+	<div class="row">
+		<div class="col-md-12 clearfix" id = "sa">
 			<div class="row">
-				<h3 class="span6">
-					<%= link_to glyphicon('eye-close'), "javascript: $('#sa div.span6').toggle();".html_safe %>
+				<h3 class="col-md-6">
+					<%= link_to glyphicon('eye-close'), "javascript: $('#sa div.col-md-6').toggle();".html_safe %>
 					SA:
 					<small>
 						<% if System::Activity.started.blank? %>
@@ -95,7 +95,7 @@
 					</small>
 				</h3>
 			</div>
-			<div class="span6" style="display:none">
+			<div class="col-md-6" style="display:none">
 				<% System::Activity.completed.limit(10).each do |sa| %>
 					<div>
 						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>
@@ -109,7 +109,7 @@
 				<% end %>
 			</div>
 
-			<div class="span6">
+			<div class="col-md-6">
 				<% System::Activity.started.each do |sa| %>
 					<div>
 						<%= glyphicon('exclamation-sign', nil, :style => "color:red;font-size:20px;") if !sa.exceptions.blank? %>

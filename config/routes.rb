@@ -16,7 +16,7 @@ end
 namespace :api do
   namespace :cmd do
     root :to => "messages#cmd"
-    
+
     resources :messages
     get "messages/:name", :to => "messages#index"
   end
@@ -36,8 +36,8 @@ namespace :api do
   end
 end
 
-match "api/proxies/selector/*selector", to: "api/proxies#selector"
-match "api/test", to: "api#test"
+get "api/proxies/selector/*selector", to: "api/proxies#selector"
+get "api/test", to: "api#test"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

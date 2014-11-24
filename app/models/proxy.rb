@@ -50,15 +50,15 @@ class Proxy
 	validates_presence_of :ip
 	validates_presence_of :port
 	validates_numericality_of :latency, greater_than: 0
-	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}$/
+	validates_format_of :ip, with: /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}/
 
 	after_save :delayed_assign_country, :if => :if_assign_country?
 
-	scope :available, where(available: true)
-	scope :unavailable, where(available: false)
-	scope :recent, order_by(:last_check.desc)
-	scope :fast, order_by(:latency.asc)
-	scope :http, where(type: "HTTP")
+	scope :available, -> { where(available: true) }
+	scope :unavailable, -> { where(available: false) }
+	scope :recent, -> { order_by(:last_check.desc) }
+	scope :fast, -> { order_by(:latency.asc) }
+	scope :http, -> { where(type: "HTTP") }
 
 	def as_json(options={})
 		options.merge!(:only => [:_id, :ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count, :geoplugin_countryName, :anonymity] )
@@ -174,14 +174,14 @@ class Proxy
 		if force || !(proxy.geoplugin_status.to_s =~ /2[\d]{2,}/)
 			proxy = ::Proxy.available.sample
 			resp = self.open(proxy, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
-			
+
 			proxy.attributes = JSON.load(resp.body) if !resp.blank?
 		end
 
 		if proxy.geoplugin_countryName.present?
 			proxy.country ||= Country.where(name: /#{proxy.geoplugin_countryName}/i).first || Country.create(name: proxy.geoplugin_countryName)
 		end
-    
+
     proxy.geoplugin_check_at = Time.now
 		proxy.save
 	end
@@ -190,7 +190,7 @@ class Proxy
 		return nil if !prx
 		uri = URI(url)
 		req = Net::HTTP::Get.new(uri.request_uri)
-        
+
     resp = if prx.socks?
       Net::HTTP.SOCKSProxy(prx.ip, prx.port).start(uri.hostname, uri.port){ |http| http.request(req) }
     else

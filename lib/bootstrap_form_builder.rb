@@ -3,12 +3,12 @@
 #= bootstrap_form_for @calendar_entry do |f|
 #  %fieldset
 #    %legend= locals[:title] || 'Edit Calendar Entry'
-#    = f.text_field :name, :class => 'span3'
-#    = f.text_area :description, :class => 'span3'
-#    = f.jquery_datetime_select :start_time, :class => 'span3'
-#    = f.jquery_datetime_select :end_time, :class => 'span3'
+#    = f.text_field :name, :class => 'col-md-3'
+#    = f.text_area :description, :class => 'col-md-3'
+#    = f.jquery_datetime_select :start_time, :class => 'col-md-3'
+#    = f.jquery_datetime_select :end_time, :class => 'col-md-3'
 #    = f.check_box :all_day
-#    = f.text_field :tag_string, :label => {:text => 'Tags'}, :class => 'span3'
+#    = f.text_field :tag_string, :label => {:text => 'Tags'}, :class => 'col-md-3'
 #    .form-actions
 #      = f.submit 'Save', :class => 'btn btn-primary'
 #      = link_to 'Cancel', calendar_entries_path, :class => 'btn'
@@ -16,12 +16,12 @@
 # If you don't use HAML, here is the same thing in ERB
 # <%= bootstrap_form_for @calendar_entry do |f| %>
 #   <%= content_tag :legend, (locals[:title] || 'Edit Calendar Entry') %>
-#   <%= f.text_field :name, :class => 'span3' %>
-#   <%= f.text_area :description, :class => 'span3' %>
-#   <%= f.jquery_datetime_select :start_time, :class => 'span3' %>
-#   <%= f.jquery_datetime_select :end_time, :class => 'span3' %>
+#   <%= f.text_field :name, :class => 'col-md-3' %>
+#   <%= f.text_area :description, :class => 'col-md-3' %>
+#   <%= f.jquery_datetime_select :start_time, :class => 'col-md-3' %>
+#   <%= f.jquery_datetime_select :end_time, :class => 'col-md-3' %>
 #   <%= f.check_box :all_day %>
-#   <%= f.text_field :tag_string, :label => {:text => 'Tags'}, :class => 'span3' do %>
+#   <%= f.text_field :tag_string, :label => {:text => 'Tags'}, :class => 'col-md-3' do %>
 #     <p class="help-block">Use commas to separate tags.</p>
 #   <% end %>
 #   <div class="form-actions">

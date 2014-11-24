@@ -39,7 +39,7 @@
 	font-size: 24px;
 }
 
-.proxy_from_timeline small.span12{
+.proxy_from_timeline small.col-md-12{
 	display:block;
 	border-top: 1px solid #eee;
 	margin-top: 10px;

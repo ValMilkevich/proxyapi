@@ -1,10 +1,10 @@
-<div class="page-header hidden-phone">
+<div class="page-header hidden-xs">
   <h1><%= "Sign in" %></h1>
 </div>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"}) do |f| %>
 	<div class="row">
-	  <div class="span6">
+	  <div class="col-md-6">
 	    <fieldset>
 	      <%= f.text_field :email %></p>
 	      <%= f.password_field :password %>
@@ -18,7 +18,7 @@
 	    </fieldset>
 	  </div>
 	  <!--
-	    <div class="span6">
+	    <div class="col-md-6">
 	      <%= render "devise/shared/omniauth_links" %>
 	    </div>
 	  -->
