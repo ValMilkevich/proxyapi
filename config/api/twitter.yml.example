@@ -1,0 +1,6 @@
+development:
+  consumer_key: asdf123
+  consumer_secret: adf123
+production:
+  consumer_key: asdf123
+  consumer_secret: asdf123

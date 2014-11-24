@@ -1,0 +1,6 @@
+development:
+  consumer_key: 123
+  consumer_secret: 123123
+production:
+  consumer_key: 123
+  consumer_secret: 123123

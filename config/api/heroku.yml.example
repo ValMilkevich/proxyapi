@@ -1,0 +1,10 @@
+development:
+  api_key: nil
+  username: email
+  password:	pwd
+  headers: nil
+production:
+  api_key: nil
+  username: email
+  password: pwd
+  headers: nil

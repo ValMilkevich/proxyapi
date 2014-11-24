@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.3'
 
 if RUBY_VERSION =~ /1.9/
     Encoding.default_external = Encoding::UTF_8
     Encoding.default_internal = Encoding::UTF_8
 end
 
-gem 'rails', ">=3.2.10"
+gem 'rails', ">=4.0.0"
 
 
 # Additional check to solve encoding issues
@@ -28,7 +28,7 @@ gem 'decent_exposure', :git => "https://github.com/voxdolo/decent_exposure.git",
 gem 'delayed_job_mongoid'
 gem 'nokogiri'
 gem 'jquery-rails'
-gem 'libv8', '~> 3.11.8'
+gem 'libv8', '~> 3.16.14'
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
