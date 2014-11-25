@@ -38,7 +38,6 @@ gem 'omniauth-facebook'
 gem 'whenever', :require => false
 gem 'socksify'
 
-
 group :production do
 	gem 'uglifier'
 end

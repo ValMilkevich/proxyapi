@@ -5,7 +5,7 @@ module Parsers::Freedailyproxy
     def self.each_page
       _self = new
       _self.doc
-      
+
       if _self.check!
         _self.pages.each do |page|
           new(page).index.map do |hash|

@@ -19,13 +19,19 @@ module Parsers::Hidemyass
         end
       end
     end
-    
+
     def check_string
       '.pagination li a'
     end
 
     def page_numbers
-      @pages ||= (1..doc.css('.pagination li a').map{|a| a['href'].scan(/[\d]+/) }.flatten.compact.map(&:to_i).max) rescue [1]
+      begin
+      @pages ||= (1..doc.css('.pagination li a').map{|a| a['href'].to_s.scan(/[\d]+/).first.to_s.to_i }.flatten.compact.map(&:to_i).max)
+      rescue => e
+        puts e.to_s
+        puts e.backtrace
+        return [1]
+      end
     end
 
     def pages
@@ -39,12 +45,17 @@ module Parsers::Hidemyass
     def index
       return @index if @index.present?
       list = []
-      doc.css('#listtable tr').each do |tr|
+      doc.css('#listable tr').each do |tr|
 
         tds = tr.css('td')
+        next if tds.size < 5
+
+        time_string = tds[0].text
+        time_string = time_string.gsub('secs', ' seconds ago').strip
+        time_string = time_string.gsub(/([\d]+)m/, "#{$1} minutes ago").strip
 
         list << {
-          :check_time => (tds[0].text + ' ago').strip,
+          :check_time => Chronic.parse( time_string ),
           :ip => childs = all_children(tds[1], {:tr => tr}, lambda{|el|
               ["text", "span"].include?(el.name) &&
               (el['style'].blank? || !(el['style'] =~ /none/)) &&
@@ -52,8 +63,8 @@ module Parsers::Hidemyass
             }).join,
           :port => tds[2].text.strip,
           :country_name => tds[3].text.strip,
-          :initial_speed => (tds[4].css('.speedbar').first || {})['rel'].to_s.strip,
-          :initial_latency => (tds[5].css('.speedbar').first || {})['rel'].to_s.strip,
+          # :initial_speed => (tds[4].css('.progress-indicator').first || {})['rel'].to_s.strip,
+          :initial_latency => (tds[5].css('.progress-indicator').first || {})['rel'].to_s.strip,
           :type => tds[6].text.to_s.strip,
           :anonymity => tds[7].text.to_s.strip,
           :url => url,

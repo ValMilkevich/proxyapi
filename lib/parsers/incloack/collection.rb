@@ -43,11 +43,16 @@ module Parsers::Incloack
 
       list_hash = []
       doc.css('div#tgr table.pl tr').map{|a| [*a.css('td').map(&:text), (a.css('td img').first['src'] rescue nil)].compact }.each do |arr|
+        puts arr.inspect
+
         hash = {}
         @@table_headers.each_with_index do |h, i|
           hash[h] = arr[i]
         end
+
         port_image_url = hash.delete(:port_image_url)
+        # binding.pry
+        hash[:check_time] = Chronic.parse(arr[@@table_headers.index(:check_time)]) rescue Time.now
 
         hash[:port] = Parsers::Incloack::Image.new( self.class.host + port_image_url.to_s).detect_port if port_image_url
         hash[:url] = url

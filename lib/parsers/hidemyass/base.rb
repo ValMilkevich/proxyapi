@@ -6,11 +6,11 @@ module Parsers::Hidemyass
     @@latency = 1500
     @@table_headers = [:check_time, :ip, :port, :country_name, :initial_speed, :initial_latency, :type, :anonymity]
 
-    @@host = "http://www.hidemyass.com"
-    @@from = "hidemyass.com"
+    @@host = "http://proxylist.hidemyass.com"
+    @@from = "proxylist.hidemyass.com"
 
     def url
-      @url || "http://www.hidemyass.com/proxy-list/#{@page}"
+      @url || "http://proxylist.hidemyass.com/#{@page}"
     end
 
     def initialize(page = nil)

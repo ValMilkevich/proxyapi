@@ -12,8 +12,10 @@ module Parsers::Incloack
     def file
     	begin
 	      @file ||= self.class.binary(@url).to_s
-	    rescue
-	    	nil
+	    rescue => e
+        puts e.to_s
+	    	puts e.backtrace
+        nil
 	    end
     end
 

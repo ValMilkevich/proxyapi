@@ -5,7 +5,7 @@ module Parsers::Sockslist
     def self.each_page
       _self = new
       _self.doc
-      
+
       if _self.check!
         _self.pages.each do |page|
           new(page).index.map do |hash|
@@ -36,15 +36,16 @@ module Parsers::Sockslist
       return @index if @index.present?
       list = []
       doc.css('.proxytbl tr').each do |tr|
+
         next if tr.attribute('align')
-        
+        puts tr.text
         list << {
-          :check_time => Time.now - (Time.parse(tr.css('td.t_checked').text) - Time.parse('00:00:00')) ,
+          :check_time => Time.now - (Chronic.parse(tr.css('td.t_checked').text) - Chronic.parse('00:00:00')) ,
           :ip => tr.css('td.t_ip').text.gsub(/[\s\t\n]/, '').strip,
           :port => tr.css('td.t_port').text.strip.scan(/[\d]{3,7}$/).first,
           :anonymity => "SOCKS",
           :initial_latency => 1,
-          :country_name => tr.css("td.t_country").text.gsub(/[\s\t\n]/, '').strip,
+          :country_name => tr.css("td.t_country").text.gsub(/[\t\n]/, '').strip,
           :type => "SOCKS#{tr.css("td.t_type").text.gsub(/[\s\t\n]/, '').strip}",
           :url => url,
           :from => self.class.from

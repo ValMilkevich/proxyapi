@@ -116,7 +116,7 @@ module Parsers
         res = raw_open(url, prx)
       end
 
-      def binary(url)
+      def binary(url, proxy = nil)
         uri = URI(url)
 
         puts "HOST: #{uri.host}, PROXY: #{[proxy.try(:ip), proxy.try(:port)].join(':')}, REQ: #{uri.request_uri}"

@@ -38,7 +38,6 @@ module Parsers::Spys
         tds = tr.css('td')
 
         next if tds.size < 5
-        puts tr.text
 
         type = tds[1].text.split(' ') & ["HTTP", "HTTPS", "SOCKS4", "SOCKS5", "SOCKS4/5"]
 
@@ -50,7 +49,7 @@ module Parsers::Spys
           :initial_latency => tds[3].text.to_f * 1000,
           :country_code => tds[4].css('.spy14').children.first.text,
           :city_name => tds[4].css('font font').text.gsub('!', '').strip,
-          :check_time => Time.parse([tds[9].text.split(' ').first.gsub(":", "/"), tds[9].text.split(' ').last].compact.join(' ')),
+          :check_time => Chronic.parse([tds[9].text.split(' ').first.gsub(":", "/"), tds[9].text.split(' ').last].compact.join(' ')),
           :url => url,
           :from => self.class.from
          } if tds[0].css('.spy14').first

@@ -38,6 +38,7 @@ module Parsers::Bullshit
 
 		def accept
 			[
+				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,application/json",
 				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 				"text/html,text/plain;q=0.5"
@@ -59,7 +60,7 @@ module Parsers::Bullshit
 				"compress;q=0.5;q=1.0",
 				"identity;q=0.5,*;q=0",
 				"deflate,sdch",
-				"deflate"
+				"deflate",
 			]
 		end
 
@@ -92,6 +93,7 @@ module Parsers::Bullshit
 
 		def user_agent
 			[
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36",
 				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
 				"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
 				"Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0 )",
