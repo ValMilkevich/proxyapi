@@ -1,10 +1,30 @@
+=== INITIAL SETUP
+
+git co master
 heroku apps:create --app prxw0
 heroku addons:add mongolab:sandbox --app prxw0
 heroku addons:add scheduler:standard --app prxw0
 heroku config:push -o -a prxw0
-nano .git/config
+
+heroku apps:create --app prxw1
+heroku addons:add mongolab:sandbox --app prxw1
+heroku addons:add scheduler:standard --app prxw1
+heroku config:push -o -a prxw1
+
+heroku apps:create --app prxw2
+heroku addons:add mongolab:sandbox --app prxw2
+heroku addons:add scheduler:standard --app prxw2
+heroku config:push -o -a prxw2
+
 git co worker
 git push hw0 worker:master
+git push hw1 worker:master
+git push hw2 worker:master
 
 heroku ps:scale worker=0 web=0 --app prxw0
+heroku ps:scale worker=0 web=0 --app prxw1
+heroku ps:scale worker=0 web=0 --app prxw2
+
 heroku addons:open scheduler --app prxw0
+heroku addons:open scheduler --app prxw1
+heroku addons:open scheduler --app prxw2
