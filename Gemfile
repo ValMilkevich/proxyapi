@@ -44,6 +44,7 @@ group :production do
 end
 
 group :development do
+  gem 'pry'
   gem 'capistrano'
   gem 'rvm-capistrano'
 end

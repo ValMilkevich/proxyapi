@@ -53,7 +53,7 @@ namespace :proxies do
             puts "==========="
 
             proxy = ::Proxy.create_or_update(hash)
-            
+
             puts proxy.errors.full_messages if proxy.errors.present?
           rescue => e
             puts "ERROR: #{e.to_s}"
@@ -76,7 +76,9 @@ namespace :proxies do
             puts hash.inspect
             puts "==========="
 
-            ::Proxy.create_or_update(hash)
+            proxy = ::Proxy.create_or_update(hash)
+
+            puts proxy.errors.full_messages if proxy.errors.present?
           rescue => e
             puts "ERROR: #{e.to_s}"
             puts hash
@@ -94,7 +96,13 @@ namespace :proxies do
       system_activity task.name do
         Parsers::Hidemyass::Collection.each_page do |hash|
           begin
-            ::Proxy.create_or_update(hash)
+            puts "PRX:"
+            puts hash.inspect
+            puts "==========="
+
+            proxy = ::Proxy.create_or_update(hash)
+
+            puts proxy.errors.full_messages if proxy.errors.present?
           rescue => e
             puts "ERROR: #{e.to_s}"
             puts hash
@@ -112,7 +120,13 @@ namespace :proxies do
       system_activity task.name do
         Parsers::Spys::Collection.each_page do |hash|
           begin
-            ::Proxy.create_or_update(hash)
+            puts "PRX:"
+            puts hash.inspect
+            puts "==========="
+
+            proxy = ::Proxy.create_or_update(hash)
+
+            puts proxy.errors.full_messages if proxy.errors.present?
           rescue => e
             puts "ERROR: #{e.to_s}"
             puts hash

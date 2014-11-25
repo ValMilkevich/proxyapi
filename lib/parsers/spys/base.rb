@@ -8,7 +8,7 @@ module Parsers::Spys
     @@from = "spys.ru"
 
     def url
-      @url || "http://spys.ru/proxies#{@page}/"
+      @url || "http://spys.ru/proxies/#{@page}/"
     end
 
     def initialize(page = nil)

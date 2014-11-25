@@ -73,8 +73,8 @@ class Proxy
 		el = self.find_or_initialize_by(ip: hash[:ip], port: hash[:port])
 		el.attributes = hash
 		el.last_check ||= Time.now
-		el.save
-		el.delayed_check
+		el.delayed_check if el.save
+		el
 	end
 
 	def self.random
