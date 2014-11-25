@@ -1,1 +1,1 @@
-web:  bundle exec foreman start
+web: bundle exec rails s -p $PORT
