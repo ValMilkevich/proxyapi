@@ -1,3 +1,0 @@
-module Proxy::CountryCheck
-
-end
