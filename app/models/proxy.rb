@@ -6,6 +6,7 @@ class Proxy
 	include Mongoid::Document
 	include Mongoid::Timestamps
 	include ::Proxy::Formatter
+	include ::Proxy::CountryCheck
 	include Mongoid::CommonScopes
 
 	THRESHOLD_AVAILABILITY_CLEAN = 0.1
@@ -67,9 +68,90 @@ class Proxy
 		ne(:check_time => nil, :latency => nil).where({:latency.lt => 1500}).order_by(:check_time.asc).limit(100).sample
 	end
 
-  def socks?
-    type.grep(/sock/i).present?
+	def self.google_chart_timespan
+		3.days
+	end
+
+	def self.google_chart_timestep
+		3600 * 2
+	end
+
+	def self.google_chart_steps
+		((Time.now - google_chart_start) / google_chart_timestep).ceil
+	end
+
+	def self.google_chart_start
+		::Proxy.google_chart_timespan.ago.at_beginning_of_day.to_date.to_time(:utc)
+	end
+
+	def self.google_chart_range
+		(1..google_chart_steps).map{ |h| google_chart_start + h * google_chart_timestep
+			}.reject{ |t|
+				t > Time.now
+			}
+	end
+
+	def self.google_chartize(collection, method, range = nil)
+		range ||= ::Proxy.google_chart_range
+  	sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
+	end
+
+	# Country checks
+
+	def country_code=(val)
+		self[:country_name] ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
+		self.country ||= Country.any_of({ code: /#{val}/i }).first
+	end
+
+	def country_name=(val)
+		self[:country_code] ||= Country.any_of({ name: /#{val}/i }).first.try(:code)
+		self.country ||= Country.any_of({ name: /#{val}/i }).first
+	end
+
+	def if_assign_country?
+    self.country.blank? && (!self.geoplugin_check_at || self.geoplugin_check_at > 7.day.ago)
   end
+
+  def delayed_assign_country(hash = {:priority => 1})
+    self.class.delay(hash).assign_country(self.id)
+  end
+
+  def assign_country(force = false)
+    self.class.assign_country(self.id, force) if self.if_assign_country?
+  end
+
+  def self.assign_country(proxy_id, force = false)
+    proxy = ::Proxy.where(id: proxy_id).first
+
+    return false if proxy.blank?
+
+    proxy.geoplugin_check_at = Time.now
+
+    resp = self.open(::Proxy.available.sample, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
+
+    if resp.code == '200'
+      geoplugin_resp = JSON.load(resp.body).symbolize_keys
+
+      if geoplugin_resp[:geoplugin_countryName].present?
+        # Finds by code or by name or create
+        country = Country.where(name: geoplugin_resp[:geoplugin_countryName]).first ||
+                  Country.where(code: geoplugin_resp[:geoplugin_countryCode] ).first ||
+                  Country.create(name: geoplugin_resp[:geoplugin_countryName], code: geoplugin_resp[:geoplugin_countryCode] )
+        # Update both code and country
+        country.update_attributes(
+            name: geoplugin_resp[:geoplugin_countryName],
+            code: geoplugin_resp[:geoplugin_countryCode]
+          )
+        proxy[:country_name] = country.name
+        proxy[:country_code] = country.code
+        proxy.country ||= country
+      end
+    end
+  ensure
+    proxy.save
+  end
+
+  # Proxy checks
 
 	def from_last_check!
 		update_attributes(
@@ -108,87 +190,9 @@ class Proxy
 		end
 	end
 
-	def country_code=(val)
-		self.country_name ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
-		self.country ||= Country.any_of({ code: /#{val}/i }).first
-	end
-
-	def country_name=(val)
-		self.country_code ||= Country.any_of({ name: /#{val}/i }).first.try(:code)
-		self.country ||= Country.any_of({ name: /#{val}/i }).first
-	end
-
-
-	def self.google_chart_timespan
-		3.days
-	end
-
-	def self.google_chart_timestep
-		3600 * 2
-	end
-
-	def self.google_chart_steps
-		((Time.now - google_chart_start) / google_chart_timestep).ceil
-	end
-
-	def self.google_chart_start
-		::Proxy.google_chart_timespan.ago.at_beginning_of_day.to_date.to_time(:utc)
-	end
-
-	def self.google_chart_range
-		(1..google_chart_steps).map{ |h| google_chart_start + h * google_chart_timestep
-			}.reject{ |t|
-				t > Time.now
-			}
-	end
-
-	def self.google_chartize(collection, method, range = nil)
-		range ||= ::Proxy.google_chart_range
-  	sent_arr = range.map{|a| [a.strftime("%H:00, %d %h"), collection.lte(method => a).count] }
-	end
-
-  def if_assign_country?
-    self.country.blank? && (!self.geoplugin_check_at || self.geoplugin_check_at > 7.day.ago)
+  def socks?
+    type.grep(/sock/i).present?
   end
-
-	def delayed_assign_country(hash = {:priority => 1})
-		self.class.delay(hash).assign_country(self.id)
-	end
-
-	def assign_country(force = false)
-		self.class.assign_country(self.id, force) if self.if_assign_country?
-	end
-
-	def self.assign_country(proxy_id, force = false)
-		proxy = ::Proxy.where(id: proxy_id).first
-
-		return false if proxy.blank?
-
-		proxy.geoplugin_check_at = Time.now
-
-		resp = self.open(::Proxy.available.sample, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
-
-		if resp.code == '200'
-			geoplugin_resp = JSON.load(resp.body).symbolize_keys
-
-			if geoplugin_resp[:geoplugin_countryName].present?
-				# Finds by code or by name or create
-				country = Country.where(name: geoplugin_resp[:geoplugin_countryName]).first ||
-									Country.where(code: geoplugin_resp[:geoplugin_countryCode] ).first ||
-									Country.create(name: geoplugin_resp[:geoplugin_countryName], code: geoplugin_resp[:geoplugin_countryCode] )
-				# Update both code and country
-				country.update_attributes(
-						name: geoplugin_resp[:geoplugin_countryName],
-						code: geoplugin_resp[:geoplugin_countryCode]
-					)
-				proxy.country ||= country
-				proxy.country_name = country.name
-				proxy.country_code = country.code
-			end
-		end
-	ensure
-		proxy.save
-	end
 
 	def self.open(prx, url)
 		return nil if !prx
