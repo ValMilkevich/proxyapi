@@ -47,7 +47,7 @@ class Proxy
 	scope :http, -> { where(type: "HTTP") }
 
 	def as_json(options={})
-		options.merge!(:only => [:_id, :ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count, :geoplugin_countryName, :anonymity] )
+		options.merge!(:only => [:ip, :port, :latency, :type, :availability, :available, :last_check, :checks_count, :country_name, :country_code, :anonymity] )
 		super(options)
 	end
 
