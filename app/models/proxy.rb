@@ -6,7 +6,6 @@ class Proxy
 	include Mongoid::Document
 	include Mongoid::Timestamps
 	include ::Proxy::Formatter
-	include ::Proxy::CountryCheck
 	include Mongoid::CommonScopes
 
 	THRESHOLD_AVAILABILITY_CLEAN = 0.1
