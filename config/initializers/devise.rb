@@ -214,7 +214,6 @@ Devise.setup do |config|
   config.omniauth :twitter, twitter_config['consumer_key'], twitter_config['consumer_secret']
   config.omniauth :facebook, facebook_config['consumer_key'], facebook_config['consumer_secret']
 
-
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
