@@ -28,20 +28,6 @@ class Proxy
 	field :last_check, type: Time
 	field :checks_count, type: Integer, default: 0
 
-	field :geoplugin_status
-	field :geoplugin_city
-	field :geoplugin_region
-	field :geoplugin_countryCode
-	field :geoplugin_countryName
-	field :geoplugin_continentCode
-	field :geoplugin_latitude
-	field :geoplugin_longitude
-	field :geoplugin_regionCode
-	field :geoplugin_regionName
-	field :geoplugin_currencyCode
-	field :geoplugin_currencySymbol
-	field :geoplugin_currencySymbol_UTF8
-	field :geoplugin_currencyConverter
   field :geoplugin_check_at, type: Time
 
 	belongs_to :country
@@ -124,7 +110,14 @@ class Proxy
 
 	def country_code=(val)
 		self.country_name ||= Country.any_of({ code: /#{val}/i }, { long_code: /#{val}/i }).first.try(:name)
+		self.country ||= Country.any_of({ code: /#{val}/i }).first
 	end
+
+	def country_name=(val)
+		self.country_code ||= Country.any_of({ name: /#{val}/i }).first.try(:code)
+		self.country ||= Country.any_of({ name: /#{val}/i }).first
+	end
+
 
 	def self.google_chart_timespan
 		3.days
@@ -155,7 +148,7 @@ class Proxy
 	end
 
   def if_assign_country?
-    (!self.geoplugin_check_at || self.geoplugin_check_at > 1.day.ago) && self.country.blank? || self.geoplugin_countryName.blank?
+    self.country.blank? && (!self.geoplugin_check_at || self.geoplugin_check_at > 7.day.ago)
   end
 
 	def delayed_assign_country(hash = {:priority => 1})
@@ -171,18 +164,29 @@ class Proxy
 
 		return false if proxy.blank?
 
-		if force || !(proxy.geoplugin_status.to_s =~ /2[\d]{2,}/)
-			proxy = ::Proxy.available.sample
-			resp = self.open(proxy, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
+		proxy.geoplugin_check_at = Time.now
 
-			proxy.attributes = JSON.load(resp.body) if !resp.blank?
+		resp = self.open(::Proxy.available.sample, "http://www.geoplugin.net/json.gp?ip=#{proxy.ip}")
+
+		if resp.code == '200'
+			geoplugin_resp = JSON.load(resp.body).symbolize_keys
+
+			if geoplugin_resp[:geoplugin_countryName].present?
+				# Finds by code or by name or create
+				country = Country.where(name: geoplugin_resp[:geoplugin_countryName]).first ||
+									Country.where(code: geoplugin_resp[:geoplugin_countryCode] ).first ||
+									Country.create(name: geoplugin_resp[:geoplugin_countryName], code: geoplugin_resp[:geoplugin_countryCode] )
+				# Update both code and country
+				country.update_attributes(
+						name: geoplugin_resp[:geoplugin_countryName],
+						code: geoplugin_resp[:geoplugin_countryCode]
+					)
+				proxy.country ||= country
+				proxy.country_name = country.name
+				proxy.country_code = country.code
+			end
 		end
-
-		if proxy.geoplugin_countryName.present?
-			proxy.country ||= Country.where(name: /#{proxy.geoplugin_countryName}/i).first || Country.create(name: proxy.geoplugin_countryName)
-		end
-
-    proxy.geoplugin_check_at = Time.now
+	ensure
 		proxy.save
 	end
 
