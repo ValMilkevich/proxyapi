@@ -37,7 +37,11 @@ namespace :proxies do
 
   namespace :all do
     task :get => [
-      "proxies:incloack:get"
+      "proxies:incloack:get",
+      "proxies:sockslist:get",
+      "proxies:hidemyass:get",
+      "proxies:spys:get",
+      "proxies:freedailyproxy:get",
     ]
   end
 
