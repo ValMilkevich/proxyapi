@@ -43,6 +43,7 @@ group :production do
 end
 
 group :development do
+  gem 'spring'
   gem 'pry'
   gem 'capistrano'
   gem 'rvm-capistrano'

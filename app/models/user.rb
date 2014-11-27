@@ -48,7 +48,7 @@ class User
 
 
 def self.from_omniauth(auth)
-  find_or_create_by(auth.slice(:provider, :uid)) do |user|
+  find_or_create_by(auth.permit(:provider, :uid)) do |user|
     user.provider = auth.provider
     user.uid = auth.uid
     user.username = auth.info.nickname
@@ -57,7 +57,7 @@ end
 
 def self.new_with_session(params, session)
   if session["devise.user_attributes"]
-    new(session["devise.user_attributes"], without_protection: true) do |user|
+    new(session["devise.user_attributes"]) do |user|
       user.attributes = params
       user.valid?
     end
